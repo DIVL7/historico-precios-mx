@@ -293,7 +293,7 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   // contrato), que junto con precio_unitario permite derivar la cantidad
   // implícita de la oferta: subtotal = precio_unitario × cantidad.
   if (cantidad == null && item.subtotal != null && precioUnitario) {
-    cantidad = +(item.subtotal / precioUnitario).toFixed(4);
+    cantidad = Math.round(item.subtotal / precioUnitario);
     stats.cantidadesDerivadas.push({ codigo_contrato: contrato.codigoContrato, cve_cucop: item.cve_cucop, subtotal: item.subtotal, precio_unitario: precioUnitario, cantidad_derivada: cantidad });
   }
 

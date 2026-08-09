@@ -129,7 +129,7 @@ El subtotal reportado por la API es consistente con `cantidad_minima` en todos l
 
 Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad`, `cantidad_minima` y `cantidad_maxima` vienen vacíos desde el origen (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" visible en el detalle del contrato en el sitio — que permite derivar dos cosas:
 
-- **`cantidad`** (informativa): `subtotal / precio_unitario`, solo cuando las tres vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
+- **`cantidad`** (informativa): `subtotal / precio_unitario`, redondeada al entero más cercano, solo cuando las tres vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
 - **`valor` / `valor_minimo` / `valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de `cantidad`. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar `cantidad` tampoco, pero `valor` sí se rescata de `subtotal`.
 
 ### 5.4 Reporte de calidad
