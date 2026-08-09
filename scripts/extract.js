@@ -171,11 +171,16 @@ async function findAndClickContrato(page, numContrato) {
   }
 
   // Búsqueda exhaustiva: recorre todas las páginas hasta encontrar el contrato
-  // o agotar la tabla. El límite real de seguridad es el timeout duro por
-  // contrato (CONTRATO_HARD_TIMEOUT_MS) que envuelve a esta función, no un
-  // tope artificial de páginas -- así se cubre el universo completo incluso
-  // en compras consolidadas con cientos de contratos.
-  while (true) {
+  // o agotar la tabla. Antes el único límite era el timeout duro por contrato
+  // (CONTRATO_HARD_TIMEOUT_MS) que envuelve a esta función -- pero un
+  // Promise.race no cancela el trabajo en curso: si ese timeout externo se
+  // dispara, este bucle seguía corriendo "huérfano" contra la misma `page`
+  // (verificado en vivo: un caso real donde nextBtn nunca reportó disabled y
+  // el proceso quedó colgado indefinidamente). Ahora el propio bucle respeta
+  // un límite de tiempo, con margen bajo CONTRATO_HARD_TIMEOUT_MS para que
+  // termine solo antes de que el timeout externo lo intente cortar.
+  const deadline = Date.now() + CONTRATO_HARD_TIMEOUT_MS - 3000;
+  while (Date.now() < deadline) {
     const link = page.locator('td.p-link2', { hasText: numContrato }).first();
     if (await link.count() > 0 && await link.isVisible().catch(() => false)) {
       await link.click();
@@ -186,6 +191,7 @@ async function findAndClickContrato(page, numContrato) {
     await nextBtn.click({ timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(600);
   }
+  return false; // se agotó el tiempo de búsqueda sin encontrar el contrato
 }
 
 // Clickear una fila abre el detalle del contrato en un modal (p-dialog) que
@@ -259,7 +265,7 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
 
   const compEntry = clave ? compendio[clave] : null;
 
-  const cantidad = item.cantidad_maxima ?? item.cantidad ?? item.cantidad_minima ?? null;
+  let cantidad = item.cantidad_maxima ?? item.cantidad ?? item.cantidad_minima ?? null;
 
   // El campo "precio_unitario" que entrega la API a veces viene mal cargado en
   // el origen (se detectó un caso real donde traía copiado el valor de
@@ -278,6 +284,19 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
       precioUnitario = precioCalculado;
     }
   }
+
+  // Contratos "por monto" (tipo_contrato_abierto: "MONTO" en la fuente): el
+  // compromiso es un techo de gasto, no una cantidad, así que la API nunca
+  // trae cantidad/cantidad_minima/cantidad_maxima para estos ítems -- vienen
+  // vacíos desde el origen, no es un hueco de la extracción. Sí trae
+  // `subtotal` (el "Monto de la Oferta" que se ve en el detalle del
+  // contrato), que junto con precio_unitario permite derivar la cantidad
+  // implícita de la oferta: subtotal = precio_unitario × cantidad.
+  if (cantidad == null && item.subtotal != null && precioUnitario) {
+    cantidad = +(item.subtotal / precioUnitario).toFixed(4);
+    stats.cantidadesDerivadas.push({ codigo_contrato: contrato.codigoContrato, cve_cucop: item.cve_cucop, subtotal: item.subtotal, precio_unitario: precioUnitario, cantidad_derivada: cantidad });
+  }
+
   const valor = (precioUnitario != null && cantidad != null) ? +(precioUnitario * cantidad).toFixed(2) : null;
 
   // valor_minimo/valor_maximo: piso y techo de exposición contractual, bien
@@ -494,6 +513,7 @@ function construirReporteCalidad(resultados, stats) {
     top_20_valores_mas_altos: topValores,
     registros_con_precio_o_cantidad_en_cero_o_negativo: enCero,
     precios_corregidos_por_inconsistencia_con_subtotal: stats.preciosCorregidos,
+    cantidades_derivadas_de_subtotal_entre_precio_unitario: stats.cantidadesDerivadas,
   };
 }
 
@@ -535,7 +555,7 @@ async function main() {
   const resultados = resultadosPrevios.filter(r => !codigosPendientes.has(r.codigo_contrato));
   const errores = erroresPrevios.filter(e => !codigosPendientes.has(e.codigoContrato));
 
-  const stats = { preciosCorregidos: [] };
+  const stats = { preciosCorregidos: [], cantidadesDerivadas: [] };
   const browser = await chromium.launch({ headless: true });
 
   const queue = [...pendientes.entries()];
@@ -562,6 +582,7 @@ async function main() {
   console.log(`Registros finales totales: ${resultados.length}`);
   console.log(`Errores totales acumulados: ${errores.length}`);
   console.log(`Precios corregidos por inconsistencia esta corrida: ${stats.preciosCorregidos.length}`);
+  console.log(`Cantidades derivadas de subtotal/precio_unitario esta corrida: ${stats.cantidadesDerivadas.length}`);
   console.log(`Salida: ${args.out}`);
   console.log(`Excel: ${excelPath}`);
   console.log(`Errores detallados: ${errPath}`);

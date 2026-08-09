@@ -1,5 +1,10 @@
 [
   {
+    "hash": "52d3940d1178c64ee0639e1200a9f61f",
+    "error": "navegacion_fallida",
+    "detalle": "TimeoutError: page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""
+  },
+  {
     "hash": "89524d09d6b04cabafe5a696e4418324",
     "codigoContrato": "C-2026-00038840",
     "error": "timeout_esperando_respuesta"
@@ -10,18 +15,8 @@
     "error": "timeout_esperando_respuesta"
   },
   {
-    "hash": "52d3940d1178c64ee0639e1200a9f61f",
-    "error": "navegacion_fallida",
-    "detalle": "TimeoutError: page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""
-  },
-  {
     "hash": "26605aecb60c44f6800535a8a6a04c69",
     "codigoContrato": "C-2026-00000266",
-    "error": "timeout_esperando_respuesta"
-  },
-  {
-    "hash": "61ee8c50c6d54c2f915f47e592110cb2",
-    "codigoContrato": "C-2026-00023079",
     "error": "timeout_esperando_respuesta"
   }
 ]

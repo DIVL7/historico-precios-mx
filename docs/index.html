@@ -43,17 +43,29 @@
 
   .result-count { font-size: 0.85rem; color: var(--muted); margin: 8px 0 12px; }
 
-  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
+  table { width: 100%; min-width: 1100px; border-collapse: collapse; }
   thead th {
     background: var(--accent-light); text-align: left; font-size: 0.75rem;
     text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent);
     padding: 10px 12px; position: sticky; top: 0; cursor: pointer; user-select: none;
+    white-space: nowrap;
   }
   thead th:hover { background: #ecd9de; }
   tbody td { padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border); vertical-align: top; }
   tbody tr:hover { background: #fafafa; }
   .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .muted { color: var(--muted); }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem;
+    font-weight: 600; white-space: nowrap;
+  }
+  .badge-abierto { background: #e6eef7; color: #2b5a8a; }
+  .badge-cerrado { background: #ece6f7; color: #5a3d8a; }
+  @media (prefers-color-scheme: dark) {
+    .badge-abierto { background: #1f3347; color: #9cc4ea; }
+    .badge-cerrado { background: #2f2447; color: #c5aeea; }
+  }
 
   .pager { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
   .pager button {
@@ -90,11 +102,16 @@
     <select id="fInstitucion"><option value="">Institución (todas)</option></select>
     <select id="fGrupo"><option value="">Grupo terapéutico (todos)</option></select>
     <select id="fTipoProc"><option value="">Tipo de procedimiento (todos)</option></select>
+    <select id="fTipoContrato">
+      <option value="">Tipo de contrato (todos)</option>
+      <option value="Abierto">Abierto (rango mín–máx)</option>
+      <option value="Cerrado">Cerrado (cantidad fija)</option>
+    </select>
   </div>
 
   <div class="result-count" id="resultCount"></div>
 
-  <div id="tableWrap"></div>
+  <div id="tableWrap" class="table-wrap"></div>
   <div class="pager" id="pager"></div>
 </main>
 
@@ -111,9 +128,13 @@ const columns = [
   { key: 'clave', label: 'Clave' },
   { key: 'institucion', label: 'Institución' },
   { key: 'proveedor', label: 'Proveedor' },
+  { key: 'tipo_contrato', label: 'Tipo contrato' },
   { key: 'precio_unitario', label: 'Precio unitario', num: true },
   { key: 'cantidad', label: 'Cantidad', num: true },
-  { key: 'valor', label: 'Valor', num: true },
+  { key: 'unidad_medida', label: 'Unidad' },
+  { key: 'valor_maximo', label: 'Valor (piso–techo)', num: true },
+  { key: 'procedimiento', label: 'Procedimiento' },
+  { key: 'fecha_inicio_contrato', label: 'Vigencia' },
   { key: 'fecha_firma_contrato', label: 'Fecha firma' },
 ];
 
@@ -138,6 +159,28 @@ function formatCantidad(r) {
   return num(r.cantidad);
 }
 
+// Mismo criterio que formatCantidad pero para valor: en "Cerrado" valor_minimo
+// == valor_maximo (un solo monto real comprometido); en "Abierto" divergen
+// (piso garantizado vs. techo de exposición) -- ver Metodologia.md §5.5 sobre
+// por qué nunca se debe sumar/mostrar `valor` a secas sin este contexto.
+function formatValor(r) {
+  if (r.valor_minimo != null && r.valor_maximo != null && r.valor_minimo !== r.valor_maximo) {
+    return `${money(r.valor_minimo)} – ${money(r.valor_maximo)}`;
+  }
+  return money(r.valor_maximo ?? r.valor_minimo ?? r.valor);
+}
+
+function formatVigencia(r) {
+  if (!r.fecha_inicio_contrato && !r.fecha_fin_contrato) return '—';
+  return `${r.fecha_inicio_contrato || '—'} – ${r.fecha_fin_contrato || '—'}`;
+}
+
+function tipoContratoBadge(r) {
+  if (!r.tipo_contrato) return '<span class="muted">—</span>';
+  const cls = r.tipo_contrato === 'Abierto' ? 'badge-abierto' : 'badge-cerrado';
+  return `<span class="badge ${cls}">${r.tipo_contrato}</span>`;
+}
+
 function fillSelect(id, values) {
   const sel = document.getElementById(id);
   [...new Set(values)].filter(Boolean).sort().forEach(v => {
@@ -147,13 +190,19 @@ function fillSelect(id, values) {
   });
 }
 
+// Se suman valor_minimo/valor_maximo por separado (piso garantizado / techo de
+// exposición), nunca `valor` a secas -- sumar `valor` mezclaría el monto real
+// de contratos "Cerrado" con el techo posible de contratos "Abierto" como si
+// fueran la misma clase de número (Metodologia.md §5.5).
 function renderStats() {
-  const totalValor = filteredRows.reduce((s, r) => s + (r.valor || 0), 0);
+  const pisoTotal = filteredRows.reduce((s, r) => s + (r.valor_minimo || 0), 0);
+  const techoTotal = filteredRows.reduce((s, r) => s + (r.valor_maximo || 0), 0);
   const claves = new Set(filteredRows.map(r => r.clave).filter(Boolean)).size;
   document.getElementById('stats').innerHTML = `
     <div class="stat"><div class="value">${num(filteredRows.length)}</div><div class="label">Registros</div></div>
     <div class="stat"><div class="value">${claves}</div><div class="label">Claves distintas</div></div>
-    <div class="stat"><div class="value">${money(totalValor)}</div><div class="label">Valor total (filtrado)</div></div>
+    <div class="stat"><div class="value">${money(pisoTotal)}</div><div class="label">Gasto piso (filtrado)</div></div>
+    <div class="stat"><div class="value">${money(techoTotal)}</div><div class="label">Exposición techo (filtrado)</div></div>
   `;
 }
 
@@ -162,10 +211,12 @@ function applyFilters() {
   const inst = document.getElementById('fInstitucion').value;
   const grupo = document.getElementById('fGrupo').value;
   const tipoProc = document.getElementById('fTipoProc').value;
+  const tipoContrato = document.getElementById('fTipoContrato').value;
 
   filteredRows = allRows.filter(r => {
     if (inst && r.institucion !== inst) return false;
     if (tipoProc && r.tipo_procedimiento !== tipoProc) return false;
+    if (tipoContrato && r.tipo_contrato !== tipoContrato) return false;
     if (grupo && !(r.grupo_terapeutico || []).includes(grupo)) return false;
     if (q) {
       const hay = `${r.producto} ${r.proveedor} ${r.institucion} ${r.clave || ''}`.toLowerCase();
@@ -210,9 +261,13 @@ function renderTable() {
       <td class="muted">${r.clave || '—'}</td>
       <td>${r.institucion || ''}</td>
       <td>${r.proveedor || ''}</td>
+      <td>${tipoContratoBadge(r)}</td>
       <td class="num">${money(r.precio_unitario)}</td>
       <td class="num">${formatCantidad(r)}</td>
-      <td class="num">${money(r.valor)}</td>
+      <td class="muted">${r.unidad_medida || '—'}</td>
+      <td class="num">${formatValor(r)}</td>
+      <td class="muted">${r.procedimiento || '—'}</td>
+      <td class="muted">${formatVigencia(r)}</td>
       <td class="muted">${r.fecha_firma_contrato || '—'}</td>
     </tr>`).join('') + '</tbody>';
 
@@ -243,7 +298,7 @@ async function init() {
   fillSelect('fGrupo', allRows.flatMap(r => r.grupo_terapeutico || []));
   fillSelect('fTipoProc', allRows.map(r => r.tipo_procedimiento));
 
-  ['q', 'fInstitucion', 'fGrupo', 'fTipoProc'].forEach(id =>
+  ['q', 'fInstitucion', 'fGrupo', 'fTipoProc', 'fTipoContrato'].forEach(id =>
     document.getElementById(id).addEventListener('input', applyFilters)
   );
 

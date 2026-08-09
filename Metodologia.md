@@ -84,7 +84,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | `proveedor` | "Proveedor o contratista" | |
 | `institución` | "Siglas de la Institución" (CSV) | En compras consolidadas puede no corresponder a la institución que realmente contrató cada renglón — ver `Limitaciones.md` |
 | `precio_unitario` | "Precio unitario sin impuestos" (`detallepartidas`), recalculado si es inconsistente con el subtotal — ver §5.3 | |
-| `cantidad` | `cantidad_maxima ?? cantidad ?? cantidad_minima` | Usado para `valor`. Es el compromiso contractual, no el volumen entregado |
+| `cantidad` | `cantidad_maxima ?? cantidad ?? cantidad_minima`, o derivada de `subtotal / precio_unitario` si las tres vienen vacías — ver §5.3.1 | Usado para `valor`. Es el compromiso contractual, no el volumen entregado |
 | `cantidad_minima` / `cantidad_maxima` | "Cantidad mínima" / "Cantidad máxima" (`detallepartidas`) | `cantidad_maxima` solo viene poblada en contratos tipo "abierto" |
 | `tipo_contrato` | "Tipo de contrato" (CSV) | `Abierto` / `Cerrado`, valor oficial de la fuente — no se infiere de si `cantidad_maxima` viene poblada, para tener una sola fuente de verdad sin ambigüedad al integrar ambos esquemas de cantidad en la misma tabla |
 | `valor` | `precio_unitario × cantidad` (derivado) | Número único de referencia para ver un registro individual — ver §5.5 antes de sumarlo entre muchos registros |
@@ -124,6 +124,10 @@ La clave ganadora de cada grupo se propaga a todas sus instancias, así el mismo
 ### 5.3 Corrección de `precio_unitario`
 
 El subtotal reportado por la API es consistente con `cantidad_minima` en todos los casos verificados. El pipeline recalcula `precio_unitario = subtotal / cantidad_minima` y solo conserva el valor original de la API cuando coincide (±1%); cada corrección queda registrada en `docs/data.calidad.json`.
+
+### 5.3.1 Derivación de `cantidad` en contratos "por monto"
+
+Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad`, `cantidad_minima` y `cantidad_maxima` vienen vacíos desde el origen para esos ítems (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" que se ve en el detalle del contrato en el sitio — que junto con `precio_unitario` permite derivar la cantidad implícita: `cantidad = subtotal / precio_unitario`. El pipeline aplica esta derivación solo cuando las tres vías directas fallan, y registra cada caso en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`) para trazabilidad.
 
 ### 5.4 Reporte de calidad
 

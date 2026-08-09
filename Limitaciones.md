@@ -48,7 +48,19 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 4. `cantidad` es el compromiso contractual, no lo entregado realmente
+## 4. Contratos "por monto": `cantidad` se deriva, no viene directa de la fuente
+
+**Por qué pasa:** algunos ítems (`tipo_contrato_abierto: "MONTO"` en la API de origen) comprometen un techo de gasto en pesos, no una cantidad de piezas — la fuente no publica `cantidad`, `cantidad_minima` ni `cantidad_maxima` para estos casos. Sí publica `subtotal` (el "Monto de la Oferta" visible en el detalle del contrato en el sitio de Compras MX), que junto con `precio_unitario` permite derivar la cantidad implícita (`subtotal / precio_unitario`) — ver Metodologia.md §5.3.1.
+
+**Riesgo residual:** la cantidad derivada asume que `subtotal` es exactamente `precio_unitario × cantidad` sin redondeos raros del proveedor; no se ha visto un caso donde no cuadre, pero no está garantizado matemáticamente.
+
+**Alternativas:** revisar `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`) para ver todos los casos donde se aplicó esta derivación.
+
+**Estado actual (backfill parcial):** de los 209 contratos que tenían `cantidad: null` antes de este fix, 206 ya se re-extrajeron con la derivación aplicada. Quedan **3 pendientes** (`C-2026-00033383`, `C-2026-00025194`, `C-2026-00060225`) — no se marcaron como error, simplemente no están todavía en `docs/data.json`, así que la próxima corrida normal de `extract.js` los recoge sola (el pipeline es reanudable: cualquier `codigo_contrato` ausente del dataset se trata como pendiente). El reporte de calidad y el Excel actuales se regeneraron a partir del dataset parcial (23,553 registros), pero sin recalcular `cantidades_derivadas_de_subtotal_entre_precio_unitario` ni `precios_corregidos_por_inconsistencia_con_subtotal` para lo ya existente (se dejaron vacíos a propósito en vez de inventar) — la próxima corrida completa de `extract.js` los vuelve a poblar correctamente para todo el dataset.
+
+---
+
+## 5. `cantidad` es el compromiso contractual, no lo entregado realmente
 
 **Por qué pasa:** las fuentes de contratación pública solo exponen la cantidad pactada en el contrato. No existe una fuente pública que reporte cuánto se entregó/facturó realmente — puede haber diferencia si el contrato no se ejecutó completo.
 
@@ -56,7 +68,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 5. `precio_unitario` puede venir corrupto desde el origen
+## 6. `precio_unitario` puede venir corrupto desde el origen
 
 **Por qué pasa:** el campo de la API puede traer copiado por error el valor de otro campo (ej. el monto total de una compra grande en vez del precio unitario) — un error del propio sistema de Compras MX, no de la extracción.
 
@@ -68,7 +80,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 6. Texto de producto corrupto o mal capturado en la fuente
+## 7. Texto de producto corrupto o mal capturado en la fuente
 
 **Por qué pasa:** algunas descripciones de origen tienen errores de digitación evidentes de la institución compradora, y en al menos un caso el campo `producto` capturó el título genérico del contrato en vez del nombre del medicamento.
 
@@ -78,7 +90,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 7. Un medicamento puede tener más de un grupo terapéutico
+## 8. Un medicamento puede tener más de un grupo terapéutico
 
 **Por qué pasa:** el Compendio CSG asigna a veces más de un grupo terapéutico al mismo medicamento. `grupo_terapeutico` se guarda como arreglo (puede traer varios valores), sin regla de desempate a un único valor.
 
@@ -86,15 +98,17 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 8. Fragilidad de la extracción (dependencia de automatización de navegador)
+## 9. Fragilidad de la extracción (dependencia de automatización de navegador)
 
 **Por qué pasa:** Compras MX no tiene API pública — todo se extrae automatizando un navegador real contra una SPA protegida con reCAPTCHA v3. Un cambio futuro en el sitio (nueva versión de la SPA, cambio de estructura, nuevo mecanismo de paginación) podría romper la extracción sin aviso.
 
 **Alternativas:** ninguna mientras Compras MX no publique una API — es el costo aceptado de esta arquitectura. Mitigación parcial: el reporte de errores por corrida (`docs/data.errores.json`) sirve de alerta temprana si algo empieza a fallar sistemáticamente.
 
+**Bug encontrado y corregido (2026-08-08):** `findAndClickContrato` (búsqueda del contrato dentro de la tabla paginada del expediente) tenía un `while (true)` sin límite de tiempo propio — confiaba en que el timeout duro por contrato (`CONTRATO_HARD_TIMEOUT_MS`, vía `Promise.race`) lo cortara desde afuera. Pero un `Promise.race` no cancela el trabajo en curso en JS: cuando ese timeout externo se disparaba, el bucle seguía corriendo huérfano contra la misma página. Se observó en vivo dos corridas seguidas colgadas indefinidamente (>20 min sin avanzar) en el último expediente de la cola. Corregido: el bucle ahora respeta su propio límite de tiempo (con margen bajo `CONTRATO_HARD_TIMEOUT_MS`) y siempre retorna, en vez de depender de que algo externo lo corte.
+
 ---
 
-## 9. Cobertura histórica limitada a 2020–2026
+## 10. Cobertura histórica limitada a 2020–2026
 
 **Por qué pasa:** los archivos de "Contratos de la Plataforma Integral" cubren de forma consistente 2020–2026. Años anteriores (CompraNet 5.0 y 3.0) usan esquemas distintos y más limitados.
 
@@ -102,7 +116,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 10. Supuestos no verificados activamente
+## 11. Supuestos no verificados activamente
 
 - **Moneda:** el pipeline asume MXN sin verificar contra la columna "Moneda" del CSV. Hoy da 100% MXN en los datos filtrados, pero no hay alerta si eso cambiara.
 - **Filas descartadas por campos faltantes** (sin "Dirección del anuncio" o "Código del contrato"): no se cuentan ni se loguean. Hoy da cero filas afectadas, pero no hay visibilidad si eso cambiara.
@@ -111,15 +125,15 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 11. Errores de extracción residuales
+## 12. Errores de extracción residuales
 
 **Estado actual:** un puñado de contratos con error de extracción por corrida (timeouts de red), dentro del presupuesto de 3 reintentos automáticos — se resuelven solos en la siguiente corrida. Ver `docs/data.errores.json` para el detalle actualizado.
 
-**Alternativas:** ninguna acción necesaria mientras el conteo se mantenga bajo — un salto grande en una corrida futura es señal de que algo cambió en el sitio fuente (ver punto 8). Si un contrato agota los 3 reintentos automáticos (queda como "fallo permanente", ya no se reintenta solo), se puede forzar manualmente: ubicarlo por `codigoContrato` en `data/raw/contratos_{año}.csv`, revisar el expediente directo en `https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento` para diagnosticar, y borrar sus entradas de `docs/data.errores.json` antes de correr `extract.js` de nuevo para que se reintente.
+**Alternativas:** ninguna acción necesaria mientras el conteo se mantenga bajo — un salto grande en una corrida futura es señal de que algo cambió en el sitio fuente (ver punto 9). Si un contrato agota los 3 reintentos automáticos (queda como "fallo permanente", ya no se reintenta solo), se puede forzar manualmente: ubicarlo por `codigoContrato` en `data/raw/contratos_{año}.csv`, revisar el expediente directo en `https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento` para diagnosticar, y borrar sus entradas de `docs/data.errores.json` antes de correr `extract.js` de nuevo para que se reintente.
 
 ---
 
-## 12. `institución` puede no ser la institución real en compras consolidadas
+## 13. `institución` puede no ser la institución real en compras consolidadas
 
 **Por qué pasa:** `institución` se toma de "Siglas de la Institución" en el CSV. En procedimientos consolidados, esa columna puede no corresponder a la institución que realmente contrató cada renglón — la institución real solo aparece en la tabla de contratos de la página de detalle, no en el CSV (verificado con un caso real). En procedimientos NO consolidados (una sola institución, sin ambigüedad) esto no debería pasar.
 
