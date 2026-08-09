@@ -1,0 +1,15 @@
+node_modules/
+
+# Los archivos crudos se descargan frescos en cada corrida del pipeline; no se
+# versionan -- ver .github/workflows/scrape.yml
+data/raw/
+
+# Salidas de prueba locales
+data/test_output*.json
+
+# Logs de corridas locales
+data/*.log
+
+# Estado local de Claude Code
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

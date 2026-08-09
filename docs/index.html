@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precios de Medicamentos — Compras Públicas México</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0db; --text: #2b2a27;
+    --muted: #6b6a65; --accent: #6b1930; --accent-light: #f4e9ec;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  header {
+    background: var(--accent); color: white; padding: 24px 32px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 1.4rem; }
+  header p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .stat {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 20px; flex: 1; min-width: 140px;
+  }
+  .stat .value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .stat .label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .filters {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .filters input, .filters select {
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 0.9rem; background: white;
+  }
+  .filters input[type=text] { flex: 2; min-width: 220px; }
+  .filters select { flex: 1; min-width: 160px; }
+
+  .result-count { font-size: 0.85rem; color: var(--muted); margin: 8px 0 12px; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  thead th {
+    background: var(--accent-light); text-align: left; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent);
+    padding: 10px 12px; position: sticky; top: 0; cursor: pointer; user-select: none;
+  }
+  thead th:hover { background: #ecd9de; }
+  tbody td { padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border); vertical-align: top; }
+  tbody tr:hover { background: #fafafa; }
+  .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+
+  .pager { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
+  .pager button {
+    padding: 6px 14px; border: 1px solid var(--border); background: white; border-radius: 6px;
+    cursor: pointer; font-size: 0.85rem;
+  }
+  .pager button:disabled { opacity: 0.4; cursor: default; }
+
+  .empty { text-align: center; padding: 40px; color: var(--muted); }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1b19; --panel: #262523; --border: #3a3833; --text: #ece9e4;
+      --muted: #9a9890; --accent: #d98fa3; --accent-light: #33262a;
+    }
+    thead th:hover { background: #3d2c31; }
+    tbody tr:hover { background: #2c2b28; }
+    .filters input, .filters select { background: #1c1b19; color: var(--text); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Precios de Medicamentos — Compras Públicas de México</h1>
+  <p>Base construida a partir de Compras MX (Secretaría Anticorrupción y Buen Gobierno), cruzada contra el Compendio Nacional de Medicamentos (CSG)</p>
+</header>
+
+<main>
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <input type="text" id="q" placeholder="Buscar producto, proveedor, institución...">
+    <select id="fInstitucion"><option value="">Institución (todas)</option></select>
+    <select id="fGrupo"><option value="">Grupo terapéutico (todos)</option></select>
+    <select id="fTipoProc"><option value="">Tipo de procedimiento (todos)</option></select>
+  </div>
+
+  <div class="result-count" id="resultCount"></div>
+
+  <div id="tableWrap"></div>
+  <div class="pager" id="pager"></div>
+</main>
+
+<script>
+const PAGE_SIZE = 50;
+let allRows = [];
+let filteredRows = [];
+let currentPage = 1;
+let sortKey = 'fecha_firma_contrato';
+let sortDir = -1;
+
+const columns = [
+  { key: 'producto', label: 'Producto' },
+  { key: 'clave', label: 'Clave' },
+  { key: 'institucion', label: 'Institución' },
+  { key: 'proveedor', label: 'Proveedor' },
+  { key: 'precio_unitario', label: 'Precio unitario', num: true },
+  { key: 'cantidad', label: 'Cantidad', num: true },
+  { key: 'valor', label: 'Valor', num: true },
+  { key: 'fecha_firma_contrato', label: 'Fecha firma' },
+];
+
+function money(n) {
+  if (n == null) return '—';
+  return '$' + Number(n).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function num(n) {
+  if (n == null) return '—';
+  return Number(n).toLocaleString('es-MX');
+}
+
+// Unifica cantidad/cantidad_minima/cantidad_maxima en una sola celda: un
+// número si es contrato de cantidad fija, o un rango "mín–máx" si es
+// contrato abierto (min y max distintos) -- misma lógica que el Excel
+// exportado (scripts/extract.js, scripts/validar-claves.js).
+function formatCantidad(r) {
+  if (r.cantidad_minima != null && r.cantidad_maxima != null && r.cantidad_minima !== r.cantidad_maxima) {
+    return `${num(r.cantidad_minima)}–${num(r.cantidad_maxima)}`;
+  }
+  return num(r.cantidad);
+}
+
+function fillSelect(id, values) {
+  const sel = document.getElementById(id);
+  [...new Set(values)].filter(Boolean).sort().forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v; opt.textContent = v;
+    sel.appendChild(opt);
+  });
+}
+
+function renderStats() {
+  const totalValor = filteredRows.reduce((s, r) => s + (r.valor || 0), 0);
+  const claves = new Set(filteredRows.map(r => r.clave).filter(Boolean)).size;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="value">${num(filteredRows.length)}</div><div class="label">Registros</div></div>
+    <div class="stat"><div class="value">${claves}</div><div class="label">Claves distintas</div></div>
+    <div class="stat"><div class="value">${money(totalValor)}</div><div class="label">Valor total (filtrado)</div></div>
+  `;
+}
+
+function applyFilters() {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const inst = document.getElementById('fInstitucion').value;
+  const grupo = document.getElementById('fGrupo').value;
+  const tipoProc = document.getElementById('fTipoProc').value;
+
+  filteredRows = allRows.filter(r => {
+    if (inst && r.institucion !== inst) return false;
+    if (tipoProc && r.tipo_procedimiento !== tipoProc) return false;
+    if (grupo && !(r.grupo_terapeutico || []).includes(grupo)) return false;
+    if (q) {
+      const hay = `${r.producto} ${r.proveedor} ${r.institucion} ${r.clave || ''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  sortRows();
+  currentPage = 1;
+  renderStats();
+  renderTable();
+}
+
+function sortRows() {
+  filteredRows.sort((a, b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    if (typeof va === 'string') return va.localeCompare(vb) * sortDir;
+    return (va - vb) * sortDir;
+  });
+}
+
+function renderTable() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageRows = filteredRows.slice(start, start + PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+
+  document.getElementById('resultCount').textContent =
+    `Mostrando ${pageRows.length ? start + 1 : 0}–${start + pageRows.length} de ${filteredRows.length.toLocaleString('es-MX')} registros`;
+
+  if (!pageRows.length) {
+    document.getElementById('tableWrap').innerHTML = '<div class="empty">Sin resultados para estos filtros.</div>';
+  } else {
+    const thead = `<thead><tr>${columns.map(c =>
+      `<th data-key="${c.key}">${c.label}${sortKey === c.key ? (sortDir === 1 ? ' ▲' : ' ▼') : ''}</th>`
+    ).join('')}</tr></thead>`;
+
+    const tbody = '<tbody>' + pageRows.map(r => `<tr>
+      <td>${r.producto || ''}</td>
+      <td class="muted">${r.clave || '—'}</td>
+      <td>${r.institucion || ''}</td>
+      <td>${r.proveedor || ''}</td>
+      <td class="num">${money(r.precio_unitario)}</td>
+      <td class="num">${formatCantidad(r)}</td>
+      <td class="num">${money(r.valor)}</td>
+      <td class="muted">${r.fecha_firma_contrato || '—'}</td>
+    </tr>`).join('') + '</tbody>';
+
+    document.getElementById('tableWrap').innerHTML = `<table>${thead}${tbody}</table>`;
+    document.querySelectorAll('thead th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+        sortRows(); renderTable();
+      });
+    });
+  }
+
+  document.getElementById('pager').innerHTML = `
+    <button id="prevBtn" ${currentPage <= 1 ? 'disabled' : ''}>← Anterior</button>
+    <span>Página ${currentPage} de ${totalPages}</span>
+    <button id="nextBtn" ${currentPage >= totalPages ? 'disabled' : ''}>Siguiente →</button>
+  `;
+  document.getElementById('prevBtn')?.addEventListener('click', () => { currentPage--; renderTable(); });
+  document.getElementById('nextBtn')?.addEventListener('click', () => { currentPage++; renderTable(); });
+}
+
+async function init() {
+  const res = await fetch('./data.json');
+  allRows = await res.json();
+
+  fillSelect('fInstitucion', allRows.map(r => r.institucion));
+  fillSelect('fGrupo', allRows.flatMap(r => r.grupo_terapeutico || []));
+  fillSelect('fTipoProc', allRows.map(r => r.tipo_procedimiento));
+
+  ['q', 'fInstitucion', 'fGrupo', 'fTipoProc'].forEach(id =>
+    document.getElementById(id).addEventListener('input', applyFilters)
+  );
+
+  applyFilters();
+}
+
+init().catch(err => {
+  document.getElementById('tableWrap').innerHTML =
+    `<div class="empty">No se pudo cargar data.json todavía. (${err.message})</div>`;
+});
+</script>
+
+</body>
+</html>

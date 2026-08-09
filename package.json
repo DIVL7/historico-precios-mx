@@ -1,0 +1,21 @@
+{
+  "name": "historico-precios-mx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:compendio": "node scripts/build-compendio.js",
+    "download": "node scripts/download-csv.js",
+    "extract": "node scripts/extract.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "csv-parse": "^7.0.2",
+    "playwright": "^1.62.1",
+    "xlsx": "^0.18.5"
+  }
+}
