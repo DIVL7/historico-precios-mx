@@ -297,7 +297,17 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
     stats.cantidadesDerivadas.push({ codigo_contrato: contrato.codigoContrato, cve_cucop: item.cve_cucop, subtotal: item.subtotal, precio_unitario: precioUnitario, cantidad_derivada: cantidad });
   }
 
-  const valor = (precioUnitario != null && cantidad != null) ? +(precioUnitario * cantidad).toFixed(2) : null;
+  // `subtotal` es el monto total ya calculado por la fuente para el ítem --
+  // cuando no hay cantidad_minima/cantidad_maxima distintas que preservar
+  // (Cerrado, o "por monto" sin ningún rango), es el número más confiable
+  // posible para `valor`, más confiable incluso que recalcularlo multiplicando
+  // por `cantidad`. Esto importa en particular para el caso "por monto": ahí
+  // `cantidad` ya se derivó arriba dividiendo subtotal/precio_unitario, así
+  // que multiplicarla de vuelta por precio_unitario para obtener `valor`
+  // sería un viaje de ida y vuelta innecesario (subtotal → cantidad →
+  // subtotal) que además puede perder precisión por el redondeo intermedio
+  // de `cantidad` -- si ya se tiene subtotal, se usa directo.
+  const valorDirecto = item.subtotal != null ? +item.subtotal.toFixed(2) : null;
 
   // valor_minimo/valor_maximo: piso y techo de exposición contractual, bien
   // definidos para los dos tipos de contrato sin necesidad de segmentar antes
@@ -309,10 +319,23 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   // `valor`) como si fueran la misma clase de número -- cualquier análisis
   // agregado de gasto debería usar valor_minimo (piso garantizado) o
   // valor_maximo (techo de exposición) explícitamente, no `valor` a secas.
+  //
+  // Solo cuando SÍ hay un rango genuino (cantidad_minima y cantidad_maxima
+  // distintas, "Abierto" real) hace falta calcular piso/techo por separado
+  // multiplicando -- ahí `subtotal` no sirve como respaldo porque la API lo
+  // reporta consistente con cantidad_minima únicamente (ver corrección de
+  // precio_unitario arriba), así que usarlo para el techo estaría mal.
   const cantidadMinimaEfectiva = item.cantidad_minima ?? cantidad;
   const cantidadMaximaEfectiva = item.cantidad_maxima ?? cantidad;
-  const valorMinimo = (precioUnitario != null && cantidadMinimaEfectiva != null) ? +(precioUnitario * cantidadMinimaEfectiva).toFixed(2) : null;
-  const valorMaximo = (precioUnitario != null && cantidadMaximaEfectiva != null) ? +(precioUnitario * cantidadMaximaEfectiva).toFixed(2) : null;
+  const hayRangoGenuino = item.cantidad_minima != null && item.cantidad_maxima != null && item.cantidad_minima !== item.cantidad_maxima;
+
+  const valorCalculado = (precioUnitario != null && cantidad != null) ? +(precioUnitario * cantidad).toFixed(2) : null;
+  const valorMinimoCalculado = (precioUnitario != null && cantidadMinimaEfectiva != null) ? +(precioUnitario * cantidadMinimaEfectiva).toFixed(2) : null;
+  const valorMaximoCalculado = (precioUnitario != null && cantidadMaximaEfectiva != null) ? +(precioUnitario * cantidadMaximaEfectiva).toFixed(2) : null;
+
+  const valor = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorCalculado ?? valorDirecto);
+  const valorMinimo = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorMinimoCalculado ?? valorDirecto);
+  const valorMaximo = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorMaximoCalculado ?? valorDirecto);
 
   return {
     codigo_contrato: contrato.codigoContrato,

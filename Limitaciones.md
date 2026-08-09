@@ -1,6 +1,6 @@
 # Limitaciones de los Datos
 
-**Aplica a:** dataset de 2026 (`docs/data.json`, 24,875 registros)
+**Aplica a:** dataset de 2026 (`docs/data.json`) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
 
 Este documento resume dónde puede haber datos erróneos, imprecisos o incompletos en esta base, y qué alternativas existen para cada caso. Cómo funciona la herramienta está en `Metodologia.md`; aquí solo se documenta qué puede estar mal y qué hacer al respecto.
 
@@ -50,13 +50,11 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ## 4. Contratos "por monto": `cantidad` se deriva, no viene directa de la fuente
 
-**Por qué pasa:** algunos ítems (`tipo_contrato_abierto: "MONTO"` en la API de origen) comprometen un techo de gasto en pesos, no una cantidad de piezas — la fuente no publica `cantidad`, `cantidad_minima` ni `cantidad_maxima` para estos casos. Sí publica `subtotal` (el "Monto de la Oferta" visible en el detalle del contrato en el sitio de Compras MX), que junto con `precio_unitario` permite derivar la cantidad implícita (`subtotal / precio_unitario`) — ver Metodologia.md §5.3.1.
+**Por qué pasa:** algunos ítems (`tipo_contrato_abierto: "MONTO"` en la API de origen) comprometen un techo de gasto en pesos, no una cantidad de piezas — la fuente no publica `cantidad`, `cantidad_minima` ni `cantidad_maxima` para estos casos, ni siquiera `precio_unitario` en algunos (servicios, medicina magistral). Sí publica `subtotal` (el "Monto de la Oferta" visible en el detalle del contrato en el sitio de Compras MX) — ver Metodologia.md §5.3.1 para cómo se usa para derivar `cantidad` y respaldar `valor`.
 
 **Riesgo residual:** la cantidad derivada asume que `subtotal` es exactamente `precio_unitario × cantidad` sin redondeos raros del proveedor; no se ha visto un caso donde no cuadre, pero no está garantizado matemáticamente.
 
 **Alternativas:** revisar `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`) para ver todos los casos donde se aplicó esta derivación.
-
-**Estado actual (backfill parcial):** de los 209 contratos que tenían `cantidad: null` antes de este fix, 206 ya se re-extrajeron con la derivación aplicada. Quedan **3 pendientes** (`C-2026-00033383`, `C-2026-00025194`, `C-2026-00060225`) — no se marcaron como error, simplemente no están todavía en `docs/data.json`, así que la próxima corrida normal de `extract.js` los recoge sola (el pipeline es reanudable: cualquier `codigo_contrato` ausente del dataset se trata como pendiente). El reporte de calidad y el Excel actuales se regeneraron a partir del dataset parcial (23,553 registros), pero sin recalcular `cantidades_derivadas_de_subtotal_entre_precio_unitario` ni `precios_corregidos_por_inconsistencia_con_subtotal` para lo ya existente (se dejaron vacíos a propósito en vez de inventar) — la próxima corrida completa de `extract.js` los vuelve a poblar correctamente para todo el dataset.
 
 ---
 
@@ -102,9 +100,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 **Por qué pasa:** Compras MX no tiene API pública — todo se extrae automatizando un navegador real contra una SPA protegida con reCAPTCHA v3. Un cambio futuro en el sitio (nueva versión de la SPA, cambio de estructura, nuevo mecanismo de paginación) podría romper la extracción sin aviso.
 
-**Alternativas:** ninguna mientras Compras MX no publique una API — es el costo aceptado de esta arquitectura. Mitigación parcial: el reporte de errores por corrida (`docs/data.errores.json`) sirve de alerta temprana si algo empieza a fallar sistemáticamente.
-
-**Bug encontrado y corregido (2026-08-08):** `findAndClickContrato` (búsqueda del contrato dentro de la tabla paginada del expediente) tenía un `while (true)` sin límite de tiempo propio — confiaba en que el timeout duro por contrato (`CONTRATO_HARD_TIMEOUT_MS`, vía `Promise.race`) lo cortara desde afuera. Pero un `Promise.race` no cancela el trabajo en curso en JS: cuando ese timeout externo se disparaba, el bucle seguía corriendo huérfano contra la misma página. Se observó en vivo dos corridas seguidas colgadas indefinidamente (>20 min sin avanzar) en el último expediente de la cola. Corregido: el bucle ahora respeta su propio límite de tiempo (con margen bajo `CONTRATO_HARD_TIMEOUT_MS`) y siempre retorna, en vez de depender de que algo externo lo corte.
+**Alternativas:** ninguna mientras Compras MX no publique una API — es el costo aceptado de esta arquitectura. Mitigación parcial: el reporte de errores por corrida (`docs/data.errores.json`) sirve de alerta temprana si algo empieza a fallar sistemáticamente. La búsqueda del contrato dentro de la tabla paginada (`findAndClickContrato`) tiene su propio límite de tiempo interno (no solo el timeout duro externo, que no cancela trabajo en curso en JS) para nunca quedarse colgada indefinidamente si el contrato no aparece en la tabla.
 
 ---
 

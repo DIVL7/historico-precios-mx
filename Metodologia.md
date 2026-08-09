@@ -87,8 +87,8 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | `cantidad` | `cantidad_maxima ?? cantidad ?? cantidad_minima`, o derivada de `subtotal / precio_unitario` si las tres vienen vacías — ver §5.3.1 | Usado para `valor`. Es el compromiso contractual, no el volumen entregado |
 | `cantidad_minima` / `cantidad_maxima` | "Cantidad mínima" / "Cantidad máxima" (`detallepartidas`) | `cantidad_maxima` solo viene poblada en contratos tipo "abierto" |
 | `tipo_contrato` | "Tipo de contrato" (CSV) | `Abierto` / `Cerrado`, valor oficial de la fuente — no se infiere de si `cantidad_maxima` viene poblada, para tener una sola fuente de verdad sin ambigüedad al integrar ambos esquemas de cantidad en la misma tabla |
-| `valor` | `precio_unitario × cantidad` (derivado) | Número único de referencia para ver un registro individual — ver §5.5 antes de sumarlo entre muchos registros |
-| `valor_minimo` / `valor_maximo` | `precio_unitario × cantidad_minima` / `precio_unitario × cantidad_maxima` (derivados) | Piso y techo de exposición contractual — ver §5.5 |
+| `valor` | `precio_unitario × cantidad`, o `subtotal` directo si no se puede calcular así — ver §5.3.1 | Número único de referencia para ver un registro individual — ver §5.5 antes de sumarlo entre muchos registros |
+| `valor_minimo` / `valor_maximo` | `precio_unitario × cantidad_minima` / `precio_unitario × cantidad_maxima`, o `subtotal` directo si no se puede calcular así — ver §5.3.1 | Piso y techo de exposición contractual — ver §5.5 |
 | `fecha_firma_contrato` | "Fecha firma contrato" (CSV) | Cuándo se formalizó el contrato |
 | `fecha_fallo` | "Fecha de fallo" (CSV) | Cuándo se determinó el precio ganador (adjudicación) — normalmente precede a la firma |
 | `fecha_inicio_contrato` / `fecha_fin_contrato` | "Fecha de inicio del contrato" / "Fecha de fin del contrato" (CSV) | Ventana de vigencia del contrato — cuándo ese precio estuvo activo para entregas, distinto de cuándo se firmó |
@@ -125,9 +125,12 @@ La clave ganadora de cada grupo se propaga a todas sus instancias, así el mismo
 
 El subtotal reportado por la API es consistente con `cantidad_minima` en todos los casos verificados. El pipeline recalcula `precio_unitario = subtotal / cantidad_minima` y solo conserva el valor original de la API cuando coincide (±1%); cada corrección queda registrada en `docs/data.calidad.json`.
 
-### 5.3.1 Derivación de `cantidad` en contratos "por monto"
+### 5.3.1 Derivación de `cantidad` y `valor` en contratos "por monto"
 
-Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad`, `cantidad_minima` y `cantidad_maxima` vienen vacíos desde el origen para esos ítems (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" que se ve en el detalle del contrato en el sitio — que junto con `precio_unitario` permite derivar la cantidad implícita: `cantidad = subtotal / precio_unitario`. El pipeline aplica esta derivación solo cuando las tres vías directas fallan, y registra cada caso en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`) para trazabilidad.
+Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad`, `cantidad_minima` y `cantidad_maxima` vienen vacíos desde el origen (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" visible en el detalle del contrato en el sitio — que permite derivar dos cosas:
+
+- **`cantidad`** (informativa): `subtotal / precio_unitario`, solo cuando las tres vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
+- **`valor` / `valor_minimo` / `valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de `cantidad`. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar `cantidad` tampoco, pero `valor` sí se rescata de `subtotal`.
 
 ### 5.4 Reporte de calidad
 
