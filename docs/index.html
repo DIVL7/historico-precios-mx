@@ -22,6 +22,15 @@
 
   main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
 
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
   .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
   .stat {
     background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
@@ -44,28 +53,30 @@
   .result-count { font-size: 0.85rem; color: var(--muted); margin: 8px 0 12px; }
 
   .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
-  table { width: 100%; min-width: 1100px; border-collapse: collapse; }
+  table { width: 100%; min-width: 900px; border-collapse: collapse; }
   thead th {
     background: var(--accent-light); text-align: left; font-size: 0.75rem;
     text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent);
-    padding: 10px 12px; position: sticky; top: 0; cursor: pointer; user-select: none;
-    white-space: nowrap;
+    position: sticky; top: 0; white-space: nowrap;
   }
-  thead th:hover { background: #ecd9de; }
+  thead th.static { padding: 10px 12px; }
+  .sort-btn {
+    all: unset; box-sizing: border-box; display: block; width: 100%;
+    padding: 10px 12px; cursor: pointer; font: inherit; color: inherit;
+    text-transform: inherit; letter-spacing: inherit; white-space: inherit;
+    user-select: none;
+  }
+  .sort-btn:hover { background: #ecd9de; }
   tbody td { padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border); vertical-align: top; }
   tbody tr:hover { background: #fafafa; }
-  .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .muted { color: var(--muted); }
-  .badge {
-    display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem;
-    font-weight: 600; white-space: nowrap;
+
+  .detalle-btn {
+    padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--accent-light); color: var(--accent); font-size: 0.78rem;
+    font-weight: 600; cursor: pointer; white-space: nowrap;
   }
-  .badge-abierto { background: #e6eef7; color: #2b5a8a; }
-  .badge-cerrado { background: #ece6f7; color: #5a3d8a; }
-  @media (prefers-color-scheme: dark) {
-    .badge-abierto { background: #1f3347; color: #9cc4ea; }
-    .badge-cerrado { background: #2f2447; color: #c5aeea; }
-  }
+  .detalle-btn:hover { background: #ecd9de; }
 
   .pager { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
   .pager button {
@@ -75,15 +86,40 @@
   .pager button:disabled { opacity: 0.4; cursor: default; }
 
   .empty { text-align: center; padding: 40px; color: var(--muted); }
+  .empty .detail { margin-top: 8px; font-size: 0.75rem; opacity: 0.7; }
+
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(20, 18, 16, 0.5);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100;
+  }
+  .modal-backdrop[hidden] { display: none; }
+  .modal {
+    background: var(--panel); border-radius: 10px; max-width: 560px; width: 100%;
+    max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  }
+  .modal-header {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    padding: 20px 24px 14px; border-bottom: 1px solid var(--border);
+  }
+  .modal-header h2 { margin: 0; font-size: 1.05rem; }
+  .modal-close {
+    background: none; border: 0; font-size: 1.1rem; line-height: 1; cursor: pointer;
+    color: var(--muted); padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
+  }
+  .modal-close:hover { background: #ecd9de; color: var(--accent); }
+  .modal-body { margin: 0; padding: 16px 24px 24px; display: grid; grid-template-columns: max-content 1fr; gap: 10px 16px; }
+  .modal-body dt { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); white-space: nowrap; }
+  .modal-body dd { margin: 0; font-size: 0.9rem; }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1c1b19; --panel: #262523; --border: #3a3833; --text: #ece9e4;
       --muted: #9a9890; --accent: #d98fa3; --accent-light: #33262a;
     }
-    thead th:hover { background: #3d2c31; }
+    .sort-btn:hover, .detalle-btn:hover, .modal-close:hover { background: #3d2c31; }
     tbody tr:hover { background: #2c2b28; }
     .filters input, .filters select { background: #1c1b19; color: var(--text); }
+    .modal-backdrop { background: rgba(0, 0, 0, 0.65); }
   }
 </style>
 </head>
@@ -98,22 +134,33 @@
   <div class="stats" id="stats"></div>
 
   <div class="filters">
-    <input type="text" id="q" placeholder="Buscar producto, proveedor, institución...">
-    <select id="fInstitucion"><option value="">Institución (todas)</option></select>
-    <select id="fGrupo"><option value="">Grupo terapéutico (todos)</option></select>
-    <select id="fTipoProc"><option value="">Tipo de procedimiento (todos)</option></select>
-    <select id="fTipoContrato">
+    <label for="q" class="sr-only">Buscar</label>
+    <input type="text" id="q" placeholder="Buscar producto, proveedor, institución, código de contrato...">
+    <select id="fInstitucion" aria-label="Institución"><option value="">Institución (todas)</option></select>
+    <select id="fGrupo" aria-label="Grupo terapéutico"><option value="">Grupo terapéutico (todos)</option></select>
+    <select id="fTipoProc" aria-label="Tipo de procedimiento"><option value="">Tipo de procedimiento (todos)</option></select>
+    <select id="fTipoContrato" aria-label="Tipo de contrato">
       <option value="">Tipo de contrato (todos)</option>
       <option value="Abierto">Abierto (rango mín–máx)</option>
       <option value="Cerrado">Cerrado (cantidad fija)</option>
     </select>
   </div>
 
-  <div class="result-count" id="resultCount"></div>
+  <div class="result-count" id="resultCount" aria-live="polite" aria-atomic="true"></div>
 
   <div id="tableWrap" class="table-wrap"></div>
   <div class="pager" id="pager"></div>
 </main>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Cerrar detalle">✕</button>
+    </div>
+    <dl class="modal-body" id="modalBody"></dl>
+  </div>
+</div>
 
 <script>
 const PAGE_SIZE = 50;
@@ -122,20 +169,36 @@ let filteredRows = [];
 let currentPage = 1;
 let sortKey = 'fecha_firma_contrato';
 let sortDir = -1;
+let lastFocusedEl = null;
 
+// Columnas principales de la tabla -- las que se listan de un vistazo. El
+// resto de los campos del registro vive en el modal "Detalle" (ver
+// DETALLE_CAMPOS) para no saturar la tabla con las ~19 columnas del dataset
+// completo (Metodologia.md §4).
 const columns = [
-  { key: 'producto', label: 'Producto' },
-  { key: 'clave', label: 'Clave' },
+  { key: 'codigo_contrato', label: 'Código de contrato' },
+  { key: 'num_contrato', label: 'Número de contrato' },
   { key: 'institucion', label: 'Institución' },
   { key: 'proveedor', label: 'Proveedor' },
-  { key: 'tipo_contrato', label: 'Tipo contrato' },
-  { key: 'precio_unitario', label: 'Precio unitario', num: true },
-  { key: 'cantidad', label: 'Cantidad', num: true },
-  { key: 'unidad_medida', label: 'Unidad' },
-  { key: 'valor_maximo', label: 'Valor (piso–techo)', num: true },
-  { key: 'procedimiento', label: 'Procedimiento' },
-  { key: 'fecha_inicio_contrato', label: 'Vigencia' },
-  { key: 'fecha_firma_contrato', label: 'Fecha firma' },
+  { key: 'cve_cucop', label: 'Clave CUCoP' },
+  { key: 'producto', label: 'Producto' },
+  { key: 'grupo_terapeutico', label: 'Grupo terapéutico', sortable: false },
+  { key: 'detalle', label: 'Detalle', sortable: false },
+];
+
+const DETALLE_CAMPOS = [
+  ['Clave (Compendio CSG)', r => r.clave || '—'],
+  ['Unidad de medida', r => r.unidad_medida || '—'],
+  ['Precio unitario', r => money(r.precio_unitario)],
+  ['Cantidad', r => num(r.cantidad)],
+  ['Valor', r => money(r.valor)],
+  ['Valor mínimo', r => money(r.valor_minimo)],
+  ['Valor máximo', r => money(r.valor_maximo)],
+  ['Tipo de procedimiento', r => r.tipo_procedimiento || '—'],
+  ['Fecha de firma', r => r.fecha_firma_contrato || '—'],
+  ['Fecha de fallo', r => r.fecha_fallo || '—'],
+  ['Fecha de inicio', r => r.fecha_inicio_contrato || '—'],
+  ['Fecha de fin', r => r.fecha_fin_contrato || '—'],
 ];
 
 function money(n) {
@@ -148,37 +211,9 @@ function num(n) {
   return Number(n).toLocaleString('es-MX');
 }
 
-// Unifica cantidad/cantidad_minima/cantidad_maxima en una sola celda: un
-// número si es contrato de cantidad fija, o un rango "mín–máx" si es
-// contrato abierto (min y max distintos) -- misma lógica que el Excel
-// exportado (scripts/extract.js, scripts/validar-claves.js).
-function formatCantidad(r) {
-  if (r.cantidad_minima != null && r.cantidad_maxima != null && r.cantidad_minima !== r.cantidad_maxima) {
-    return `${num(r.cantidad_minima)}–${num(r.cantidad_maxima)}`;
-  }
-  return num(r.cantidad);
-}
-
-// Mismo criterio que formatCantidad pero para valor: en "Cerrado" valor_minimo
-// == valor_maximo (un solo monto real comprometido); en "Abierto" divergen
-// (piso garantizado vs. techo de exposición) -- ver Metodologia.md §5.5 sobre
-// por qué nunca se debe sumar/mostrar `valor` a secas sin este contexto.
-function formatValor(r) {
-  if (r.valor_minimo != null && r.valor_maximo != null && r.valor_minimo !== r.valor_maximo) {
-    return `${money(r.valor_minimo)} – ${money(r.valor_maximo)}`;
-  }
-  return money(r.valor_maximo ?? r.valor_minimo ?? r.valor);
-}
-
-function formatVigencia(r) {
-  if (!r.fecha_inicio_contrato && !r.fecha_fin_contrato) return '—';
-  return `${r.fecha_inicio_contrato || '—'} – ${r.fecha_fin_contrato || '—'}`;
-}
-
-function tipoContratoBadge(r) {
-  if (!r.tipo_contrato) return '<span class="muted">—</span>';
-  const cls = r.tipo_contrato === 'Abierto' ? 'badge-abierto' : 'badge-cerrado';
-  return `<span class="badge ${cls}">${r.tipo_contrato}</span>`;
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
 
 function fillSelect(id, values) {
@@ -206,7 +241,42 @@ function renderStats() {
   `;
 }
 
-function applyFilters() {
+// Refleja filtros/orden/página en la URL (query params) para poder compartir
+// o guardar un enlace a una vista específica -- se usa replaceState (no
+// pushState) para no llenar el historial del navegador en cada tecla.
+function writeStateToURL() {
+  const p = new URLSearchParams();
+  const q = document.getElementById('q').value.trim();
+  const inst = document.getElementById('fInstitucion').value;
+  const grupo = document.getElementById('fGrupo').value;
+  const tipoProc = document.getElementById('fTipoProc').value;
+  const tipoContrato = document.getElementById('fTipoContrato').value;
+  if (q) p.set('q', q);
+  if (inst) p.set('institucion', inst);
+  if (grupo) p.set('grupo', grupo);
+  if (tipoProc) p.set('tipoProc', tipoProc);
+  if (tipoContrato) p.set('tipoContrato', tipoContrato);
+  if (sortKey !== 'fecha_firma_contrato' || sortDir !== -1) {
+    p.set('sort', sortKey); p.set('dir', sortDir === 1 ? 'asc' : 'desc');
+  }
+  if (currentPage > 1) p.set('page', String(currentPage));
+  const qs = p.toString();
+  history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+}
+
+function restoreStateFromURL() {
+  const p = new URLSearchParams(location.search);
+  document.getElementById('q').value = p.get('q') || '';
+  document.getElementById('fInstitucion').value = p.get('institucion') || '';
+  document.getElementById('fGrupo').value = p.get('grupo') || '';
+  document.getElementById('fTipoProc').value = p.get('tipoProc') || '';
+  document.getElementById('fTipoContrato').value = p.get('tipoContrato') || '';
+  sortKey = p.get('sort') || sortKey;
+  sortDir = p.get('dir') ? (p.get('dir') === 'asc' ? 1 : -1) : sortDir;
+  currentPage = p.get('page') ? Math.max(1, parseInt(p.get('page'), 10) || 1) : currentPage;
+}
+
+function computeFilteredRows() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const inst = document.getElementById('fInstitucion').value;
   const grupo = document.getElementById('fGrupo').value;
@@ -219,16 +289,25 @@ function applyFilters() {
     if (tipoContrato && r.tipo_contrato !== tipoContrato) return false;
     if (grupo && !(r.grupo_terapeutico || []).includes(grupo)) return false;
     if (q) {
-      const hay = `${r.producto} ${r.proveedor} ${r.institucion} ${r.clave || ''}`.toLowerCase();
+      const hay = `${r.producto} ${r.proveedor} ${r.institucion} ${r.clave || ''} ${r.codigo_contrato || ''} ${r.num_contrato || ''} ${r.cve_cucop || ''}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   });
 
   sortRows();
+}
+
+// Usado por los controles de filtro: cualquier cambio de filtro/búsqueda
+// vuelve a la página 1 (la página que traía la URL solo tiene sentido para
+// la carga inicial -- ver init(), que llama computeFilteredRows() directo
+// en vez de esto para no pisar el ?page= restaurado de la URL).
+function applyFilters() {
+  computeFilteredRows();
   currentPage = 1;
   renderStats();
   renderTable();
+  writeStateToURL();
 }
 
 function sortRows() {
@@ -242,9 +321,10 @@ function sortRows() {
 }
 
 function renderTable() {
+  const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageRows = filteredRows.slice(start, start + PAGE_SIZE);
-  const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
 
   document.getElementById('resultCount').textContent =
     `Mostrando ${pageRows.length ? start + 1 : 0}–${start + pageRows.length} de ${filteredRows.length.toLocaleString('es-MX')} registros`;
@@ -252,32 +332,37 @@ function renderTable() {
   if (!pageRows.length) {
     document.getElementById('tableWrap').innerHTML = '<div class="empty">Sin resultados para estos filtros.</div>';
   } else {
-    const thead = `<thead><tr>${columns.map(c =>
-      `<th data-key="${c.key}">${c.label}${sortKey === c.key ? (sortDir === 1 ? ' ▲' : ' ▼') : ''}</th>`
-    ).join('')}</tr></thead>`;
+    const thead = `<thead><tr>${columns.map(c => {
+      if (c.sortable === false) return `<th class="static">${c.label}</th>`;
+      const active = sortKey === c.key;
+      const ariaSort = active ? (sortDir === 1 ? 'ascending' : 'descending') : 'none';
+      const arrow = active ? (sortDir === 1 ? ' ▲' : ' ▼') : '';
+      return `<th aria-sort="${ariaSort}"><button type="button" class="sort-btn" data-key="${c.key}">${c.label}${arrow}</button></th>`;
+    }).join('')}</tr></thead>`;
 
-    const tbody = '<tbody>' + pageRows.map(r => `<tr>
+    const tbody = '<tbody>' + pageRows.map((r, i) => `<tr>
+      <td>${r.codigo_contrato || '—'}</td>
+      <td>${r.num_contrato || '—'}</td>
+      <td>${r.institucion || '—'}</td>
+      <td>${r.proveedor || '—'}</td>
+      <td class="muted">${r.cve_cucop || '—'}</td>
       <td>${r.producto || ''}</td>
-      <td class="muted">${r.clave || '—'}</td>
-      <td>${r.institucion || ''}</td>
-      <td>${r.proveedor || ''}</td>
-      <td>${tipoContratoBadge(r)}</td>
-      <td class="num">${money(r.precio_unitario)}</td>
-      <td class="num">${formatCantidad(r)}</td>
-      <td class="muted">${r.unidad_medida || '—'}</td>
-      <td class="num">${formatValor(r)}</td>
-      <td class="muted">${r.procedimiento || '—'}</td>
-      <td class="muted">${formatVigencia(r)}</td>
-      <td class="muted">${r.fecha_firma_contrato || '—'}</td>
+      <td class="muted">${(r.grupo_terapeutico || []).join(', ') || '—'}</td>
+      <td><button type="button" class="detalle-btn" data-idx="${start + i}">Ver detalle</button></td>
     </tr>`).join('') + '</tbody>';
 
     document.getElementById('tableWrap').innerHTML = `<table>${thead}${tbody}</table>`;
-    document.querySelectorAll('thead th').forEach(th => {
-      th.addEventListener('click', () => {
-        const key = th.dataset.key;
+
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
         if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
-        sortRows(); renderTable();
+        currentPage = 1;
+        sortRows(); renderTable(); writeStateToURL();
       });
+    });
+    document.querySelectorAll('.detalle-btn').forEach(btn => {
+      btn.addEventListener('click', () => openDetalle(filteredRows[Number(btn.dataset.idx)]));
     });
   }
 
@@ -286,28 +371,67 @@ function renderTable() {
     <span>Página ${currentPage} de ${totalPages}</span>
     <button id="nextBtn" ${currentPage >= totalPages ? 'disabled' : ''}>Siguiente →</button>
   `;
-  document.getElementById('prevBtn')?.addEventListener('click', () => { currentPage--; renderTable(); });
-  document.getElementById('nextBtn')?.addEventListener('click', () => { currentPage++; renderTable(); });
+  document.getElementById('prevBtn')?.addEventListener('click', () => { currentPage--; renderTable(); writeStateToURL(); });
+  document.getElementById('nextBtn')?.addEventListener('click', () => { currentPage++; renderTable(); writeStateToURL(); });
+}
+
+function openDetalle(r) {
+  if (!r) return;
+  lastFocusedEl = document.activeElement;
+  document.getElementById('modalTitle').textContent = r.producto || 'Detalle';
+  document.getElementById('modalBody').innerHTML = DETALLE_CAMPOS
+    .map(([label, get]) => `<dt>${label}</dt><dd>${get(r)}</dd>`).join('');
+  document.getElementById('modalBackdrop').hidden = false;
+  document.getElementById('modalClose').focus();
+  document.addEventListener('keydown', onModalKeydown);
+}
+
+function closeDetalle() {
+  document.getElementById('modalBackdrop').hidden = true;
+  document.removeEventListener('keydown', onModalKeydown);
+  lastFocusedEl?.focus();
+}
+
+function onModalKeydown(e) {
+  if (e.key === 'Escape') closeDetalle();
 }
 
 async function init() {
+  document.getElementById('tableWrap').innerHTML = '<div class="empty">Cargando datos…</div>';
+
   const res = await fetch('./data.json');
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
   allRows = await res.json();
 
   fillSelect('fInstitucion', allRows.map(r => r.institucion));
   fillSelect('fGrupo', allRows.flatMap(r => r.grupo_terapeutico || []));
   fillSelect('fTipoProc', allRows.map(r => r.tipo_procedimiento));
 
-  ['q', 'fInstitucion', 'fGrupo', 'fTipoProc', 'fTipoContrato'].forEach(id =>
+  restoreStateFromURL();
+
+  document.getElementById('q').addEventListener('input', debounce(applyFilters, 250));
+  ['fInstitucion', 'fGrupo', 'fTipoProc', 'fTipoContrato'].forEach(id =>
     document.getElementById(id).addEventListener('input', applyFilters)
   );
+  document.getElementById('modalClose').addEventListener('click', closeDetalle);
+  document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'modalBackdrop') closeDetalle();
+  });
 
-  applyFilters();
+  // No usa applyFilters() aquí porque esa siempre resetea a la página 1 --
+  // en la carga inicial se respeta el ?page= que haya traído la URL.
+  computeFilteredRows();
+  renderStats();
+  renderTable();
+  writeStateToURL();
 }
 
 init().catch(err => {
-  document.getElementById('tableWrap').innerHTML =
-    `<div class="empty">No se pudo cargar data.json todavía. (${err.message})</div>`;
+  document.getElementById('tableWrap').innerHTML = `
+    <div class="empty">
+      No se pudo cargar la base de datos. Intenta recargar la página; si el problema persiste, es posible que el dataset todavía no esté publicado.
+      <div class="detail">${err.message}</div>
+    </div>`;
 });
 </script>
 

@@ -48,6 +48,37 @@ const CUCOP_PATH = path.join(__dirname, '..', 'data', 'raw', 'cucop.xlsx');
 
 const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
 
+// Descripción de cada columna de docs/data.json (Metodologia.md §4), para la
+// hoja "Diccionario" del Excel -- quien reciba data.xlsx suelto, sin este
+// repo a la mano, necesita saber qué significa cada campo.
+const DICCIONARIO = [
+  ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
+  ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
+  ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
+  ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
+  ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
+  ['producto', 'Descripción del medicamento, según el detalle del contrato.'],
+  ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
+  ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
+  ['procedimiento', 'Número de procedimiento de contratación.'],
+  ['tipo_procedimiento', 'CONSOLIDADA (varias instituciones agrupadas en un solo procedimiento) o NO CONSOLIDADA (una sola institución).'],
+  ['tipo_contrato', 'Abierto (rango mín-máx) o Cerrado (cantidad fija), valor oficial de la fuente.'],
+  ['proveedor', 'Nombre del proveedor o contratista.'],
+  ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
+  ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
+  ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
+  ['cantidad', 'Cantidad comprometida en el contrato (no lo entregado realmente). En contratos "por monto" se deriva de subtotal/precio_unitario.'],
+  ['cantidad_minima', 'Cantidad mínima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
+  ['cantidad_maxima', 'Cantidad máxima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
+  ['valor', 'precio_unitario × cantidad (o subtotal directo). Referencia de un registro individual -- no sumar entre muchos registros (ver Metodologia.md §5.5).'],
+  ['valor_minimo', 'Piso de exposición contractual garantizado. Usar este campo (o valor_maximo) para sumas/promedios agregados, nunca "valor".'],
+  ['valor_maximo', 'Techo de exposición contractual posible. En contratos Cerrado es igual a valor_minimo (no hay rango que representar).'],
+  ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
+  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma.'],
+  ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
+  ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
+];
+
 function normalizarTexto(s) {
   return String(s || '')
     .toUpperCase()
@@ -165,7 +196,10 @@ function guardarExcel(outPath, resultados) {
     };
   });
   const ws = XLSX.utils.json_to_sheet(filas);
+  const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
+  wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];
   const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsDiccionario, 'Diccionario');
   XLSX.utils.book_append_sheet(wb, ws, 'Precios');
   XLSX.writeFile(wb, outPath);
 }
