@@ -31,14 +31,6 @@
     outline: 2px solid var(--accent); outline-offset: 2px;
   }
 
-  .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-  .stat {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px 20px; flex: 1; min-width: 140px;
-  }
-  .stat .value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
-  .stat .label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
-
   .filters {
     background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
     padding: 16px; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
@@ -131,19 +123,11 @@
 </header>
 
 <main>
-  <div class="stats" id="stats"></div>
-
   <div class="filters">
     <label for="q" class="sr-only">Buscar</label>
-    <input type="text" id="q" placeholder="Buscar producto, proveedor, institución, código de contrato...">
+    <input type="text" id="q" placeholder="Buscar por producto, proveedor, código de contrato, clave...">
     <select id="fInstitucion" aria-label="Institución"><option value="">Institución (todas)</option></select>
     <select id="fGrupo" aria-label="Grupo terapéutico"><option value="">Grupo terapéutico (todos)</option></select>
-    <select id="fTipoProc" aria-label="Tipo de procedimiento"><option value="">Tipo de procedimiento (todos)</option></select>
-    <select id="fTipoContrato" aria-label="Tipo de contrato">
-      <option value="">Tipo de contrato (todos)</option>
-      <option value="Abierto">Abierto (rango mín–máx)</option>
-      <option value="Cerrado">Cerrado (cantidad fija)</option>
-    </select>
   </div>
 
   <div class="result-count" id="resultCount" aria-live="polite" aria-atomic="true"></div>
@@ -197,8 +181,7 @@ const DETALLE_CAMPOS = [
   ['Tipo de procedimiento', r => r.tipo_procedimiento || '—'],
   ['Fecha de firma', r => r.fecha_firma_contrato || '—'],
   ['Fecha de fallo', r => r.fecha_fallo || '—'],
-  ['Fecha de inicio', r => r.fecha_inicio_contrato || '—'],
-  ['Fecha de fin', r => r.fecha_fin_contrato || '—'],
+  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${r.fecha_inicio_contrato || '—'} – ${r.fecha_fin_contrato || '—'}` : '—'],
 ];
 
 function money(n) {
@@ -225,22 +208,6 @@ function fillSelect(id, values) {
   });
 }
 
-// Se suman valor_minimo/valor_maximo por separado (piso garantizado / techo de
-// exposición), nunca `valor` a secas -- sumar `valor` mezclaría el monto real
-// de contratos "Cerrado" con el techo posible de contratos "Abierto" como si
-// fueran la misma clase de número (Metodologia.md §5.5).
-function renderStats() {
-  const pisoTotal = filteredRows.reduce((s, r) => s + (r.valor_minimo || 0), 0);
-  const techoTotal = filteredRows.reduce((s, r) => s + (r.valor_maximo || 0), 0);
-  const claves = new Set(filteredRows.map(r => r.clave).filter(Boolean)).size;
-  document.getElementById('stats').innerHTML = `
-    <div class="stat"><div class="value">${num(filteredRows.length)}</div><div class="label">Registros</div></div>
-    <div class="stat"><div class="value">${claves}</div><div class="label">Claves distintas</div></div>
-    <div class="stat"><div class="value">${money(pisoTotal)}</div><div class="label">Gasto piso (filtrado)</div></div>
-    <div class="stat"><div class="value">${money(techoTotal)}</div><div class="label">Exposición techo (filtrado)</div></div>
-  `;
-}
-
 // Refleja filtros/orden/página en la URL (query params) para poder compartir
 // o guardar un enlace a una vista específica -- se usa replaceState (no
 // pushState) para no llenar el historial del navegador en cada tecla.
@@ -249,13 +216,9 @@ function writeStateToURL() {
   const q = document.getElementById('q').value.trim();
   const inst = document.getElementById('fInstitucion').value;
   const grupo = document.getElementById('fGrupo').value;
-  const tipoProc = document.getElementById('fTipoProc').value;
-  const tipoContrato = document.getElementById('fTipoContrato').value;
   if (q) p.set('q', q);
   if (inst) p.set('institucion', inst);
   if (grupo) p.set('grupo', grupo);
-  if (tipoProc) p.set('tipoProc', tipoProc);
-  if (tipoContrato) p.set('tipoContrato', tipoContrato);
   if (sortKey !== 'fecha_firma_contrato' || sortDir !== -1) {
     p.set('sort', sortKey); p.set('dir', sortDir === 1 ? 'asc' : 'desc');
   }
@@ -269,8 +232,6 @@ function restoreStateFromURL() {
   document.getElementById('q').value = p.get('q') || '';
   document.getElementById('fInstitucion').value = p.get('institucion') || '';
   document.getElementById('fGrupo').value = p.get('grupo') || '';
-  document.getElementById('fTipoProc').value = p.get('tipoProc') || '';
-  document.getElementById('fTipoContrato').value = p.get('tipoContrato') || '';
   sortKey = p.get('sort') || sortKey;
   sortDir = p.get('dir') ? (p.get('dir') === 'asc' ? 1 : -1) : sortDir;
   currentPage = p.get('page') ? Math.max(1, parseInt(p.get('page'), 10) || 1) : currentPage;
@@ -280,13 +241,9 @@ function computeFilteredRows() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const inst = document.getElementById('fInstitucion').value;
   const grupo = document.getElementById('fGrupo').value;
-  const tipoProc = document.getElementById('fTipoProc').value;
-  const tipoContrato = document.getElementById('fTipoContrato').value;
 
   filteredRows = allRows.filter(r => {
     if (inst && r.institucion !== inst) return false;
-    if (tipoProc && r.tipo_procedimiento !== tipoProc) return false;
-    if (tipoContrato && r.tipo_contrato !== tipoContrato) return false;
     if (grupo && !(r.grupo_terapeutico || []).includes(grupo)) return false;
     if (q) {
       const hay = `${r.producto} ${r.proveedor} ${r.institucion} ${r.clave || ''} ${r.codigo_contrato || ''} ${r.num_contrato || ''} ${r.cve_cucop || ''}`.toLowerCase();
@@ -305,7 +262,6 @@ function computeFilteredRows() {
 function applyFilters() {
   computeFilteredRows();
   currentPage = 1;
-  renderStats();
   renderTable();
   writeStateToURL();
 }
@@ -405,12 +361,11 @@ async function init() {
 
   fillSelect('fInstitucion', allRows.map(r => r.institucion));
   fillSelect('fGrupo', allRows.flatMap(r => r.grupo_terapeutico || []));
-  fillSelect('fTipoProc', allRows.map(r => r.tipo_procedimiento));
 
   restoreStateFromURL();
 
   document.getElementById('q').addEventListener('input', debounce(applyFilters, 250));
-  ['fInstitucion', 'fGrupo', 'fTipoProc', 'fTipoContrato'].forEach(id =>
+  ['fInstitucion', 'fGrupo'].forEach(id =>
     document.getElementById(id).addEventListener('input', applyFilters)
   );
   document.getElementById('modalClose').addEventListener('click', closeDetalle);
@@ -421,7 +376,6 @@ async function init() {
   // No usa applyFilters() aquí porque esa siempre resetea a la página 1 --
   // en la carga inicial se respeta el ?page= que haya traído la URL.
   computeFilteredRows();
-  renderStats();
   renderTable();
   writeStateToURL();
 }
