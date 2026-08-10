@@ -1,6 +1,6 @@
 # Limitaciones de los Datos
 
-**Aplica a:** dataset de 2026 (`docs/data.json`, 16,920 registros) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
+**Aplica a:** dataset de 2026 (`docs/data.json`, 16,911 registros) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
 
 Este documento resume dónde puede haber datos erróneos, imprecisos o incompletos en esta base, y qué alternativas existen para cada caso. Cómo funciona la herramienta está en `Metodologia.md`; aquí solo se documenta qué puede estar mal y qué hacer al respecto.
 
@@ -8,11 +8,11 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 33.4% de los registros (5,650 de 16,920)
+## 1. Grupo terapéutico: falta en 32.8% de los registros (5,552 de 16,911)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
-- El catálogo CUCoP+ referencia **2,596 claves** bajo la partida de medicamentos, pero el Compendio Nacional descargado solo tiene **1,895** — cubre ~70% del universo de claves que se compran en la práctica.
+- El catálogo CUCoP+ referencia **2,600 claves** bajo la partida de medicamentos, pero el Compendio Nacional descargado solo tiene **1,895** — cubre ~70% del universo de claves que se compran en la práctica. (El catálogo tiene 3,386 entradas en total bajo esa partida, pero 786 no traen ninguna clave CSG asociada en su propia ficha — ver Metodologia.md §5.3.2.)
 - Buena parte de estos registros probablemente corresponden a medicamentos comprados **fuera del cuadro básico oficial** (ver punto 3), que por definición no tienen clave CNIS.
 
 **Alternativas:**
@@ -26,11 +26,11 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Por qué pasa:** cuando la institución no cita la clave directamente en la descripción del contrato, el pipeline la recupera vía el código `cve_cucop` del catálogo CUCoP. Esa recuperación puede fallar cuando la institución usó un código genérico o de la dosis/presentación equivocada — confirmado contra la respuesta cruda de la API (no es un error de la extracción, viene así desde el origen).
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
-- De los registros con clave vía CUCoP, **39% no pasan** la autoverificación contra la dosis que ese código declara.
-- De los **7,456 productos canónicos** del dataset, **2,665 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los registros con clave vía CUCoP, **38% no pasan** la autoverificación contra la dosis que ese código declara.
+- De los **7,225 productos canónicos** del dataset, **2,528 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
 
 **Alternativas para lo sin resolver:**
-- Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,596 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
+- Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,600 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
 - Descargar y parsear `https://www.csg.gob.mx/Comp26042025.pdf` (Compendio en PDF, +10MB) como fuente alterna si vademecum dejara de existir — no implementado.
 - **Corrección manual dirigida** (priorizar por `valor_maximo` del contrato en vez de cubrir el 100%): tomar el `producto` de `docs/data.correcciones.json` (`sin_resolver`), determinar la clave correcta a mano, y editar `docs/data.json` poniendo `clave`, `grupo_terapeutico` y **`clave_fuente: "manual"`** en todos los registros con ese `producto`. Cualquier `clave_fuente` distinto de `null`/`"cucop"` se trata como confiable, así que la corrección sobrevive a la siguiente corrida de `validar-claves.js` y se propaga sola a otros registros del mismo producto canónico. Correr `node scripts/validar-claves.js` una vez después de editar para regenerar la propagación y el Excel.
 
@@ -78,13 +78,20 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 7. Texto de producto corrupto o mal capturado en la fuente
+## 7. Texto de producto: dos patrones degenerados corregidos automáticamente; typos sueltos no
 
-**Por qué pasa:** algunas descripciones de origen tienen errores de digitación evidentes de la institución compradora, y en al menos un caso el campo `producto` capturó el título genérico del contrato en vez del nombre del medicamento.
+**Qué se detectó (2026-08-10), verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en dos patrones estructurales recurrentes:
+- Referencia vacía de contenido: el texto es literalmente `CONFORME A PARTIDA N DE LA CONVOCATORIA` — remite a su propia partida sin describir el producto (128 registros en la corrida donde se detectó).
+- Sin espacios entre palabras: el texto sí describe el producto pero viene concatenado, ej. `ACICLOVIR200MGENVASECON25COMPRIMIDOSOTABLETAS...` (134 registros).
+
+**Qué se hizo:** el pipeline detecta ambos patrones y sustituye `producto` por la ficha del catálogo CUCoP+, que siempre viene bien formada (Metodologia.md §5.3.2). Cobertura completa en la corrida vigente — 0 casos de estos dos patrones en los 16,911 registros.
+
+**Lo que sigue sin corregir:** errores de digitación sueltos (typos evidentes que no siguen ninguno de los dos patrones de arriba) no se detectan ni corrigen.
 
 **Alternativas:**
 - No hay forma automática de "arreglar" texto corrupto de origen sin arriesgar inventar datos.
-- Se podría agregar una heurística de detección (ej. flag si el texto no contiene ningún nombre reconocible de principio activo) para marcar estos casos como sospechosos, sin corregirlos automáticamente. No implementado.
+- Se podría ampliar la heurística a otros patrones estructurales si aparecen como recurrentes (ej. flag si el texto no contiene ningún nombre reconocible de principio activo). No implementado.
+- Para typos sueltos, la única vía es corrección manual dirigida editando `producto` directo en `docs/data.json` — a diferencia de `clave` (punto 2), no hay un campo `producto_fuente` que la marque como confiable, así que no sobrevive a la siguiente corrida completa a menos que también se corrija en el origen.
 
 ---
 
