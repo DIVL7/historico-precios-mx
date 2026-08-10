@@ -76,6 +76,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | Campo | Fuente | Notas |
 |---|---|---|
 | `codigo_contrato` | Compras MX | Identificador único a nivel contrato |
+| `num_contrato` | Compras MX ("Núm. del contrato") | Número de contrato asignado por la institución compradora — formato libre, distinto de `codigo_contrato` |
 | `clave` | Ver §5.2 (asignación y validación de clave) | Formato CSG `NNN.NNN.NNNN.NN`, o `null` si no se pudo determinar |
 | `clave_fuente` | Interno | De dónde salió `clave`: `descripcion` (del texto del contrato), `cucop` (vía catálogo CUCoP), `validacion_nombre_local` (por nombre contra el Compendio), `propagacion_confiable` (heredada de otro registro del mismo producto), o `null` |
 | `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave | |
@@ -162,6 +163,8 @@ La integración se resuelve con tres campos, cada uno con un propósito distinto
 
 Todo el filtrado del dashboard ocurre en JavaScript en el navegador del usuario — no hay motor de consultas en servidor. Es una decisión deliberada dado el volumen de datos (decenas de miles de filas, no millones) y el uso esperado (consulta, no transaccional).
 
+La tabla principal muestra solo las columnas de consulta más frecuente (código y número de contrato, institución, proveedor, clave CUCoP, producto, grupo terapéutico); el resto de los campos del modelo (§4) — clave del Compendio, precio, cantidad, valores, fechas — se consulta por registro en el modal "Detalle".
+
 **Frecuencia de actualización:** pendiente de definir — el cron de GitHub Actions queda configurado pero ajustable (candidatos: semanal, diaria, manual).
 
 **Prerrequisito:** una cuenta de GitHub (gratuita) para alojar el repositorio, correr las Actions y servir Pages.
@@ -176,8 +179,9 @@ Todo el filtrado del dashboard ocurre en JavaScript en el navegador del usuario 
 | `scripts/download-csv.js` | Descarga el CSV anual de "Contratos de la Plataforma Integral" desde Datos Abiertos |
 | `scripts/extract.js` | Pipeline principal — ver §5.1 |
 | `scripts/validar-claves.js` | Sanity check de claves post-corrida — ver §5.2 |
-| `docs/index.html` | Dashboard estático: búsqueda, filtros, orden por columna, paginación |
-| `docs/data.json` / `docs/data.xlsx` | Dataset consolidado |
+| `docs/index.html` | Dashboard estático: búsqueda, filtros, orden por columna, paginación, modal de detalle por registro — ver §6 |
+| `docs/data.json` | Dataset consolidado, un registro por ítem de contrato |
+| `docs/data.xlsx` | Copia del dataset en Excel, con hoja "Diccionario" (descripción de cada columna) además de la hoja "Precios" |
 | `docs/data.errores.json` | Contratos que fallaron la extracción (reintentables hasta 3 veces) |
 | `docs/data.calidad.json` | Reporte de anomalías — ver §5.4 |
 | `docs/data.correcciones.json` | Registro de correcciones de clave aplicadas y casos sin resolver — ver §5.2 |

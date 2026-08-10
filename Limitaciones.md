@@ -8,7 +8,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 48.3% de los registros (12,020 de 24,875)
+## 1. Grupo terapéutico: falta en 49.0% de los registros (12,214 de 24,909)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
@@ -27,7 +27,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
 - De los registros con clave vía CUCoP, **33% no pasan** la autoverificación contra la dosis que ese código declara.
-- Del total de productos únicos del dataset, **7,302 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los **12,474 productos canónicos** del dataset, **6,683 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
 
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,596 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
