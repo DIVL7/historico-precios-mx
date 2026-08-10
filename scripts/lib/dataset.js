@@ -25,7 +25,7 @@ const DICCIONARIO = [
   ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
   ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
   ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2. Prefijos de numeración/viñetas al inicio se recortan -- ver §5.3.3.'],
+  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2. Prefijos de numeración/viñetas al inicio se recortan -- ver §5.3.3. Coletilla administrativa al final ("CONFORME A PARTIDA...") se recorta -- ver §5.3.4.'],
   ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
   ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
   ['procedimiento', 'Número de procedimiento de contratación.'],

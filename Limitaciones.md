@@ -8,7 +8,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 30.5% de los registros (5,155 de 16,911)
+## 1. Grupo terapéutico: falta en 30.3% de los registros (5,126 de 16,911)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
@@ -27,7 +27,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
 - De los registros con clave vía CUCoP, **38% no pasan** la autoverificación contra la dosis que ese código declara.
-- De los **6,548 productos canónicos** del dataset, **2,402 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los **6,015 productos canónicos** del dataset, **2,367 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
 
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,600 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
@@ -78,16 +78,17 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 7. Texto de producto: tres patrones degenerados corregidos automáticamente; typos sueltos no
+## 7. Texto de producto: cuatro patrones degenerados corregidos automáticamente; typos sueltos no
 
-**Qué se detectó (2026-08-10), verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en tres patrones estructurales recurrentes:
+**Qué se detectó, verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en cuatro patrones estructurales recurrentes:
 - Referencia vacía de contenido: el texto es literalmente `CONFORME A PARTIDA N DE LA CONVOCATORIA` — remite a su propia partida sin describir el producto (128 registros en la corrida donde se detectó).
 - Sin espacios entre palabras: el texto sí describe el producto pero viene concatenado, ej. `ACICLOVIR200MGENVASECON25COMPRIMIDOSOTABLETAS...` (134 registros).
 - Numeración de partida, viñetas o una clave con separador raro pegadas al inicio, ajenas al nombre del medicamento: ej. `13040096 UPADACITINIB...`, `2. 1 TEOFILINA...`, `-OLANZAPINA...`, `•\tASPIRINA...` (965 registros).
+- La misma coletilla `CONFORME A PARTIDA N DE LA CONVOCATORIA` del primer patrón, pero pegada al **final** de una descripción real y completa (no en vez de ella): ej. `PARACETAMOL 500 MG ENVASE CON 10 TABLETAS.CONFORME A PARTIDA 204 DE LA CONVOCATORIA` (612 registros — población disjunta del primer patrón: 0 registros coinciden con ambos a la vez, confirmado contra el dataset).
 
-**Qué se hizo:** el pipeline detecta los dos primeros patrones y sustituye `producto` por la ficha del catálogo CUCoP+, que siempre viene bien formada (Metodologia.md §5.3.2). El tercero se recorta con una regex que exige que el prefijo termine justo antes de una letra, para no comerse dígitos que sí son parte del texto (ej. `5% DIOXIDO DE CARBONO...` se conserva intacto) — Metodologia.md §5.3.3. Cobertura completa en la corrida vigente — 0 casos de los dos primeros patrones y solo 3 del tercero (protegidos a propósito por las guardas de la regex: 2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico truncable) en los 16,911 registros.
+**Qué se hizo:** para el primer y segundo patrón, el pipeline sustituye `producto` por la ficha del catálogo CUCoP+, que siempre viene bien formada (Metodologia.md §5.3.2). El tercero se recorta con una regex que exige que el prefijo termine justo antes de una letra, para no comerse dígitos que sí son parte del texto (ej. `5% DIOXIDO DE CARBONO...` se conserva intacto) — Metodologia.md §5.3.3. El cuarto recorta solo la coletilla del final, conservando la descripción real — Metodologia.md §5.3.4. Cobertura completa en la corrida vigente — 0 casos de los patrones 1, 2 y 4, y solo 3 del tercero (protegidos a propósito por las guardas de la regex: 2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico truncable) en los 16,911 registros.
 
-**Lo que sigue sin corregir:** errores de digitación sueltos (typos evidentes que no siguen ninguno de los tres patrones de arriba) no se detectan ni corrigen.
+**Lo que sigue sin corregir:** errores de digitación sueltos (typos evidentes que no siguen ninguno de los cuatro patrones de arriba) no se detectan ni corrigen.
 
 **Alternativas:**
 - No hay forma automática de "arreglar" texto corrupto de origen sin arriesgar inventar datos.

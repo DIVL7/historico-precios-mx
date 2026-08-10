@@ -25,6 +25,16 @@ const CONFORME_PARTIDA_RE = /^CONFORME\s+A\s+PARTIDA\s+\d+\s+DE\s+LA\s+CONVOCATO
 // caracteres para evitar falsos positivos en descripciones cortas
 // legítimamente compactas.
 const PRODUCTO_SIN_ESPACIOS_RE = (s) => s.length > 25 && !s.includes(' ');
+// Variante del caso de arriba: la institución SÍ describe el producto
+// completo y bien formado, pero le pega la misma coletilla administrativa al
+// final ("...ENVASE CON 10 TABLETAS.CONFORME A PARTIDA 204 DE LA
+// CONVOCATORIA"), con o sin punto/espacio de separación, a veces sin el
+// número de partida. A diferencia de CONFORME_PARTIDA_RE (arriba), aquí NO
+// se reemplaza todo el producto por la ficha CUCoP+ -- la descripción propia
+// ya es buena, solo se recorta la coletilla. Verificado 2026-08-10: 612 casos
+// reales, ninguno coincide también con CONFORME_PARTIDA_RE (poblaciones
+// disjuntas -- ver Limitaciones.md §7).
+const CONFORME_PARTIDA_SUFIJO_RE = /\s*[.\-•]?\s*CONFORME\s+A\s+PARTIDA\s*\d*\s*DE\s+LA\s+CONVOCATORIA\.?\s*$/i;
 // Numeración de partida, viñetas o claves con separador distinto al esperado
 // que algunas instituciones anteponen a "Descripción detallada", ajenas al
 // nombre del medicamento -- ej. "13040096 UPADACITINIB...", "2. 1
@@ -264,6 +274,14 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
     const viaCucop = cucopMap[item.cve_cucop];
     if (viaCucop) producto = viaCucop.descripcion;
   }
+
+  // Coletilla administrativa pegada al final de una descripción por lo demás
+  // buena (ver CONFORME_PARTIDA_SUFIJO_RE arriba) -- se recorta, no se
+  // reemplaza todo el producto como en el caso de arriba. Corre después del
+  // bloque anterior: los casos puros (producto == solo la frase) ya quedaron
+  // reemplazados por su ficha CUCoP+, que nunca contiene esta frase, así que
+  // este paso no les afecta.
+  producto = producto.replace(CONFORME_PARTIDA_SUFIJO_RE, '').trim();
 
   producto = producto.replace(LEADING_JUNK_RE, '').trim();
 

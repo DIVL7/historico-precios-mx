@@ -81,7 +81,7 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 | `num_contrato` | Compras MX ("Núm. del contrato") | Número de contrato asignado por la institución compradora — formato libre, distinto de `codigo_contrato` |
 | `clave` | Ver §5.2 (asignación y validación de clave) | Formato CSG `NNN.NNN.NNNN.NN`, o `null` si no se pudo determinar |
 | `clave_fuente` | Interno | De dónde salió `clave`: `descripcion` (del texto del contrato), `cucop` (vía catálogo CUCoP), `validacion_nombre_local` (por nombre contra el Compendio), `propagacion_confiable` (heredada de otro registro del mismo producto), o `null` |
-| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave, salvo cuando viene degenerado — ahí se usa la ficha CUCoP+ en su lugar, ver §5.3.2. Prefijos de numeración/viñetas al inicio se recortan, ver §5.3.3 | |
+| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave, salvo cuando viene degenerado — ahí se usa la ficha CUCoP+ en su lugar, ver §5.3.2. Prefijos de numeración/viñetas al inicio se recortan, ver §5.3.3; coletilla administrativa al final se recorta, ver §5.3.4 | |
 | `tipo_insumo` | Constante `MEDICAMENTO` | |
 | `grupo_terapéutico` | Join contra Compendio CSG por `clave` | `null` si `clave` es `null` o no existe en el Compendio |
 | `procedimiento` | "Número de procedimiento" | |
@@ -151,6 +151,12 @@ Algunas instituciones anteponen a "Descripción detallada" numeración de partid
 `buildRegistro` limpia esto con `LEADING_JUNK_RE`: recorta cualquier prefijo de dígitos/espacios/puntos/guiones/viñetas/comillas, pero solo si justo después empieza una letra — así no se come dígitos que sí son parte del texto (`"5% DIOXIDO DE CARBONO..."`: al `5` le sigue `%`, no una letra, así que se conserva intacto). Una guarda adicional evita truncar a la mitad un sufijo de clave alfanumérico como `"...1757.P0 MELFALAN..."` (se deja el texto completo en vez de cortar a `"P0 MELFALAN..."`). Se aplica después del reemplazo por CUCoP+ de §5.3.2, así que corre sobre cualquiera de las dos fuentes por igual.
 
 Corrida del 2026-08-10: 965 de 16,911 registros tenían este prefijo; los 3 casos protegidos por las guardas de arriba quedaron sin tocar (2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico). Como efecto colateral, el agrupamiento canónico de `scripts/validar-claves.js` (agrupa por nombre+dosis extraídos de `producto`) mejoró para estos registros — cobertura de `clave` subió de 72.5% a 74.9%.
+
+### 5.3.4 Recorte de coletilla administrativa al final de `producto`
+
+Variante del caso de §5.3.2: la institución sí describe el producto completo y bien formado, pero le pega al final la misma frase `"CONFORME A PARTIDA N DE LA CONVOCATORIA"` — remite al número de partida de la convocatoria, no al medicamento. A diferencia de §5.3.2 (donde el string completo ES solo esa frase, sin describir nada), aquí la descripción real ya es buena; solo hay que recortar la coletilla, no reemplazar todo el producto. Ejemplos reales: `"PARACETAMOL 500 MG ENVASE CON 10 TABLETAS.CONFORME A PARTIDA 204 DE LA CONVOCATORIA"`, `"...FRASCO ÁMPULA CON 100 ML.CONFORME A PARTIDA 434 DE LA CONVOCATORIA"`, a veces sin separador (`"...1.0 MLCONFORME A PARTIDA 7 DE LA CONVOCATORIA"`) o sin número de partida.
+
+`buildRegistro` recorta esto con `CONFORME_PARTIDA_SUFIJO_RE` después del bloque de §5.3.2 (así que los casos puros, ya reemplazados por su ficha CUCoP+, no vuelven a tocarse — esa ficha nunca contiene la frase). Verificado 2026-08-10: 612 registros con esta coletilla, población disjunta de los 128 casos puros de §5.3.2 (0 registros coinciden con ambos patrones a la vez). Como efecto colateral, el agrupamiento canónico mejoró de nuevo (6,548 → 6,015 productos canónicos) al dejar de separar la misma descripción real solo por traer o no la coletilla.
 
 ### 5.4 Reporte de calidad
 
