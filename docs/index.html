@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1b19" media="(prefers-color-scheme: dark)">
 <title>Precios de Medicamentos — Compras Públicas México</title>
 <style>
   :root {
+    color-scheme: light dark;
     --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0db; --text: #2b2a27;
     --muted: #6b6a65; --accent: #6b1930; --accent-light: #f4e9ec;
   }
@@ -14,10 +17,11 @@
     margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     background: var(--bg); color: var(--text);
   }
+  button { touch-action: manipulation; }
   header {
     background: var(--accent); color: white; padding: 24px 32px;
   }
-  header h1 { margin: 0 0 4px; font-size: 1.4rem; }
+  header h1 { margin: 0 0 4px; font-size: 1.4rem; text-wrap: balance; }
   header p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
 
   main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
@@ -26,6 +30,13 @@
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
   }
+
+  .skip-link {
+    position: absolute; left: 8px; top: -48px; z-index: 200;
+    background: var(--accent); color: white; padding: 10px 16px; border-radius: 6px;
+    text-decoration: none; font-size: 0.85rem;
+  }
+  .skip-link:focus { top: 8px; }
 
   button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
     outline: 2px solid var(--accent); outline-offset: 2px;
@@ -39,7 +50,8 @@
     padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
     font-size: 0.9rem; background: white;
   }
-  .filters input[type=text] { flex: 2; min-width: 220px; }
+  .filters input[type=search] { flex: 2; min-width: 220px; }
+  .filters input[type=search]::-webkit-search-cancel-button { cursor: pointer; }
   .filters select { flex: 1; min-width: 160px; }
 
   .result-count { font-size: 0.85rem; color: var(--muted); margin: 8px 0 12px; }
@@ -59,7 +71,10 @@
     user-select: none;
   }
   .sort-btn:hover { background: #ecd9de; }
-  tbody td { padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border); vertical-align: top; }
+  tbody td {
+    padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border);
+    vertical-align: top; overflow-wrap: break-word;
+  }
   tbody tr:hover { background: #fafafa; }
   .muted { color: var(--muted); }
 
@@ -75,6 +90,7 @@
     padding: 6px 14px; border: 1px solid var(--border); background: white; border-radius: 6px;
     cursor: pointer; font-size: 0.85rem;
   }
+  .pager button:hover:not(:disabled) { background: #ecd9de; }
   .pager button:disabled { opacity: 0.4; cursor: default; }
 
   .empty { text-align: center; padding: 40px; color: var(--muted); }
@@ -87,13 +103,14 @@
   .modal-backdrop[hidden] { display: none; }
   .modal {
     background: var(--panel); border-radius: 10px; max-width: 560px; width: 100%;
-    max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    max-height: 85vh; overflow-y: auto; overscroll-behavior: contain;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   }
   .modal-header {
     display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
     padding: 20px 24px 14px; border-bottom: 1px solid var(--border);
   }
-  .modal-header h2 { margin: 0; font-size: 1.05rem; }
+  .modal-header h2 { margin: 0; font-size: 1.05rem; text-wrap: balance; }
   .modal-close {
     background: none; border: 0; font-size: 1.1rem; line-height: 1; cursor: pointer;
     color: var(--muted); padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
@@ -108,7 +125,7 @@
       --bg: #1c1b19; --panel: #262523; --border: #3a3833; --text: #ece9e4;
       --muted: #9a9890; --accent: #d98fa3; --accent-light: #33262a;
     }
-    .sort-btn:hover, .detalle-btn:hover, .modal-close:hover { background: #3d2c31; }
+    .sort-btn:hover, .detalle-btn:hover, .modal-close:hover, .pager button:hover:not(:disabled) { background: #3d2c31; }
     tbody tr:hover { background: #2c2b28; }
     .filters input, .filters select { background: #1c1b19; color: var(--text); }
     .modal-backdrop { background: rgba(0, 0, 0, 0.65); }
@@ -117,15 +134,17 @@
 </head>
 <body>
 
+<a href="#main" class="skip-link">Saltar al contenido principal</a>
+
 <header>
   <h1>Precios de Medicamentos — Compras Públicas de México</h1>
   <p>Base construida a partir de Compras MX (Secretaría Anticorrupción y Buen Gobierno), cruzada contra el Compendio Nacional de Medicamentos (CSG)</p>
 </header>
 
-<main>
+<main id="main" tabindex="-1">
   <div class="filters">
     <label for="q" class="sr-only">Buscar</label>
-    <input type="text" id="q" placeholder="Buscar por producto, proveedor, código de contrato, clave...">
+    <input type="search" id="q" name="q" autocomplete="off" placeholder="Buscar por producto, proveedor, código de contrato, clave…">
     <select id="fInstitucion" aria-label="Institución"><option value="">Institución (todas)</option></select>
     <select id="fGrupo" aria-label="Grupo terapéutico"><option value="">Grupo terapéutico (todos)</option></select>
   </div>
@@ -179,9 +198,9 @@ const DETALLE_CAMPOS = [
   ['Valor mínimo', r => money(r.valor_minimo)],
   ['Valor máximo', r => money(r.valor_maximo)],
   ['Tipo de procedimiento', r => r.tipo_procedimiento || '—'],
-  ['Fecha de firma', r => r.fecha_firma_contrato || '—'],
-  ['Fecha de fallo', r => r.fecha_fallo || '—'],
-  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${r.fecha_inicio_contrato || '—'} – ${r.fecha_fin_contrato || '—'}` : '—'],
+  ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato)],
+  ['Fecha de fallo', r => fechaHora(r.fecha_fallo)],
+  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—'],
 ];
 
 function money(n) {
@@ -192,6 +211,32 @@ function money(n) {
 function num(n) {
   if (n == null) return '—';
   return Number(n).toLocaleString('es-MX');
+}
+
+// El origen trae dos formatos de fecha distintos en el mismo registro:
+// "YYYY-MM-DD HH:mm:ss" (fecha_firma_contrato, fecha_fallo) y "DD/MM/YYYY"
+// (fecha_inicio_contrato, fecha_fin_contrato) -- se detecta el formato y se
+// parsea a Date para mostrar ambos de forma consistente vía Intl.
+function parseFecha(s) {
+  if (!s) return null;
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0));
+  m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+  return null;
+}
+
+const FECHA_FMT = new Intl.DateTimeFormat('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const FECHA_HORA_FMT = new Intl.DateTimeFormat('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+function fecha(s) {
+  const d = parseFecha(s);
+  return d ? FECHA_FMT.format(d) : '—';
+}
+
+function fechaHora(s) {
+  const d = parseFecha(s);
+  return d ? FECHA_HORA_FMT.format(d) : '—';
 }
 
 function debounce(fn, ms) {
