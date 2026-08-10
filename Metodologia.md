@@ -79,7 +79,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | `num_contrato` | Compras MX ("Núm. del contrato") | Número de contrato asignado por la institución compradora — formato libre, distinto de `codigo_contrato` |
 | `clave` | Ver §5.2 (asignación y validación de clave) | Formato CSG `NNN.NNN.NNNN.NN`, o `null` si no se pudo determinar |
 | `clave_fuente` | Interno | De dónde salió `clave`: `descripcion` (del texto del contrato), `cucop` (vía catálogo CUCoP), `validacion_nombre_local` (por nombre contra el Compendio), `propagacion_confiable` (heredada de otro registro del mismo producto), o `null` |
-| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave | |
+| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave, salvo cuando viene degenerado — ahí se usa la ficha CUCoP+ en su lugar, ver §5.3.2 | |
 | `tipo_insumo` | Constante `MEDICAMENTO` | |
 | `grupo_terapéutico` | Join contra Compendio CSG por `clave` | `null` si `clave` es `null` o no existe en el Compendio |
 | `procedimiento` | "Número de procedimiento" | |
@@ -105,7 +105,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 3. Agrupar filas por expediente (hash extraído de `Dirección del anuncio`).
 4. Por cada expediente, navegar al detalle y localizar cada contrato dentro de la tabla paginada de resultados.
 5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`). Un contrato que pasó el filtro del paso 2 puede traer aquí líneas de **otras partidas** (compra mixta: radiofármacos, material de curación, papelería, etc.) — se descarta cualquier ítem cuyo `cve_cucop` no empiece con `25301`, para no marcarlo como medicamento solo por venir en el mismo contrato. (Detectado el 2026-08-09: sin este segundo filtro, ~32% del dataset — 7,989 de 24,909 registros — eran contaminación de otras partidas; se limpió retroactivamente y se corrigió el pipeline.)
-6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final.
+6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), sanear `producto` si viene degenerado (§5.3.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final.
 7. Escribir a `docs/data.json` con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
 
 ### 5.2 Asignación y validación de clave
@@ -132,6 +132,15 @@ Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta d
 
 - **`cantidad_minima`/`cantidad_maxima`** (informativa, ambas colapsan al mismo valor): `subtotal / precio_unitario`, redondeada al entero más cercano, solo cuando las vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
 - **`valor_minimo`/`valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de la cantidad derivada. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar ninguna cantidad tampoco (`cantidad_minima`/`cantidad_maxima` quedan en `null`, único caso donde eso ocurre — ver `Limitaciones.md`), pero `valor_minimo`/`valor_maximo` sí se rescatan de `subtotal`.
+
+### 5.3.2 Reemplazo de `producto` degenerado con la ficha CUCoP+
+
+La institución compradora a veces captura "Descripción detallada" (el campo que alimenta `producto`) de forma degenerada, verificado en vivo contra el sitio en dos formas distintas:
+
+- **Referencia vacía de contenido**: el texto es literalmente `CONFORME A PARTIDA N DE LA CONVOCATORIA` — una remisión a su propia partida, sin describir el producto (visto en el contrato `C-2026-00073692`).
+- **Sin espacios entre palabras**: el texto sí describe el producto pero viene concatenado (`ACICLOVIR200MGENVASECON25COMPRIMIDOSOTABLETAS...`) — de origen, no un artefacto de la extracción; se confirmó que los 174 ítems de un mismo procedimiento (`IA-13-312-013000999-T-327-2026`) vienen así (contrato `C-2026-00070247`).
+
+En ambos casos, la página del expediente muestra una columna separada, "Descripción CUCoP+", que siempre viene bien formada — es la ficha oficial del catálogo, no depende de cómo la institución tecleó su propia descripción. El pipeline detecta ambos patrones (regex para el primero, longitud + ausencia de espacios para el segundo) y sustituye `producto` por `cucopMap[cve_cucop].descripcion` — el mismo catálogo CUCoP+ (§3.4) ya cargado en memoria para resolver `clave` (§5.2), reutilizado aquí. Cuando el `cve_cucop` del ítem no está en el catálogo local (puede ser más nuevo que el snapshot descargado), no hay mejor fuente disponible y el texto degenerado queda tal cual.
 
 ### 5.4 Reporte de calidad
 

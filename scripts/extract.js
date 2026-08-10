@@ -15,6 +15,20 @@ const XLSX = require('xlsx');
 // ("010000430400") al inicio de la descripción -- se capturan los 4 grupos de
 // dígitos por separado y se reconstruye siempre en formato con puntos.
 const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
+// La institución a veces captura "Descripción detallada" del requerimiento de
+// forma degenerada: como mera referencia a su propia partida, sin texto de
+// producto ("CONFORME A PARTIDA 3 DE LA CONVOCATORIA"). Verificado en vivo
+// contra el sitio (contrato C-2026-00073692): el desglose real del producto
+// no está en ningún otro campo de ese contrato, solo en la ficha CUCoP+ de
+// la convocatoria (ver PRODUCTO_SIN_ESPACIOS_RE abajo y buildRegistro).
+const CONFORME_PARTIDA_RE = /^CONFORME\s+A\s+PARTIDA\s+\d+\s+DE\s+LA\s+CONVOCATORIA$/i;
+// Otras veces sí trae el producto, pero sin ningún espacio entre palabras --
+// visto en vivo en procedimiento IA-13-312-013000999-T-327-2026: los 174
+// ítems de "Descripción detallada" vienen así, de origen, mientras que
+// "Descripción CUCoP+" (misma página) sí viene bien formada. Umbral de 25
+// caracteres para evitar falsos positivos en descripciones cortas
+// legítimamente compactas.
+const PRODUCTO_SIN_ESPACIOS_RE = (s) => s.length > 25 && !s.includes(' ');
 const HASH_RE = /detalle\/([a-f0-9]+)\/procedimiento/i;
 const NAV_TIMEOUT = 30000;
 const CLICK_TIMEOUT = 15000;
@@ -39,7 +53,7 @@ const DICCIONARIO = [
   ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
   ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
   ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato.'],
+  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2.'],
   ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
   ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
   ['procedimiento', 'Número de procedimiento de contratación.'],
@@ -86,10 +100,10 @@ function loadCompendio() {
 
 // Construye, en memoria, el mapa cve_cucop -> clave CSG a partir del catálogo
 // oficial CUCoP (data/raw/cucop.xlsx). Hallazgo clave: en el catálogo, la
-// columna "DESCRIPCIÓN" de toda entrada bajo la partida 25301 (medicamentos)
-// trae la clave del Compendio Nacional como prefijo -- es estático, no
-// depende de qué institución compre, así que sirve de respaldo cuando la
-// descripción libre de Compras MX no la incluye.
+// columna "DESCRIPCIÓN" de la mayoría de las entradas bajo la partida 25301
+// (medicamentos) trae la clave del Compendio Nacional como prefijo -- es
+// estático, no depende de qué institución compre, así que sirve de respaldo
+// cuando la descripción libre de Compras MX no la incluye.
 // Se guarda también la descripción propia de CUCoP (sin la clave) -- no se
 // usa durante la extracción (que solo busca ser rápida y agarrar una clave
 // por el medio que se pueda), pero queda disponible para quien lea el mapa
@@ -98,6 +112,15 @@ function loadCompendio() {
 // del mismo producto?) vive en scripts/validar-claves.js, que corre después
 // sobre el dataset completo -- un solo lugar para toda la lógica de
 // confiabilidad, en vez de repartirla entre extracción y validación.
+//
+// No todas las entradas traen el prefijo de clave CSG: ~23% de las 25301
+// (verificado 2026-08-10, sobre todo altas más recientes al catálogo, sin
+// fecha de alta o de 2023-2024 en adelante) solo tienen el nombre del
+// producto, sin clave. Antes se descartaban por completo -- perdiendo
+// también su descripción, utilizable aunque no traiga clave. Se guardan
+// igual, con `clave: null` (nunca hay dos filas con la misma cve_cucop, una
+// con prefijo y otra sin -- verificado, no hay riesgo de que una pise a la
+// otra).
 function buildCucopMap() {
   const p = path.join(__dirname, '..', 'data', 'raw', 'cucop.xlsx');
   const wb = XLSX.readFile(p);
@@ -107,9 +130,12 @@ function buildCucopMap() {
   for (const row of rows) {
     if (String(row['PARTIDA ESPECÍFICA'] || '').trim() !== '25301') continue;
     const cveCucop = String(row['CLAVE CUCoP +'] || '').trim();
-    const m = String(row['DESCRIPCIÓN'] || '').match(CLAVE_RE);
-    if (!cveCucop || !m) continue;
-    map[cveCucop] = { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() };
+    const descripcionCruda = String(row['DESCRIPCIÓN'] || '').trim();
+    if (!cveCucop || !descripcionCruda) continue;
+    const m = descripcionCruda.match(CLAVE_RE);
+    map[cveCucop] = m
+      ? { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() }
+      : { clave: null, descripcion: descripcionCruda };
   }
   return map;
 }
@@ -279,7 +305,18 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   // enriquece con grupo_terapéutico; si no, quedan en null (baja confianza pero
   // se conserva la fila).
   const m = String(item.descripcion || '').match(CLAVE_RE);
-  const producto = m ? m[5].trim() : String(item.descripcion || '').trim();
+  let producto = m ? m[5].trim() : String(item.descripcion || '').trim();
+
+  // Cuando la descripción de la institución es degenerada (ver
+  // CONFORME_PARTIDA_RE / PRODUCTO_SIN_ESPACIOS_RE arriba), se reemplaza por
+  // la ficha oficial del catálogo CUCoP+ -- ya cargada en cucopMap para
+  // resolver `clave`, siempre bien formada. No todos los cve_cucop están en
+  // el catálogo local (puede ser más nuevo que el snapshot descargado); en
+  // esos casos queda el texto degenerado tal cual, no hay mejor fuente.
+  if (CONFORME_PARTIDA_RE.test(producto) || PRODUCTO_SIN_ESPACIOS_RE(producto)) {
+    const viaCucop = cucopMap[item.cve_cucop];
+    if (viaCucop) producto = viaCucop.descripcion;
+  }
 
   // Prioridad para asignar clave: 1) extraerla directamente de la descripción
   // de la institución (más confiable); 2) si no vino, recuperarla vía el
@@ -291,7 +328,10 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   let claveFuente = clave ? 'descripcion' : null;
   if (!clave) {
     const viaCucop = cucopMap[item.cve_cucop];
-    if (viaCucop) {
+    // viaCucop.clave puede ser null (entrada del catálogo sin prefijo de
+    // clave CSG en su descripción -- ver buildCucopMap) -- ahí no hay clave
+    // que adoptar, solo descripción (ya usada arriba para `producto`).
+    if (viaCucop && viaCucop.clave) {
       clave = viaCucop.clave;
       claveFuente = 'cucop';
     }

@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-10T04:10:27.298Z",
-  "total_registros": 16920,
+  "generado": "2026-08-10T15:54:36.953Z",
+  "total_registros": 16911,
   "top_20_valores_mas_altos": [
     {
       "codigo_contrato": "C-2026-00044750",
@@ -687,6 +687,72 @@
   ],
   "precios_corregidos_por_inconsistencia_con_subtotal": [
     {
+      "codigo_contrato": "C-2026-00011185",
+      "cve_cucop": "25301-2968",
+      "precio_api": 1029,
+      "precio_calculado": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00011185",
+      "cve_cucop": "25301-1157",
+      "precio_api": 3942,
+      "precio_calculado": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00046723",
+      "cve_cucop": "25301-4399",
+      "precio_api": 34.28,
+      "precio_calculado": 35.28
+    },
+    {
+      "codigo_contrato": "C-2025-00124375",
+      "cve_cucop": "25301-3314",
+      "precio_api": 644.5,
+      "precio_calculado": 1917.5
+    },
+    {
+      "codigo_contrato": "C-2026-00072651",
+      "cve_cucop": "25301-3313",
+      "precio_api": 682,
+      "precio_calculado": 1071.45
+    },
+    {
+      "codigo_contrato": "C-2025-00137383",
+      "cve_cucop": "25301-1557",
+      "precio_api": 229.1,
+      "precio_calculado": 214.78
+    },
+    {
+      "codigo_contrato": "C-2026-00011895",
+      "cve_cucop": "25301-1557",
+      "precio_api": 229.1,
+      "precio_calculado": 245.44
+    },
+    {
+      "codigo_contrato": "C-2026-00016515",
+      "cve_cucop": "25301-3248",
+      "precio_api": 584.43,
+      "precio_calculado": 6.08
+    },
+    {
+      "codigo_contrato": "C-2025-00115286",
+      "cve_cucop": "25301-0115",
+      "precio_api": 1599.39,
+      "precio_calculado": 1355.49
+    },
+    {
+      "codigo_contrato": "C-2025-00115286",
+      "cve_cucop": "25301-0127",
+      "precio_api": 1101.74,
+      "precio_calculado": 1043.6
+    },
+    {
+      "codigo_contrato": "C-2025-00123179",
+      "cve_cucop": "25301-2952",
+      "precio_api": 247,
+      "precio_calculado": 130
+    },
+    {
       "codigo_contrato": "C-2026-00036112",
       "cve_cucop": "25301-2358",
       "precio_api": 10.04,
@@ -765,28 +831,3850 @@
       "precio_calculado": 30492
     },
     {
+      "codigo_contrato": "C-2026-00064461",
+      "cve_cucop": "25301-1007",
+      "precio_api": 1294,
+      "precio_calculado": 1317.96
+    },
+    {
+      "codigo_contrato": "C-2026-00064461",
+      "cve_cucop": "25301-1007",
+      "precio_api": 1294,
+      "precio_calculado": 439.47
+    },
+    {
+      "codigo_contrato": "C-2026-00064461",
+      "cve_cucop": "25301-1007",
+      "precio_api": 465,
+      "precio_calculado": 1344.27
+    },
+    {
+      "codigo_contrato": "C-2025-00137416",
+      "cve_cucop": "25301-1397",
+      "precio_api": 25.28,
+      "precio_calculado": 23.7
+    },
+    {
+      "codigo_contrato": "C-2026-00021668",
+      "cve_cucop": "25301-3266",
+      "precio_api": 440,
+      "precio_calculado": 465.88
+    },
+    {
+      "codigo_contrato": "C-2026-00047586",
+      "cve_cucop": "25301-2123",
+      "precio_api": 641.09,
+      "precio_calculado": 203.76
+    },
+    {
+      "codigo_contrato": "C-2026-00025157",
+      "cve_cucop": "25301-4044",
+      "precio_api": 63379.8,
+      "precio_calculado": 42253.2
+    },
+    {
+      "codigo_contrato": "C-2025-00115299",
+      "cve_cucop": "25301-2097",
+      "precio_api": 14.3,
+      "precio_calculado": 1.08
+    },
+    {
+      "codigo_contrato": "C-2026-00054570",
+      "cve_cucop": "25301-2435",
+      "precio_api": 65.27,
+      "precio_calculado": 200.83
+    },
+    {
+      "codigo_contrato": "C-2026-00013358",
+      "cve_cucop": "25301-4464",
+      "precio_api": 1026,
+      "precio_calculado": 170103.36
+    },
+    {
+      "codigo_contrato": "C-2026-00041053",
+      "cve_cucop": "25301-3284",
+      "precio_api": 2547.4,
+      "precio_calculado": 2597.4
+    },
+    {
+      "codigo_contrato": "C-2026-00023872",
+      "cve_cucop": "25301-3591",
+      "precio_api": 1798,
+      "precio_calculado": 780.38
+    },
+    {
+      "codigo_contrato": "C-2026-00023872",
+      "cve_cucop": "25301-0809",
+      "precio_api": 4730,
+      "precio_calculado": 520.3
+    },
+    {
+      "codigo_contrato": "C-2026-00066297",
+      "cve_cucop": "25301-2619",
+      "precio_api": 343.94,
+      "precio_calculado": 374.68
+    },
+    {
+      "codigo_contrato": "C-2026-00071032",
+      "cve_cucop": "25301-0032",
+      "precio_api": 196.67,
+      "precio_calculado": 262.23
+    },
+    {
+      "codigo_contrato": "C-2025-00109845",
+      "cve_cucop": "25301-1442",
+      "precio_api": 4.2,
+      "precio_calculado": 4.04
+    },
+    {
+      "codigo_contrato": "C-2026-00073723",
+      "cve_cucop": "25301-1474",
+      "precio_api": 135.66,
+      "precio_calculado": 121.12
+    },
+    {
+      "codigo_contrato": "C-2026-00073723",
+      "cve_cucop": "25301-2702",
+      "precio_api": 997.5,
+      "precio_calculado": 926.25
+    },
+    {
+      "codigo_contrato": "C-2026-00073723",
+      "cve_cucop": "25301-3963",
+      "precio_api": 614.46,
+      "precio_calculado": 570.57
+    },
+    {
+      "codigo_contrato": "C-2026-00073723",
+      "cve_cucop": "25301-3966",
+      "precio_api": 199.5,
+      "precio_calculado": 185.25
+    },
+    {
+      "codigo_contrato": "C-2026-00073723",
+      "cve_cucop": "25301-3057",
+      "precio_api": 548.1,
+      "precio_calculado": 448.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 264,
+      "precio_calculado": 127.86
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 45.6,
+      "precio_calculado": 14.46
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 10.62,
+      "precio_calculado": 2.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 26.43,
+      "precio_calculado": 43.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18.75,
+      "precio_calculado": 87.7
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 50.66
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2057.13,
+      "precio_calculado": 4244.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2040,
+      "precio_calculado": 1929.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3960,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 581.25,
+      "precio_calculado": 461.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 904.8,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4080,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 625,
+      "precio_calculado": 1516.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 682.5,
+      "precio_calculado": 1010.69
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 206.25,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 768.75,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 900,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1393.75,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 318.75,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 635.41,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18.75,
+      "precio_calculado": 58.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 22.5,
+      "precio_calculado": 146.38
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 225,
+      "precio_calculado": 424.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 100,
+      "precio_calculado": 136.93
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 160,
+      "precio_calculado": 1768.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 85.31,
+      "precio_calculado": 69.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 60,
+      "precio_calculado": 336.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 67.93,
+      "precio_calculado": 104.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 125,
+      "precio_calculado": 393.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1924.28,
+      "precio_calculado": 50.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 356.85,
+      "precio_calculado": 94.33
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2208,
+      "precio_calculado": 214.38
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 375,
+      "precio_calculado": 235.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 44.42,
+      "precio_calculado": 106.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 28.72,
+      "precio_calculado": 60.3
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 100,
+      "precio_calculado": 265.31
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3194.37,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6000,
+      "precio_calculado": 3032.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 110.06,
+      "precio_calculado": 258.84
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 44.43,
+      "precio_calculado": 112.3
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 594.78,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 284.38,
+      "precio_calculado": 255.72
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2228.56,
+      "precio_calculado": 1516.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 40,
+      "precio_calculado": 102.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 73.71,
+      "precio_calculado": 62.79
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 90.51,
+      "precio_calculado": 54.84
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 37.5,
+      "precio_calculado": 76.35
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 82.87,
+      "precio_calculado": 758.02
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3500,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 47.5,
+      "precio_calculado": 589.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 7.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 279.16,
+      "precio_calculado": 76.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18.75,
+      "precio_calculado": 53.73
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 111.25,
+      "precio_calculado": 154.92
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 17.31,
+      "precio_calculado": 26.6
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 93.75,
+      "precio_calculado": 109.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 37.5,
+      "precio_calculado": 643.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 516.25,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 93.75,
+      "precio_calculado": 17.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 761.25,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1875,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 398.75,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1504.57,
+      "precio_calculado": 3032.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 12428.56,
+      "precio_calculado": 1632.65
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 175,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1203.42,
+      "precio_calculado": 451.58
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 96.9,
+      "precio_calculado": 8.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 187.5,
+      "precio_calculado": 114.11
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 100,
+      "precio_calculado": 43.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 43.75,
+      "precio_calculado": 63.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 119.13,
+      "precio_calculado": 424.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 99.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25.6,
+      "precio_calculado": 11.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1100,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 250,
+      "precio_calculado": 461.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1273.7,
+      "precio_calculado": 964.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 125,
+      "precio_calculado": 17.69
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 95.45,
+      "precio_calculado": 34.23
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 150,
+      "precio_calculado": 111.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 20.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 283.75,
+      "precio_calculado": 28.76
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 250,
+      "precio_calculado": 218.81
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 562.5,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 223.75,
+      "precio_calculado": 116.62
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 188.16,
+      "precio_calculado": 32.65
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 903.81,
+      "precio_calculado": 573.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 187.5,
+      "precio_calculado": 58.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 8.3
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 43.75,
+      "precio_calculado": 55.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 37.5,
+      "precio_calculado": 176.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 98.6,
+      "precio_calculado": 11.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 61.43,
+      "precio_calculado": 11.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 39.47,
+      "precio_calculado": 124.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 15.22,
+      "precio_calculado": 20.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 225,
+      "precio_calculado": 20.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18.75,
+      "precio_calculado": 7.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 114.1,
+      "precio_calculado": 326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 52.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 32.85,
+      "precio_calculado": 200.23
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 81.4,
+      "precio_calculado": 30.23
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 77.47,
+      "precio_calculado": 69.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 632.75,
+      "precio_calculado": 54.28
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 743.02,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 96.25,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 81.4,
+      "precio_calculado": 136.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 81.25,
+      "precio_calculado": 143.41
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3437.5,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 21.25,
+      "precio_calculado": 18.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 53.75,
+      "precio_calculado": 146.38
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 132.5,
+      "precio_calculado": 99.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 8.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1043.67,
+      "precio_calculado": 471.66
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 312.5,
+      "precio_calculado": 71.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 381.66,
+      "precio_calculado": 123.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 36.25,
+      "precio_calculado": 25.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 53.75,
+      "precio_calculado": 111.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 127.06,
+      "precio_calculado": 31.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 56.25,
+      "precio_calculado": 294.78
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 34.41,
+      "precio_calculado": 162.02
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 39.28,
+      "precio_calculado": 27.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 90,
+      "precio_calculado": 42.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 60,
+      "precio_calculado": 298.94
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 58.75,
+      "precio_calculado": 49.59
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 196.52
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 41.25,
+      "precio_calculado": 202.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 112.5,
+      "precio_calculado": 63.55
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 50,
+      "precio_calculado": 7.81
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 77.56,
+      "precio_calculado": 27.93
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 55.87,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 53.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 32.5,
+      "precio_calculado": 24.23
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18.75,
+      "precio_calculado": 131.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 55,
+      "precio_calculado": 230.7
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 100.47,
+      "precio_calculado": 176.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 93.75,
+      "precio_calculado": 424.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 26.25,
+      "precio_calculado": 20.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25.25,
+      "precio_calculado": 56.3
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 95,
+      "precio_calculado": 88.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 37.5,
+      "precio_calculado": 48.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25,
+      "precio_calculado": 6.86
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 128.06,
+      "precio_calculado": 59.62
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 90.95,
+      "precio_calculado": 28.68
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 187.5,
+      "precio_calculado": 82.91
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 45,
+      "precio_calculado": 77.46
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 67.28,
+      "precio_calculado": 13.32
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 56.25,
+      "precio_calculado": 109.97
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 88.31,
+      "precio_calculado": 51.89
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 60,
+      "precio_calculado": 45.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 162.5,
+      "precio_calculado": 119.24
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35.2,
+      "precio_calculado": 7.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 45.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 737.5,
+      "precio_calculado": 71.95
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 46.25,
+      "precio_calculado": 316.78
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 187.5,
+      "precio_calculado": 176.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 112.5,
+      "precio_calculado": 279.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 115,
+      "precio_calculado": 290.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 107.5,
+      "precio_calculado": 26.97
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35,
+      "precio_calculado": 7.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4140,
+      "precio_calculado": 126.34
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4200,
+      "precio_calculado": 98.72
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 34.56,
+      "precio_calculado": 22.02
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 500,
+      "precio_calculado": 482.37
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 58.28,
+      "precio_calculado": 23.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 19.97,
+      "precio_calculado": 15.79
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.25,
+      "precio_calculado": 77.46
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 100,
+      "precio_calculado": 39.52
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 55,
+      "precio_calculado": 23.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 135.41,
+      "precio_calculado": 32.6
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 68.83,
+      "precio_calculado": 14.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 19.54,
+      "precio_calculado": 15.34
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 16.31,
+      "precio_calculado": 20.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 21.7,
+      "precio_calculado": 4.15
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 71.92,
+      "precio_calculado": 10.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 80.58,
+      "precio_calculado": 5.43
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 116.1,
+      "precio_calculado": 6.98
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 618.75,
+      "precio_calculado": 171.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 883.33,
+      "precio_calculado": 707.48
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 997.27,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 243.75,
+      "precio_calculado": 30.41
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 96.68,
+      "precio_calculado": 41.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 206.25,
+      "precio_calculado": 393.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 33.27,
+      "precio_calculado": 88.81
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 256.25,
+      "precio_calculado": 150.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6120,
+      "precio_calculado": 848.98
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 7560,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6346.28,
+      "precio_calculado": 7074.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 179.08,
+      "precio_calculado": 60.47
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 206.25,
+      "precio_calculado": 336.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 37.2,
+      "precio_calculado": 26.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 69.12,
+      "precio_calculado": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 656.25,
+      "precio_calculado": 19.29
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 43.75,
+      "precio_calculado": 109.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 88.54,
+      "precio_calculado": 123.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 87.5,
+      "precio_calculado": 13.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 43.75,
+      "precio_calculado": 235.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 78.97,
+      "precio_calculado": 93.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 95.56,
+      "precio_calculado": 252.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 101.06,
+      "precio_calculado": 167.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 99.64,
+      "precio_calculado": 139.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 64.29,
+      "precio_calculado": 70.51
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 564.58,
+      "precio_calculado": 312.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 9600,
+      "precio_calculado": 4244.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 14562.5,
+      "precio_calculado": 1516.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 112.32,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 22.75,
+      "precio_calculado": 31.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 29.97,
+      "precio_calculado": 79.79
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 270.83,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 85.79,
+      "precio_calculado": 28.96
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 178.9,
+      "precio_calculado": 21.01
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 245.62,
+      "precio_calculado": 59.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3372.91,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 157.29,
+      "precio_calculado": 336.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 263.14,
+      "precio_calculado": 353.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 109.41,
+      "precio_calculado": 9.81
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 38.93,
+      "precio_calculado": 15.1
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 59.25,
+      "precio_calculado": 442.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 454.08,
+      "precio_calculado": 1179.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 38.87,
+      "precio_calculado": 28.34
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 22.93,
+      "precio_calculado": 28.68
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 13.43,
+      "precio_calculado": 10.86
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 26.25,
+      "precio_calculado": 14.15
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 24.66,
+      "precio_calculado": 3032.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 106.95,
+      "precio_calculado": 71.95
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 46.27,
+      "precio_calculado": 15.34
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1202.93,
+      "precio_calculado": 196.52
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 31.08,
+      "precio_calculado": 105.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 94.64,
+      "precio_calculado": 112.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 110.08,
+      "precio_calculado": 184.56
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 55.54,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 61.06,
+      "precio_calculado": 74.47
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 49.16,
+      "precio_calculado": 12.32
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 51.62,
+      "precio_calculado": 12.11
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 87.1,
+      "precio_calculado": 8.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 72.35,
+      "precio_calculado": 1117.08
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 72.35,
+      "precio_calculado": 99.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 83.31,
+      "precio_calculado": 77.46
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 41.92,
+      "precio_calculado": 137.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 57.37,
+      "precio_calculado": 34.01
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 89.39,
+      "precio_calculado": 20.16
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 264.37,
+      "precio_calculado": 505.35
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1920,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2250,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35.62,
+      "precio_calculado": 2.31
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 46.68,
+      "precio_calculado": 6.59
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2782.5,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 746.25,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1250,
+      "precio_calculado": 35.02
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1123.12,
+      "precio_calculado": 7074.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 50,
+      "precio_calculado": 13.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1566.85,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1143.12,
+      "precio_calculado": 71.7
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3855.42,
+      "precio_calculado": 786.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 110,
+      "precio_calculado": 75.8
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 164.45,
+      "precio_calculado": 143.41
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 196.27,
+      "precio_calculado": 17.47
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 56.81,
+      "precio_calculado": 165.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6857.13,
+      "precio_calculado": 2122.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 791.25,
+      "precio_calculado": 964.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 199.79,
+      "precio_calculado": 91.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 245.14,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 233.91,
+      "precio_calculado": 65.11
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1358.33,
+      "precio_calculado": 163.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1014.37,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 169.26,
+      "precio_calculado": 14.13
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 329.06,
+      "precio_calculado": 316.78
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2010.41,
+      "precio_calculado": 214.39
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2646.85,
+      "precio_calculado": 964.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 211.51,
+      "precio_calculado": 45.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1520.83,
+      "precio_calculado": 35.26
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 28.5,
+      "precio_calculado": 5.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1626.85,
+      "precio_calculado": 11.43
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 814.27,
+      "precio_calculado": 3032.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 572.85,
+      "precio_calculado": 9.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4714.28,
+      "precio_calculado": 21224.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35.37,
+      "precio_calculado": 159.58
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 979.16,
+      "precio_calculado": 393.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 5922.85,
+      "precio_calculado": 115.35
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 375,
+      "precio_calculado": 110.54
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 182.95,
+      "precio_calculado": 21224.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 163.12,
+      "precio_calculado": 1516.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 15.62,
+      "precio_calculado": 160.79
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 446.6,
+      "precio_calculado": 176.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1046.42,
+      "precio_calculado": 23.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1441.62,
+      "precio_calculado": 168.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1354.16,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 850,
+      "precio_calculado": 141.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4200,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 74.93,
+      "precio_calculado": 15.51
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 75.72,
+      "precio_calculado": 45.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 102.37,
+      "precio_calculado": 64.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 88.97,
+      "precio_calculado": 114.11
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 25.41,
+      "precio_calculado": 10.13
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2913.75,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 64.27,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1127.13,
+      "precio_calculado": 102.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1995.42,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2832.91,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1559.64,
+      "precio_calculado": 1768.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 48.18,
+      "precio_calculado": 22.37
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1671.66,
+      "precio_calculado": 379.01
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 80.43,
+      "precio_calculado": 32.91
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 36.97,
+      "precio_calculado": 37.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 320.54,
+      "precio_calculado": 46.34
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 65.06,
+      "precio_calculado": 54.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 76.58,
+      "precio_calculado": 118.57
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 73.52,
+      "precio_calculado": 26.07
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 258.12,
+      "precio_calculado": 140.56
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 302.47,
+      "precio_calculado": 182.97
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 312.5,
+      "precio_calculado": 97.36
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 19760.56,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 8571.42,
+      "precio_calculado": 7074.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 72.93,
+      "precio_calculado": 7.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 128.18,
+      "precio_calculado": 26.66
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 47.7,
+      "precio_calculado": 66.95
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 68.87,
+      "precio_calculado": 353.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 7088.56,
+      "precio_calculado": 2358.28
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 715,
+      "precio_calculado": 109.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 5532,
+      "precio_calculado": 145.37
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 5532,
+      "precio_calculado": 144.38
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 351.64,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 49.25,
+      "precio_calculado": 643.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 737.5,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 136.35,
+      "precio_calculado": 38.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 269.82,
+      "precio_calculado": 46.65
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2216.56,
+      "precio_calculado": 34.01
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2091.99,
+      "precio_calculado": 279.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4441.99,
+      "precio_calculado": 1179.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 83.35,
+      "precio_calculado": 23.58
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 49.51,
+      "precio_calculado": 13.95
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 152.41,
+      "precio_calculado": 44.4
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 472.85,
+      "precio_calculado": 235.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1033.95,
+      "precio_calculado": 279.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 131.16,
+      "precio_calculado": 89.93
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 229.72,
+      "precio_calculado": 96.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1130.62,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1354.16,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 48000,
+      "precio_calculado": 7074.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 72.82,
+      "precio_calculado": 4.28
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 116.01,
+      "precio_calculado": 27.21
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4800,
+      "precio_calculado": 573.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 38.82,
+      "precio_calculado": 2.96
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 85.31,
+      "precio_calculado": 70.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 109.68,
+      "precio_calculado": 38.45
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 20.78,
+      "precio_calculado": 2.28
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 69.13,
+      "precio_calculado": 9.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3600,
+      "precio_calculado": 196.52
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 421.31,
+      "precio_calculado": 1929.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 568.75,
+      "precio_calculado": 4244.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35.5,
+      "precio_calculado": 83.56
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 158.43,
+      "precio_calculado": 221.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 288.62,
+      "precio_calculado": 36.1
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 125.53,
+      "precio_calculado": 286.82
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 13750,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1471.95,
+      "precio_calculado": 18.72
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1177.53,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 102.37,
+      "precio_calculado": 6.98
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2400,
+      "precio_calculado": 38.38
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 19800,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1904.16,
+      "precio_calculado": 23.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 58.25,
+      "precio_calculado": 32.16
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2389.5,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 74.85,
+      "precio_calculado": 64.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 687.5,
+      "precio_calculado": 86.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 224.6,
+      "precio_calculado": 153.8
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 164.53,
+      "precio_calculado": 385.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 72.07,
+      "precio_calculado": 41.05
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1468.93,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 110.41,
+      "precio_calculado": 2.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3687.5,
+      "precio_calculado": 964.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 147.5,
+      "precio_calculado": 79.2
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 7488,
+      "precio_calculado": 3537.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 12480.39,
+      "precio_calculado": 1414.97
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1393.06,
+      "precio_calculado": 131.83
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 731.3,
+      "precio_calculado": 212.24
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 33600,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 78,
+      "precio_calculado": 68.03
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1018.91,
+      "precio_calculado": 731.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 134.76,
+      "precio_calculado": 50.41
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 204.45,
+      "precio_calculado": 81.01
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 483.87,
+      "precio_calculado": 110.54
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3125,
+      "precio_calculado": 78.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 33.81,
+      "precio_calculado": 37.24
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3125,
+      "precio_calculado": 5.3
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 609.37,
+      "precio_calculado": 120.59
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1212.22,
+      "precio_calculado": 133.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4412.56,
+      "precio_calculado": 643.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4112.56,
+      "precio_calculado": 643.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 485.06,
+      "precio_calculado": 210.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1440,
+      "precio_calculado": 10.93
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1229.16,
+      "precio_calculado": 7.72
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 16800,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 19200,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 33600,
+      "precio_calculado": 5306.12
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1240.7,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4200,
+      "precio_calculado": 558.54
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 11760,
+      "precio_calculado": 21224.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1112.5,
+      "precio_calculado": 95.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 195,
+      "precio_calculado": 15.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1620,
+      "precio_calculado": 15.79
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 510.57,
+      "precio_calculado": 40.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1425.57,
+      "precio_calculado": 663.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1183.85,
+      "precio_calculado": 94.75
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1892.57,
+      "precio_calculado": 73.95
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2760,
+      "precio_calculado": 316.78
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4375,
+      "precio_calculado": 122.68
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 7080,
+      "precio_calculado": 241.19
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 666.66,
+      "precio_calculado": 786.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 10625,
+      "precio_calculado": 21224.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4800,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18000,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2400,
+      "precio_calculado": 151.6
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 182.81,
+      "precio_calculado": 221.09
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 801.03,
+      "precio_calculado": 6.55
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 418.63,
+      "precio_calculado": 1768.71
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3960,
+      "precio_calculado": 164.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3015.99,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 32400,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3399.99,
+      "precio_calculado": 88.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6099.99,
+      "precio_calculado": 77.46
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 30653.75,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 46800,
+      "precio_calculado": 442.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2508,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 203.57,
+      "precio_calculado": 51.27
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 5649.99,
+      "precio_calculado": 129.42
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3409.99,
+      "precio_calculado": 643.17
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3333.32,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 10506,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 7488,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 8400,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1737.36,
+      "precio_calculado": 13.8
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4375,
+      "precio_calculado": 1326.53
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1560,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1500,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1440,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1312.5,
+      "precio_calculado": 1061.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1674,
+      "precio_calculado": 1516.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 318.75,
+      "precio_calculado": 4244.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 343.75,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 979.16,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 40000,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 10920,
+      "precio_calculado": 2653.06
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 69.62,
+      "precio_calculado": 41.62
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1508.4,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 90.88,
+      "precio_calculado": 28.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4847.91,
+      "precio_calculado": 424.49
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 3720,
+      "precio_calculado": 451.58
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 77.66,
+      "precio_calculado": 112.9
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1680,
+      "precio_calculado": 10612.25
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1143.75,
+      "precio_calculado": 23.74
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 506.25,
+      "precio_calculado": 37.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1560,
+      "precio_calculado": 365.94
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 35.26,
+      "precio_calculado": 25.63
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 105.28,
+      "precio_calculado": 530.61
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 720,
+      "precio_calculado": 17.41
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 575,
+      "precio_calculado": 79.2
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 843.75,
+      "precio_calculado": 342.33
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1015.5,
+      "precio_calculado": 95.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1320,
+      "precio_calculado": 149.47
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2280,
+      "precio_calculado": 241.19
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 529.16,
+      "precio_calculado": 365.94
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 104.68,
+      "precio_calculado": 210.14
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1875.6,
+      "precio_calculado": 1414.97
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1056,
+      "precio_calculado": 1888.89
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 188.16,
+      "precio_calculado": 55.15
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1500,
+      "precio_calculado": 5000
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2604.16,
+      "precio_calculado": 250
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 8355.6,
+      "precio_calculado": 312.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 829.16,
+      "precio_calculado": 61.73
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 560.41,
+      "precio_calculado": 62.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1441.66,
+      "precio_calculado": 714.29
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 6360,
+      "precio_calculado": 441.18
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1560,
+      "precio_calculado": 1875
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 1500,
+      "precio_calculado": 1666.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2237.5,
+      "precio_calculado": 7500
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 722.91,
+      "precio_calculado": 1666.67
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2119.99,
+      "precio_calculado": 937.5
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 833.32,
+      "precio_calculado": 125
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 60.6,
+      "precio_calculado": 14.73
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 920.82,
+      "precio_calculado": 150
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 952.07,
+      "precio_calculado": 163.04
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 18000,
+      "precio_calculado": 750
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 2760,
+      "precio_calculado": 1250
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 4740,
+      "precio_calculado": 1250
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3434",
+      "precio_api": 383.75,
+      "precio_calculado": 375
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 1500,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 1500,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 1388.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 1388.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 175,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 1500,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 1388.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 775,
+      "precio_calculado": 347.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 775,
+      "precio_calculado": 347.22
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 694.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 694.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 1388.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 694.44
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 112.5,
+      "precio_calculado": 2777.77
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 775,
+      "precio_calculado": 1388.88
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 31.25,
+      "precio_calculado": 57.87
+    },
+    {
+      "codigo_contrato": "C-2026-00032577",
+      "cve_cucop": "25301-3573",
+      "precio_api": 2187.5,
+      "precio_calculado": 53.42
+    },
+    {
+      "codigo_contrato": "C-2026-00067204",
+      "cve_cucop": "25301-0403",
+      "precio_api": 55.5,
+      "precio_calculado": 50.5
+    },
+    {
+      "codigo_contrato": "C-2026-00067204",
+      "cve_cucop": "25301-1115",
+      "precio_api": 38.8,
+      "precio_calculado": 37.8
+    },
+    {
+      "codigo_contrato": "C-2026-00069464",
+      "cve_cucop": "25301-2763",
+      "precio_api": 52.2,
+      "precio_calculado": 57.2
+    },
+    {
+      "codigo_contrato": "C-2026-00024501",
+      "cve_cucop": "25301-4464",
+      "precio_api": 12346,
+      "precio_calculado": 6173
+    },
+    {
+      "codigo_contrato": "C-2026-00058046",
+      "cve_cucop": "25301-4496",
+      "precio_api": 1100,
+      "precio_calculado": 366.67
+    },
+    {
+      "codigo_contrato": "C-2026-00058046",
+      "cve_cucop": "25301-2968",
+      "precio_api": 420,
+      "precio_calculado": 403.2
+    },
+    {
+      "codigo_contrato": "C-2025-00112545",
+      "cve_cucop": "25301-1143",
+      "precio_api": 101,
+      "precio_calculado": 94.69
+    },
+    {
+      "codigo_contrato": "C-2025-00115305",
+      "cve_cucop": "25301-3552",
+      "precio_api": 31561.2,
+      "precio_calculado": 31017.04
+    },
+    {
       "codigo_contrato": "C-2026-00037289",
       "cve_cucop": "25301-0351",
       "precio_api": 1650,
       "precio_calculado": 1630
     },
     {
-      "codigo_contrato": "C-2025-00124375",
-      "cve_cucop": "25301-3314",
-      "precio_api": 644.5,
-      "precio_calculado": 1917.5
-    },
-    {
       "codigo_contrato": "C-2026-00037331",
       "cve_cucop": "25301-0351",
       "precio_api": 1650,
       "precio_calculado": 1630
-    },
-    {
-      "codigo_contrato": "C-2026-00072651",
-      "cve_cucop": "25301-3313",
-      "precio_api": 682,
-      "precio_calculado": 1071.45
     },
     {
       "codigo_contrato": "C-2026-00057217",
@@ -801,28 +4689,10 @@
       "precio_calculado": 159.6
     },
     {
-      "codigo_contrato": "C-2025-00115286",
-      "cve_cucop": "25301-0115",
-      "precio_api": 1599.39,
-      "precio_calculado": 1355.49
-    },
-    {
-      "codigo_contrato": "C-2025-00115286",
-      "cve_cucop": "25301-0127",
-      "precio_api": 1101.74,
-      "precio_calculado": 1043.6
-    },
-    {
       "codigo_contrato": "C-2026-00014466",
       "cve_cucop": "25301-4428",
       "precio_api": 77,
       "precio_calculado": 41.07
-    },
-    {
-      "codigo_contrato": "C-2025-00123179",
-      "cve_cucop": "25301-2952",
-      "precio_api": 247,
-      "precio_calculado": 130
     },
     {
       "codigo_contrato": "C-2026-00017164",
@@ -853,6 +4723,18 @@
       "cve_cucop": "25301-1251",
       "precio_api": 42,
       "precio_calculado": 0.42
+    },
+    {
+      "codigo_contrato": "C-2025-00110046",
+      "cve_cucop": "25301-0115",
+      "precio_api": 1519.42,
+      "precio_calculado": 1454.9
+    },
+    {
+      "codigo_contrato": "C-2025-00123134",
+      "cve_cucop": "25301-3887",
+      "precio_api": 54.21,
+      "precio_calculado": 48.43
     },
     {
       "codigo_contrato": "C-2026-00016085",
@@ -963,6 +4845,12 @@
       "precio_calculado": 43.98
     },
     {
+      "codigo_contrato": "C-2025-00110112",
+      "cve_cucop": "25301-3552",
+      "precio_api": 29900.08,
+      "precio_calculado": 29381.58
+    },
+    {
       "codigo_contrato": "C-2026-00057452",
       "cve_cucop": "25301-0569",
       "precio_api": 65.05,
@@ -973,12 +4861,6 @@
       "cve_cucop": "25301-1488",
       "precio_api": 61.8,
       "precio_calculado": 12.36
-    },
-    {
-      "codigo_contrato": "C-2025-00115299",
-      "cve_cucop": "25301-2097",
-      "precio_api": 14.3,
-      "precio_calculado": 1.08
     },
     {
       "codigo_contrato": "C-2026-00041199",
@@ -997,6 +4879,24 @@
       "cve_cucop": "25301-3447",
       "precio_api": 1631.5,
       "precio_calculado": 1189.64
+    },
+    {
+      "codigo_contrato": "C-2025-00110133",
+      "cve_cucop": "25301-2237",
+      "precio_api": 414,
+      "precio_calculado": 399.88
+    },
+    {
+      "codigo_contrato": "C-2025-00110031",
+      "cve_cucop": "25301-0658",
+      "precio_api": 90,
+      "precio_calculado": 84.39
+    },
+    {
+      "codigo_contrato": "C-2025-00110140",
+      "cve_cucop": "25301-2237",
+      "precio_api": 400,
+      "precio_calculado": 390.57
     },
     {
       "codigo_contrato": "C-2026-00076220",
@@ -1027,12 +4927,6 @@
       "cve_cucop": "25301-4378",
       "precio_api": 55.07,
       "precio_calculado": 55.7
-    },
-    {
-      "codigo_contrato": "C-2025-00109845",
-      "cve_cucop": "25301-1442",
-      "precio_api": 4.2,
-      "precio_calculado": 4.04
     },
     {
       "codigo_contrato": "C-2026-00054275",
@@ -1083,18 +4977,6 @@
       "precio_calculado": 7.5
     },
     {
-      "codigo_contrato": "C-2025-00112545",
-      "cve_cucop": "25301-1143",
-      "precio_api": 101,
-      "precio_calculado": 94.69
-    },
-    {
-      "codigo_contrato": "C-2025-00115305",
-      "cve_cucop": "25301-3552",
-      "precio_api": 31561.2,
-      "precio_calculado": 31017.04
-    },
-    {
       "codigo_contrato": "C-2026-00016489",
       "cve_cucop": "25301-2679",
       "precio_api": 215,
@@ -1105,45 +4987,1703 @@
       "cve_cucop": "25301-0548",
       "precio_api": 288,
       "precio_calculado": 68.16
-    },
-    {
-      "codigo_contrato": "C-2025-00110046",
-      "cve_cucop": "25301-0115",
-      "precio_api": 1519.42,
-      "precio_calculado": 1454.9
-    },
-    {
-      "codigo_contrato": "C-2025-00123134",
-      "cve_cucop": "25301-3887",
-      "precio_api": 54.21,
-      "precio_calculado": 48.43
-    },
-    {
-      "codigo_contrato": "C-2025-00110112",
-      "cve_cucop": "25301-3552",
-      "precio_api": 29900.08,
-      "precio_calculado": 29381.58
-    },
-    {
-      "codigo_contrato": "C-2025-00110133",
-      "cve_cucop": "25301-2237",
-      "precio_api": 414,
-      "precio_calculado": 399.88
-    },
-    {
-      "codigo_contrato": "C-2025-00110031",
-      "cve_cucop": "25301-0658",
-      "precio_api": 90,
-      "precio_calculado": 84.39
-    },
-    {
-      "codigo_contrato": "C-2025-00110140",
-      "cve_cucop": "25301-2237",
-      "precio_api": 400,
-      "precio_calculado": 390.57
     }
   ],
   "cantidades_derivadas_de_subtotal_entre_precio_unitario": [
+    {
+      "codigo_contrato": "C-2026-00005976",
+      "cve_cucop": "25301-1882",
+      "subtotal": 30240,
+      "precio_unitario": 1680,
+      "cantidad_derivada": 18
+    },
+    {
+      "codigo_contrato": "C-2026-00005976",
+      "cve_cucop": "25301-1856",
+      "subtotal": 40608,
+      "precio_unitario": 1269,
+      "cantidad_derivada": 32
+    },
+    {
+      "codigo_contrato": "C-2026-00005976",
+      "cve_cucop": "25301-2979",
+      "subtotal": 60800,
+      "precio_unitario": 1600,
+      "cantidad_derivada": 38
+    },
+    {
+      "codigo_contrato": "C-2026-00005976",
+      "cve_cucop": "25301-2783",
+      "subtotal": 31653.18,
+      "precio_unitario": 189.54,
+      "cantidad_derivada": 167
+    },
+    {
+      "codigo_contrato": "C-2026-00006447",
+      "cve_cucop": "25301-3012",
+      "subtotal": 84400,
+      "precio_unitario": 1055,
+      "cantidad_derivada": 80
+    },
+    {
+      "codigo_contrato": "C-2026-00006447",
+      "cve_cucop": "25301-2944",
+      "subtotal": 8400,
+      "precio_unitario": 280,
+      "cantidad_derivada": 30
+    },
+    {
+      "codigo_contrato": "C-2026-00006595",
+      "cve_cucop": "25301-3012",
+      "subtotal": 219440,
+      "precio_unitario": 1055,
+      "cantidad_derivada": 208
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-1121",
+      "subtotal": 20320,
+      "precio_unitario": 5080,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-1856",
+      "subtotal": 11760,
+      "precio_unitario": 1680,
+      "cantidad_derivada": 7
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-3043",
+      "subtotal": 23000,
+      "precio_unitario": 115,
+      "cantidad_derivada": 200
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-0042",
+      "subtotal": 9144,
+      "precio_unitario": 63.5,
+      "cantidad_derivada": 144
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-3012",
+      "subtotal": 126600,
+      "precio_unitario": 1055,
+      "cantidad_derivada": 120
+    },
+    {
+      "codigo_contrato": "C-2026-00007770",
+      "cve_cucop": "25301-2783",
+      "subtotal": 17600,
+      "precio_unitario": 1600,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00009879",
+      "cve_cucop": "25301-1557",
+      "subtotal": 37808,
+      "precio_unitario": 556,
+      "cantidad_derivada": 68
+    },
+    {
+      "codigo_contrato": "C-2026-00009879",
+      "cve_cucop": "25301-2792",
+      "subtotal": 29900,
+      "precio_unitario": 1495,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00009882",
+      "cve_cucop": "25301-1973",
+      "subtotal": 7350,
+      "precio_unitario": 147,
+      "cantidad_derivada": 50
+    },
+    {
+      "codigo_contrato": "C-2026-00009882",
+      "cve_cucop": "25301-1856",
+      "subtotal": 37440,
+      "precio_unitario": 2080,
+      "cantidad_derivada": 18
+    },
+    {
+      "codigo_contrato": "C-2026-00017265",
+      "cve_cucop": "25301-4496",
+      "subtotal": 61800,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00017265",
+      "cve_cucop": "25301-3943",
+      "subtotal": 27600,
+      "precio_unitario": 13800,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00017265",
+      "cve_cucop": "25301-1847",
+      "subtotal": 4620,
+      "precio_unitario": 2310,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00017308",
+      "cve_cucop": "25301-2997",
+      "subtotal": 35890,
+      "precio_unitario": 17945,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00017308",
+      "cve_cucop": "25301-2475",
+      "subtotal": 2640,
+      "precio_unitario": 110,
+      "cantidad_derivada": 24
+    },
+    {
+      "codigo_contrato": "C-2026-00017308",
+      "cve_cucop": "25301-4496",
+      "subtotal": 30900,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 10
+    },
+    {
+      "codigo_contrato": "C-2026-00017308",
+      "cve_cucop": "25301-3005",
+      "subtotal": 39200,
+      "precio_unitario": 490,
+      "cantidad_derivada": 80
+    },
+    {
+      "codigo_contrato": "C-2026-00021811",
+      "cve_cucop": "25301-3005",
+      "subtotal": 58800,
+      "precio_unitario": 490,
+      "cantidad_derivada": 120
+    },
+    {
+      "codigo_contrato": "C-2026-00021811",
+      "cve_cucop": "25301-4496",
+      "subtotal": 61800,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00021811",
+      "cve_cucop": "25301-1764",
+      "subtotal": 32150,
+      "precio_unitario": 643,
+      "cantidad_derivada": 50
+    },
+    {
+      "codigo_contrato": "C-2026-00020476",
+      "cve_cucop": "25301-1764",
+      "subtotal": 101594,
+      "precio_unitario": 643,
+      "cantidad_derivada": 158
+    },
+    {
+      "codigo_contrato": "C-2026-00020476",
+      "cve_cucop": "25301-2968",
+      "subtotal": 29304,
+      "precio_unitario": 2664,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00024257",
+      "cve_cucop": "25301-2123",
+      "subtotal": 76300,
+      "precio_unitario": 2180,
+      "cantidad_derivada": 35
+    },
+    {
+      "codigo_contrato": "C-2026-00029753",
+      "cve_cucop": "25301-4496",
+      "subtotal": 52530,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 17
+    },
+    {
+      "codigo_contrato": "C-2026-00029753",
+      "cve_cucop": "25301-3005",
+      "subtotal": 67260,
+      "precio_unitario": 590,
+      "cantidad_derivada": 114
+    },
+    {
+      "codigo_contrato": "C-2026-00029753",
+      "cve_cucop": "25301-3943",
+      "subtotal": 60240,
+      "precio_unitario": 15060,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00029761",
+      "cve_cucop": "25301-3005",
+      "subtotal": 71390,
+      "precio_unitario": 590,
+      "cantidad_derivada": 121
+    },
+    {
+      "codigo_contrato": "C-2026-00029761",
+      "cve_cucop": "25301-0695",
+      "subtotal": 1520,
+      "precio_unitario": 152,
+      "cantidad_derivada": 10
+    },
+    {
+      "codigo_contrato": "C-2026-00029761",
+      "cve_cucop": "25301-2069",
+      "subtotal": 25000,
+      "precio_unitario": 2500,
+      "cantidad_derivada": 10
+    },
+    {
+      "codigo_contrato": "C-2026-00030159",
+      "cve_cucop": "25301-0965",
+      "subtotal": 10000,
+      "precio_unitario": 5000,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00030159",
+      "cve_cucop": "25301-3007",
+      "subtotal": 57230,
+      "precio_unitario": 590,
+      "cantidad_derivada": 97
+    },
+    {
+      "codigo_contrato": "C-2026-00030159",
+      "cve_cucop": "25301-2968",
+      "subtotal": 11456,
+      "precio_unitario": 2864,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00030159",
+      "cve_cucop": "25301-0695",
+      "subtotal": 2280,
+      "precio_unitario": 152,
+      "cantidad_derivada": 15
+    },
+    {
+      "codigo_contrato": "C-2026-00033933",
+      "cve_cucop": "25301-4496",
+      "subtotal": 46350,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 15
+    },
+    {
+      "codigo_contrato": "C-2026-00032404",
+      "cve_cucop": "25301-3566",
+      "subtotal": 138000,
+      "precio_unitario": 34500,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00035531",
+      "cve_cucop": "25301-2123",
+      "subtotal": 10900,
+      "precio_unitario": 2180,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00035531",
+      "cve_cucop": "25301-3728",
+      "subtotal": 223500,
+      "precio_unitario": 74500,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00042996",
+      "cve_cucop": "25301-3005",
+      "subtotal": 292528,
+      "precio_unitario": 376,
+      "cantidad_derivada": 778
+    },
+    {
+      "codigo_contrato": "C-2026-00042996",
+      "cve_cucop": "25301-2329",
+      "subtotal": 26400,
+      "precio_unitario": 2200,
+      "cantidad_derivada": 12
+    },
+    {
+      "codigo_contrato": "C-2026-00042996",
+      "cve_cucop": "25301-0598",
+      "subtotal": 113900,
+      "precio_unitario": 67,
+      "cantidad_derivada": 1700
+    },
+    {
+      "codigo_contrato": "C-2026-00042998",
+      "cve_cucop": "25301-3566",
+      "subtotal": 138000,
+      "precio_unitario": 34500,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-2395",
+      "subtotal": 3135,
+      "precio_unitario": 41.8,
+      "cantidad_derivada": 75
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-1355",
+      "subtotal": 13455,
+      "precio_unitario": 1495,
+      "cantidad_derivada": 9
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-2433",
+      "subtotal": 9432,
+      "precio_unitario": 262,
+      "cantidad_derivada": 36
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-3005",
+      "subtotal": 173336,
+      "precio_unitario": 376,
+      "cantidad_derivada": 461
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-2435",
+      "subtotal": 19720,
+      "precio_unitario": 340,
+      "cantidad_derivada": 58
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-0598",
+      "subtotal": 51712,
+      "precio_unitario": 64,
+      "cantidad_derivada": 808
+    },
+    {
+      "codigo_contrato": "C-2026-00045969",
+      "cve_cucop": "25301-4496",
+      "subtotal": 58710,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 19
+    },
+    {
+      "codigo_contrato": "C-2026-00045999",
+      "cve_cucop": "25301-4496",
+      "subtotal": 61800,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00045999",
+      "cve_cucop": "25301-4520",
+      "subtotal": 37200,
+      "precio_unitario": 9300,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00045999",
+      "cve_cucop": "25301-2435",
+      "subtotal": 18700,
+      "precio_unitario": 340,
+      "cantidad_derivada": 55
+    },
+    {
+      "codigo_contrato": "C-2026-00047263",
+      "cve_cucop": "25301-4534",
+      "subtotal": 30800,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 7
+    },
+    {
+      "codigo_contrato": "C-2026-00047263",
+      "cve_cucop": "25301-2968",
+      "subtotal": 51700,
+      "precio_unitario": 2585,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00047263",
+      "cve_cucop": "25301-4496",
+      "subtotal": 6180,
+      "precio_unitario": 3090,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00047638",
+      "cve_cucop": "25301-2888",
+      "subtotal": 151764,
+      "precio_unitario": 12647,
+      "cantidad_derivada": 12
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-2968",
+      "subtotal": 51700,
+      "precio_unitario": 2585,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-2579",
+      "subtotal": 6695,
+      "precio_unitario": 103,
+      "cantidad_derivada": 65
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-4578",
+      "subtotal": 114000,
+      "precio_unitario": 2850,
+      "cantidad_derivada": 40
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-3005",
+      "subtotal": 188000,
+      "precio_unitario": 376,
+      "cantidad_derivada": 500
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-1352",
+      "subtotal": 14950,
+      "precio_unitario": 1495,
+      "cantidad_derivada": 10
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-2432",
+      "subtotal": 6288,
+      "precio_unitario": 262,
+      "cantidad_derivada": 24
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-2433",
+      "subtotal": 17000,
+      "precio_unitario": 340,
+      "cantidad_derivada": 50
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-0598",
+      "subtotal": 15812,
+      "precio_unitario": 67,
+      "cantidad_derivada": 236
+    },
+    {
+      "codigo_contrato": "C-2026-00050504",
+      "cve_cucop": "25301-4526",
+      "subtotal": 22000,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00050897",
+      "cve_cucop": "25301-3728",
+      "subtotal": 223500,
+      "precio_unitario": 74500,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00051342",
+      "cve_cucop": "25301-3724",
+      "subtotal": 17850,
+      "precio_unitario": 17850,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00051342",
+      "cve_cucop": "25301-1557",
+      "subtotal": 1880,
+      "precio_unitario": 376,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00052791",
+      "cve_cucop": "25301-4534",
+      "subtotal": 17600,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00052791",
+      "cve_cucop": "25301-2433",
+      "subtotal": 7755,
+      "precio_unitario": 2585,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00052791",
+      "cve_cucop": "25301-2968",
+      "subtotal": 25676,
+      "precio_unitario": 262,
+      "cantidad_derivada": 98
+    },
+    {
+      "codigo_contrato": "C-2026-00052791",
+      "cve_cucop": "25301-2435",
+      "subtotal": 14620,
+      "precio_unitario": 340,
+      "cantidad_derivada": 43
+    },
+    {
+      "codigo_contrato": "C-2026-00058117",
+      "cve_cucop": "25301-4534",
+      "subtotal": 92400,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 21
+    },
+    {
+      "codigo_contrato": "C-2026-00058117",
+      "cve_cucop": "25301-1557",
+      "subtotal": 40664,
+      "precio_unitario": 598,
+      "cantidad_derivada": 68
+    },
+    {
+      "codigo_contrato": "C-2026-00058117",
+      "cve_cucop": "25301-4578",
+      "subtotal": 310200,
+      "precio_unitario": 4700,
+      "cantidad_derivada": 66
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-3660",
+      "subtotal": 17490,
+      "precio_unitario": 1590,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-3709",
+      "subtotal": 1040,
+      "precio_unitario": 1040,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-2905",
+      "subtotal": 11250,
+      "precio_unitario": 1875,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-4534",
+      "subtotal": 17600,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-3610",
+      "subtotal": 6912,
+      "precio_unitario": 1152,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00061991",
+      "cve_cucop": "25301-0504",
+      "subtotal": 4560,
+      "precio_unitario": 1140,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00066416",
+      "cve_cucop": "25301-2997",
+      "subtotal": 35890,
+      "precio_unitario": 17945,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00066416",
+      "cve_cucop": "25301-2666",
+      "subtotal": 8000,
+      "precio_unitario": 4000,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00066416",
+      "cve_cucop": "25301-4534",
+      "subtotal": 26400,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00066416",
+      "cve_cucop": "25301-3005",
+      "subtotal": 171430,
+      "precio_unitario": 158,
+      "cantidad_derivada": 1085
+    },
+    {
+      "codigo_contrato": "C-2026-00061182",
+      "cve_cucop": "25301-2329",
+      "subtotal": 313500,
+      "precio_unitario": 2850,
+      "cantidad_derivada": 110
+    },
+    {
+      "codigo_contrato": "C-2026-00061182",
+      "cve_cucop": "25301-4534",
+      "subtotal": 8800,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00069440",
+      "cve_cucop": "25301-4534",
+      "subtotal": 22000,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00069440",
+      "cve_cucop": "25301-3005",
+      "subtotal": 39500,
+      "precio_unitario": 158,
+      "cantidad_derivada": 250
+    },
+    {
+      "codigo_contrato": "C-2026-00069440",
+      "cve_cucop": "25301-4578",
+      "subtotal": 235000,
+      "precio_unitario": 4700,
+      "cantidad_derivada": 50
+    },
+    {
+      "codigo_contrato": "C-2026-00068144",
+      "cve_cucop": "25301-4578",
+      "subtotal": 122200,
+      "precio_unitario": 4700,
+      "cantidad_derivada": 26
+    },
+    {
+      "codigo_contrato": "C-2026-00068144",
+      "cve_cucop": "25301-3005",
+      "subtotal": 3634,
+      "precio_unitario": 158,
+      "cantidad_derivada": 23
+    },
+    {
+      "codigo_contrato": "C-2026-00068144",
+      "cve_cucop": "25301-2997",
+      "subtotal": 35890,
+      "precio_unitario": 17945,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00068144",
+      "cve_cucop": "25301-4526",
+      "subtotal": 13200,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00069456",
+      "cve_cucop": "25301-2968",
+      "subtotal": 13450,
+      "precio_unitario": 2690,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00069456",
+      "cve_cucop": "25301-2329",
+      "subtotal": 199500,
+      "precio_unitario": 2850,
+      "cantidad_derivada": 70
+    },
+    {
+      "codigo_contrato": "C-2026-00070871",
+      "cve_cucop": "25301-4534",
+      "subtotal": 154000,
+      "precio_unitario": 4400,
+      "cantidad_derivada": 35
+    },
+    {
+      "codigo_contrato": "C-2026-00070871",
+      "cve_cucop": "25301-2968",
+      "subtotal": 24210,
+      "precio_unitario": 2690,
+      "cantidad_derivada": 9
+    },
+    {
+      "codigo_contrato": "C-2026-00070871",
+      "cve_cucop": "25301-4578",
+      "subtotal": 9400,
+      "precio_unitario": 4700,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00070871",
+      "cve_cucop": "25301-3566",
+      "subtotal": 91600,
+      "precio_unitario": 22900,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00073381",
+      "cve_cucop": "25301-0073",
+      "subtotal": 30720,
+      "precio_unitario": 512,
+      "cantidad_derivada": 60
+    },
+    {
+      "codigo_contrato": "C-2026-00073381",
+      "cve_cucop": "25301-0786",
+      "subtotal": 12750,
+      "precio_unitario": 2550,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00073381",
+      "cve_cucop": "25301-0965",
+      "subtotal": 6000,
+      "precio_unitario": 6000,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00073833",
+      "cve_cucop": "25301-0073",
+      "subtotal": 512,
+      "precio_unitario": 512,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00073833",
+      "cve_cucop": "25301-4599",
+      "subtotal": 93900,
+      "precio_unitario": 31300,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00073833",
+      "cve_cucop": "25301-2968",
+      "subtotal": 2690,
+      "precio_unitario": 2690,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00075590",
+      "cve_cucop": "25301-3610",
+      "subtotal": 3456,
+      "precio_unitario": 1152,
+      "cantidad_derivada": 3
+    },
+    {
+      "codigo_contrato": "C-2026-00075590",
+      "cve_cucop": "25301-2905",
+      "subtotal": 11250,
+      "precio_unitario": 1875,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00075590",
+      "cve_cucop": "25301-0504",
+      "subtotal": 4560,
+      "precio_unitario": 1140,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00075590",
+      "cve_cucop": "25301-3660",
+      "subtotal": 17490,
+      "precio_unitario": 1590,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00016458",
+      "cve_cucop": "25301-2619",
+      "subtotal": 1392146.91,
+      "precio_unitario": 227.81,
+      "cantidad_derivada": 6111
+    },
+    {
+      "codigo_contrato": "C-2026-00035948",
+      "cve_cucop": "25301-2505",
+      "subtotal": 343423.06,
+      "precio_unitario": 343423.06,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00035952",
+      "cve_cucop": "25301-0191",
+      "subtotal": 133939.3,
+      "precio_unitario": 133939.3,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2025-00139943",
+      "cve_cucop": "25301-4464",
+      "subtotal": 17295.8,
+      "precio_unitario": 17295.8,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00009969",
+      "cve_cucop": "25301-0965",
+      "subtotal": 7000,
+      "precio_unitario": 7000,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00074400",
+      "cve_cucop": "25301-1941",
+      "subtotal": 602255.92,
+      "precio_unitario": 81.32,
+      "cantidad_derivada": 7406
+    },
+    {
+      "codigo_contrato": "C-2026-00074400",
+      "cve_cucop": "25301-1941",
+      "subtotal": 602255.92,
+      "precio_unitario": 81.32,
+      "cantidad_derivada": 7406
+    },
+    {
+      "codigo_contrato": "C-2026-00025685",
+      "cve_cucop": "25301-0002",
+      "subtotal": 160395.2,
+      "precio_unitario": 160395.2,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00033375",
+      "cve_cucop": "25301-2395",
+      "subtotal": 65891.98,
+      "precio_unitario": 65891.98,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00019972",
+      "cve_cucop": "25301-3253",
+      "subtotal": 816.12,
+      "precio_unitario": 136.02,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00071996",
+      "cve_cucop": "25301-1376",
+      "subtotal": 10.14,
+      "precio_unitario": 10.14,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00071996",
+      "cve_cucop": "25301-3005",
+      "subtotal": 274.59,
+      "precio_unitario": 274.59,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00034091",
+      "cve_cucop": "25301-3180",
+      "subtotal": 76560,
+      "precio_unitario": 3190,
+      "cantidad_derivada": 24
+    },
+    {
+      "codigo_contrato": "C-2026-00034091",
+      "cve_cucop": "25301-2814",
+      "subtotal": 57520.8,
+      "precio_unitario": 798.9,
+      "cantidad_derivada": 72
+    },
+    {
+      "codigo_contrato": "C-2026-00034091",
+      "cve_cucop": "25301-3064",
+      "subtotal": 43186.8,
+      "precio_unitario": 3598.9,
+      "cantidad_derivada": 12
+    },
+    {
+      "codigo_contrato": "C-2026-00034091",
+      "cve_cucop": "25301-1650",
+      "subtotal": 59934,
+      "precio_unitario": 998.9,
+      "cantidad_derivada": 60
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-0050",
+      "subtotal": 276245.4,
+      "precio_unitario": 49.9,
+      "cantidad_derivada": 5536
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-2395",
+      "subtotal": 54.8,
+      "precio_unitario": 54.8,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-2435",
+      "subtotal": 263.8,
+      "precio_unitario": 263.8,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-2433",
+      "subtotal": 327.9,
+      "precio_unitario": 327.9,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-0695",
+      "subtotal": 73.4,
+      "precio_unitario": 73.4,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-1233",
+      "subtotal": 57,
+      "precio_unitario": 57,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065479",
+      "cve_cucop": "25301-2783",
+      "subtotal": 582.9,
+      "precio_unitario": 582.9,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00008927",
+      "cve_cucop": "25301-4482",
+      "subtotal": 1972800,
+      "precio_unitario": 109600,
+      "cantidad_derivada": 18
+    },
+    {
+      "codigo_contrato": "C-2026-00033720",
+      "cve_cucop": "25301-4482",
+      "subtotal": 11727200,
+      "precio_unitario": 109600,
+      "cantidad_derivada": 107
+    },
+    {
+      "codigo_contrato": "C-2026-00049340",
+      "cve_cucop": "25301-0264",
+      "subtotal": 9746908.38,
+      "precio_unitario": 9746908.38,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00054179",
+      "cve_cucop": "25301-0695",
+      "subtotal": 3288639.85,
+      "precio_unitario": 3288639.85,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-0050",
+      "subtotal": 13082.55,
+      "precio_unitario": 35.87,
+      "cantidad_derivada": 365
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2231",
+      "subtotal": 23595.75,
+      "precio_unitario": 1773.05,
+      "cantidad_derivada": 13
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2435",
+      "subtotal": 29865.88,
+      "precio_unitario": 289.96,
+      "cantidad_derivada": 103
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2433",
+      "subtotal": 57996,
+      "precio_unitario": 257.76,
+      "cantidad_derivada": 225
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-0449",
+      "subtotal": 29943.9,
+      "precio_unitario": 142.59,
+      "cantidad_derivada": 210
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-0486",
+      "subtotal": 20430.55,
+      "precio_unitario": 94.15,
+      "cantidad_derivada": 217
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-0693",
+      "subtotal": 20221.32,
+      "precio_unitario": 111.72,
+      "cantidad_derivada": 181
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-0695",
+      "subtotal": 1453.68,
+      "precio_unitario": 60.57,
+      "cantidad_derivada": 24
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-4496",
+      "subtotal": 68106.07,
+      "precio_unitario": 3584.53,
+      "cantidad_derivada": 19
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2761",
+      "subtotal": 35076.48,
+      "precio_unitario": 4384.56,
+      "cantidad_derivada": 8
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2944",
+      "subtotal": 79299.5,
+      "precio_unitario": 97.3,
+      "cantidad_derivada": 815
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1319",
+      "subtotal": 56008.65,
+      "precio_unitario": 167.19,
+      "cantidad_derivada": 335
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1352",
+      "subtotal": 23388.3,
+      "precio_unitario": 779.61,
+      "cantidad_derivada": 30
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2837",
+      "subtotal": 5814.05,
+      "precio_unitario": 528.55,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1662",
+      "subtotal": 2104.76,
+      "precio_unitario": 75.17,
+      "cantidad_derivada": 28
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1711",
+      "subtotal": 97301.25,
+      "precio_unitario": 144.15,
+      "cantidad_derivada": 675
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1764",
+      "subtotal": 195467.4,
+      "precio_unitario": 576.6,
+      "cantidad_derivada": 339
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1723",
+      "subtotal": 68884.48,
+      "precio_unitario": 38.44,
+      "cantidad_derivada": 1792
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-1856",
+      "subtotal": 181148.4,
+      "precio_unitario": 4528.71,
+      "cantidad_derivada": 40
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2989",
+      "subtotal": 50640.04,
+      "precio_unitario": 178.31,
+      "cantidad_derivada": 284
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2997",
+      "subtotal": 708180.12,
+      "precio_unitario": 30790.44,
+      "cantidad_derivada": 23
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-3005",
+      "subtotal": 470124.16,
+      "precio_unitario": 302.72,
+      "cantidad_derivada": 1553
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-2099",
+      "subtotal": 38543.8,
+      "precio_unitario": 77.6,
+      "cantidad_derivada": 497
+    },
+    {
+      "codigo_contrato": "C-2026-00021331",
+      "cve_cucop": "25301-3943",
+      "subtotal": 188130.18,
+      "precio_unitario": 31355.03,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-2393",
+      "subtotal": 43420.56,
+      "precio_unitario": 47.82,
+      "cantidad_derivada": 908
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-2579",
+      "subtotal": 62219.5,
+      "precio_unitario": 101.5,
+      "cantidad_derivada": 613
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-0950",
+      "subtotal": 62219.5,
+      "precio_unitario": 240,
+      "cantidad_derivada": 259
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-4496",
+      "subtotal": 86286.6,
+      "precio_unitario": 4541.4,
+      "cantidad_derivada": 19
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-2783",
+      "subtotal": 109295.16,
+      "precio_unitario": 700.61,
+      "cantidad_derivada": 156
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-1512",
+      "subtotal": 90546.12,
+      "precio_unitario": 239.54,
+      "cantidad_derivada": 378
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-2968",
+      "subtotal": 102022,
+      "precio_unitario": 3518,
+      "cantidad_derivada": 29
+    },
+    {
+      "codigo_contrato": "C-2026-00036322",
+      "cve_cucop": "25301-3933",
+      "subtotal": 12812.2,
+      "precio_unitario": 6406.1,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00009612",
+      "cve_cucop": "25301-3364",
+      "subtotal": 196053.75,
+      "precio_unitario": 196053.75,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00009667",
+      "cve_cucop": "25301-0002",
+      "subtotal": 490598,
+      "precio_unitario": 490598,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00025220",
+      "cve_cucop": "25301-0002",
+      "subtotal": 177957,
+      "precio_unitario": 177957,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00028445",
+      "cve_cucop": "25301-0002",
+      "subtotal": 491022,
+      "precio_unitario": 491022,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00033319",
+      "cve_cucop": "25301-0002",
+      "subtotal": 185181.5,
+      "precio_unitario": 185181.5,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00033332",
+      "cve_cucop": "25301-4496",
+      "subtotal": 128216,
+      "precio_unitario": 128216,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00033337",
+      "cve_cucop": "25301-3755",
+      "subtotal": 86600,
+      "precio_unitario": 86600,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00049161",
+      "cve_cucop": "25301-0002",
+      "subtotal": 132272.5,
+      "precio_unitario": 132272.5,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00042581",
+      "cve_cucop": "25301-0002",
+      "subtotal": 162353,
+      "precio_unitario": 162353,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00060207",
+      "cve_cucop": "25301-0002",
+      "subtotal": 325974.53,
+      "precio_unitario": 325974.53,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00065119",
+      "cve_cucop": "25301-2530",
+      "subtotal": 4960512,
+      "precio_unitario": 38754,
+      "cantidad_derivada": 128
+    },
+    {
+      "codigo_contrato": "C-2026-00005978",
+      "cve_cucop": "25301-2579",
+      "subtotal": 3741.6,
+      "precio_unitario": 124.72,
+      "cantidad_derivada": 30
+    },
+    {
+      "codigo_contrato": "C-2026-00005978",
+      "cve_cucop": "25301-0532",
+      "subtotal": 252000,
+      "precio_unitario": 1800,
+      "cantidad_derivada": 140
+    },
+    {
+      "codigo_contrato": "C-2026-00006448",
+      "cve_cucop": "25301-0396",
+      "subtotal": 97200,
+      "precio_unitario": 1800,
+      "cantidad_derivada": 54
+    },
+    {
+      "codigo_contrato": "C-2026-00005971",
+      "cve_cucop": "25301-1372",
+      "subtotal": 85100,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 23
+    },
+    {
+      "codigo_contrato": "C-2026-00005971",
+      "cve_cucop": "25301-3074",
+      "subtotal": 23306,
+      "precio_unitario": 86,
+      "cantidad_derivada": 271
+    },
+    {
+      "codigo_contrato": "C-2026-00007767",
+      "cve_cucop": "25301-2827",
+      "subtotal": 82000,
+      "precio_unitario": 4100,
+      "cantidad_derivada": 20
+    },
+    {
+      "codigo_contrato": "C-2026-00007767",
+      "cve_cucop": "25301-0798",
+      "subtotal": 200000,
+      "precio_unitario": 1000,
+      "cantidad_derivada": 200
+    },
+    {
+      "codigo_contrato": "C-2026-00007767",
+      "cve_cucop": "25301-2828",
+      "subtotal": 202000,
+      "precio_unitario": 5050,
+      "cantidad_derivada": 40
+    },
+    {
+      "codigo_contrato": "C-2026-00009881",
+      "cve_cucop": "25301-1723",
+      "subtotal": 69300,
+      "precio_unitario": 42,
+      "cantidad_derivada": 1650
+    },
+    {
+      "codigo_contrato": "C-2026-00011179",
+      "cve_cucop": "25301-3012",
+      "subtotal": 160000,
+      "precio_unitario": 800,
+      "cantidad_derivada": 200
+    },
+    {
+      "codigo_contrato": "C-2026-00009884",
+      "cve_cucop": "25301-2783",
+      "subtotal": 70000,
+      "precio_unitario": 1400,
+      "cantidad_derivada": 50
+    },
+    {
+      "codigo_contrato": "C-2026-00013468",
+      "cve_cucop": "25301-1112",
+      "subtotal": 36960,
+      "precio_unitario": 44,
+      "cantidad_derivada": 840
+    },
+    {
+      "codigo_contrato": "C-2026-00013468",
+      "cve_cucop": "25301-2395",
+      "subtotal": 11550,
+      "precio_unitario": 50,
+      "cantidad_derivada": 231
+    },
+    {
+      "codigo_contrato": "C-2026-00013468",
+      "cve_cucop": "25301-1121",
+      "subtotal": 45000,
+      "precio_unitario": 4500,
+      "cantidad_derivada": 10
+    },
+    {
+      "codigo_contrato": "C-2026-00013966",
+      "cve_cucop": "25301-0396",
+      "subtotal": 28800,
+      "precio_unitario": 1800,
+      "cantidad_derivada": 16
+    },
+    {
+      "codigo_contrato": "C-2026-00013966",
+      "cve_cucop": "25301-1121",
+      "subtotal": 9000,
+      "precio_unitario": 4500,
+      "cantidad_derivada": 2
+    },
+    {
+      "codigo_contrato": "C-2026-00013966",
+      "cve_cucop": "25301-3012",
+      "subtotal": 200000,
+      "precio_unitario": 800,
+      "cantidad_derivada": 250
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-2838",
+      "subtotal": 5600,
+      "precio_unitario": 700,
+      "cantidad_derivada": 8
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-0050",
+      "subtotal": 11032,
+      "precio_unitario": 39.4,
+      "cantidad_derivada": 280
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-0950",
+      "subtotal": 6000,
+      "precio_unitario": 100,
+      "cantidad_derivada": 60
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-0693",
+      "subtotal": 2760,
+      "precio_unitario": 69,
+      "cantidad_derivada": 40
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-2783",
+      "subtotal": 100800,
+      "precio_unitario": 1400,
+      "cantidad_derivada": 72
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-1372",
+      "subtotal": 14800,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 4
+    },
+    {
+      "codigo_contrato": "C-2026-00030158",
+      "cve_cucop": "25301-2395",
+      "subtotal": 9000,
+      "precio_unitario": 50,
+      "cantidad_derivada": 180
+    },
+    {
+      "codigo_contrato": "C-2026-00032400",
+      "cve_cucop": "25301-0178",
+      "subtotal": 50000,
+      "precio_unitario": 2000,
+      "cantidad_derivada": 25
+    },
+    {
+      "codigo_contrato": "C-2026-00035535",
+      "cve_cucop": "25301-0396",
+      "subtotal": 92400,
+      "precio_unitario": 3850,
+      "cantidad_derivada": 24
+    },
+    {
+      "codigo_contrato": "C-2026-00035535",
+      "cve_cucop": "25301-4534",
+      "subtotal": 27000,
+      "precio_unitario": 4500,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00035535",
+      "cve_cucop": "25301-1372",
+      "subtotal": 59200,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 16
+    },
+    {
+      "codigo_contrato": "C-2026-00046028",
+      "cve_cucop": "25301-2968",
+      "subtotal": 89100,
+      "precio_unitario": 2700,
+      "cantidad_derivada": 33
+    },
+    {
+      "codigo_contrato": "C-2026-00046028",
+      "cve_cucop": "25301-0695",
+      "subtotal": 1054,
+      "precio_unitario": 62,
+      "cantidad_derivada": 17
+    },
+    {
+      "codigo_contrato": "C-2026-00046028",
+      "cve_cucop": "25301-0050",
+      "subtotal": 6752,
+      "precio_unitario": 32,
+      "cantidad_derivada": 211
+    },
+    {
+      "codigo_contrato": "C-2026-00046028",
+      "cve_cucop": "25301-1372",
+      "subtotal": 40700,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00046028",
+      "cve_cucop": "25301-4534",
+      "subtotal": 27000,
+      "precio_unitario": 4500,
+      "cantidad_derivada": 6
+    },
+    {
+      "codigo_contrato": "C-2026-00050771",
+      "cve_cucop": "25301-1372",
+      "subtotal": 18500,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 5
+    },
+    {
+      "codigo_contrato": "C-2026-00050771",
+      "cve_cucop": "25301-2395",
+      "subtotal": 9000,
+      "precio_unitario": 50,
+      "cantidad_derivada": 180
+    },
+    {
+      "codigo_contrato": "C-2026-00050771",
+      "cve_cucop": "25301-0050",
+      "subtotal": 5088,
+      "precio_unitario": 32,
+      "cantidad_derivada": 159
+    },
+    {
+      "codigo_contrato": "C-2026-00050771",
+      "cve_cucop": "25301-0695",
+      "subtotal": 2294,
+      "precio_unitario": 62,
+      "cantidad_derivada": 37
+    },
+    {
+      "codigo_contrato": "C-2026-00051391",
+      "cve_cucop": "25301-2395",
+      "subtotal": 23550,
+      "precio_unitario": 50,
+      "cantidad_derivada": 471
+    },
+    {
+      "codigo_contrato": "C-2026-00051391",
+      "cve_cucop": "25301-0530",
+      "subtotal": 23800,
+      "precio_unitario": 1700,
+      "cantidad_derivada": 14
+    },
+    {
+      "codigo_contrato": "C-2026-00052795",
+      "cve_cucop": "25301-1372",
+      "subtotal": 40700,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 11
+    },
+    {
+      "codigo_contrato": "C-2026-00069448",
+      "cve_cucop": "25301-0530",
+      "subtotal": 113600,
+      "precio_unitario": 1600,
+      "cantidad_derivada": 71
+    },
+    {
+      "codigo_contrato": "C-2026-00072363",
+      "cve_cucop": "25301-1372",
+      "subtotal": 107300,
+      "precio_unitario": 3700,
+      "cantidad_derivada": 29
+    },
+    {
+      "codigo_contrato": "C-2026-00045826",
+      "cve_cucop": "25301-0002",
+      "subtotal": 29358,
+      "precio_unitario": 29358,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00064279",
+      "cve_cucop": "25301-4589",
+      "subtotal": 790572.8,
+      "precio_unitario": 790572.8,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2025-00137839",
+      "cve_cucop": "25301-3472",
+      "subtotal": 301724.14,
+      "precio_unitario": 301724.14,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00003577",
+      "cve_cucop": "25301-0015",
+      "subtotal": 800000,
+      "precio_unitario": 800000,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00007998",
+      "cve_cucop": "25301-0015",
+      "subtotal": 3700000,
+      "precio_unitario": 3700000,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00020381",
+      "cve_cucop": "25301-0912",
+      "subtotal": 160272,
+      "precio_unitario": 20034,
+      "cantidad_derivada": 8
+    },
+    {
+      "codigo_contrato": "C-2026-00009599",
+      "cve_cucop": "25301-0002",
+      "subtotal": 433444,
+      "precio_unitario": 433444,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00009670",
+      "cve_cucop": "25301-0002",
+      "subtotal": 483630,
+      "precio_unitario": 483630,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00026243",
+      "cve_cucop": "25301-0002",
+      "subtotal": 491861.94,
+      "precio_unitario": 491861.94,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00049155",
+      "cve_cucop": "25301-0002",
+      "subtotal": 433444,
+      "precio_unitario": 433444,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00018455",
+      "cve_cucop": "25301-0566",
+      "subtotal": 640835.03,
+      "precio_unitario": 18.78,
+      "cantidad_derivada": 34123
+    },
+    {
+      "codigo_contrato": "C-2026-00020518",
+      "cve_cucop": "25301-0947",
+      "subtotal": 131300,
+      "precio_unitario": 1300,
+      "cantidad_derivada": 101
+    },
+    {
+      "codigo_contrato": "C-2026-00035945",
+      "cve_cucop": "25301-0947",
+      "subtotal": 51000,
+      "precio_unitario": 51000,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00044372",
+      "cve_cucop": "25301-0036",
+      "subtotal": 825206,
+      "precio_unitario": 53644.16,
+      "cantidad_derivada": 15
+    },
     {
       "codigo_contrato": "C-2026-00013940",
       "cve_cucop": "25301-3935",
@@ -5954,62 +11494,6 @@
       "cantidad_derivada": 6
     },
     {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3434",
-      "subtotal": 12214.2,
-      "precio_unitario": 407.14,
-      "cantidad_derivada": 30
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3437",
-      "subtotal": 10212.41,
-      "precio_unitario": 92.42,
-      "cantidad_derivada": 111
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3434",
-      "subtotal": 407970,
-      "precio_unitario": 30.22,
-      "cantidad_derivada": 13500
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3436",
-      "subtotal": 45904,
-      "precio_unitario": 96.64,
-      "cantidad_derivada": 475
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3435",
-      "subtotal": 20912.4,
-      "precio_unitario": 290.45,
-      "cantidad_derivada": 72
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3437",
-      "subtotal": 249456.9,
-      "precio_unitario": 215.98,
-      "cantidad_derivada": 1155
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3434",
-      "subtotal": 16285.6,
-      "precio_unitario": 407.14,
-      "cantidad_derivada": 40
-    },
-    {
-      "codigo_contrato": "C-2026-00031887",
-      "cve_cucop": "25301-3434",
-      "subtotal": 13412.58,
-      "precio_unitario": 83.05,
-      "cantidad_derivada": 162
-    },
-    {
       "codigo_contrato": "C-2026-00030750",
       "cve_cucop": "25301-3434",
       "subtotal": 3632726.25,
@@ -7900,6 +13384,62 @@
       "cantidad_derivada": 792
     },
     {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3434",
+      "subtotal": 12214.2,
+      "precio_unitario": 407.14,
+      "cantidad_derivada": 30
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3437",
+      "subtotal": 10212.41,
+      "precio_unitario": 92.42,
+      "cantidad_derivada": 111
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3434",
+      "subtotal": 407970,
+      "precio_unitario": 30.22,
+      "cantidad_derivada": 13500
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3436",
+      "subtotal": 45904,
+      "precio_unitario": 96.64,
+      "cantidad_derivada": 475
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3435",
+      "subtotal": 20912.4,
+      "precio_unitario": 290.45,
+      "cantidad_derivada": 72
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3437",
+      "subtotal": 249456.9,
+      "precio_unitario": 215.98,
+      "cantidad_derivada": 1155
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3434",
+      "subtotal": 16285.6,
+      "precio_unitario": 407.14,
+      "cantidad_derivada": 40
+    },
+    {
+      "codigo_contrato": "C-2026-00031887",
+      "cve_cucop": "25301-3434",
+      "subtotal": 13412.58,
+      "precio_unitario": 83.05,
+      "cantidad_derivada": 162
+    },
+    {
       "codigo_contrato": "C-2026-00043326",
       "cve_cucop": "25301-3434",
       "subtotal": 7999912.5,
@@ -7919,6 +13459,55 @@
       "subtotal": 3744719,
       "precio_unitario": 1,
       "cantidad_derivada": 3744719
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3434",
+      "subtotal": 6291600,
+      "precio_unitario": 6291600,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3437",
+      "subtotal": 2359350,
+      "precio_unitario": 2359350,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3434",
+      "subtotal": 117210,
+      "precio_unitario": 117210,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3435",
+      "subtotal": 25166.4,
+      "precio_unitario": 25166.4,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3436",
+      "subtotal": 37316.25,
+      "precio_unitario": 37316.25,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3437",
+      "subtotal": 5457,
+      "precio_unitario": 5457,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00017162",
+      "cve_cucop": "25301-3434",
+      "subtotal": 126730.8,
+      "precio_unitario": 126730.8,
+      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00021190",
@@ -8024,55 +13613,6 @@
       "subtotal": 450000,
       "precio_unitario": 83.47,
       "cantidad_derivada": 5391
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3434",
-      "subtotal": 6291600,
-      "precio_unitario": 6291600,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3437",
-      "subtotal": 2359350,
-      "precio_unitario": 2359350,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3434",
-      "subtotal": 117210,
-      "precio_unitario": 117210,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3435",
-      "subtotal": 25166.4,
-      "precio_unitario": 25166.4,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3436",
-      "subtotal": 37316.25,
-      "precio_unitario": 37316.25,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3437",
-      "subtotal": 5457,
-      "precio_unitario": 5457,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00017162",
-      "cve_cucop": "25301-3434",
-      "subtotal": 126730.8,
-      "precio_unitario": 126730.8,
-      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00031096",
@@ -10606,7 +16146,7 @@
       "cve_cucop": "25301-4492",
       "subtotal": 4773698.55,
       "precio_unitario": 70721.46,
-      "cantidad_derivada": 68
+      "cantidad_derivada": 67
     },
     {
       "codigo_contrato": "C-2026-00031402",
@@ -10648,6 +16188,20 @@
       "cve_cucop": "25301-3436",
       "subtotal": 8637859.2,
       "precio_unitario": 8637859.2,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00076746",
+      "cve_cucop": "25301-3434",
+      "subtotal": 26724137.93,
+      "precio_unitario": 26724137.93,
+      "cantidad_derivada": 1
+    },
+    {
+      "codigo_contrato": "C-2026-00076746",
+      "cve_cucop": "25301-3434",
+      "subtotal": 6896551.72,
+      "precio_unitario": 6896551.72,
       "cantidad_derivada": 1
     },
     {
@@ -10747,20 +16301,6 @@
       "subtotal": 993800.53,
       "precio_unitario": 20.449,
       "cantidad_derivada": 48599
-    },
-    {
-      "codigo_contrato": "C-2026-00076746",
-      "cve_cucop": "25301-3434",
-      "subtotal": 26724137.93,
-      "precio_unitario": 26724137.93,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00076746",
-      "cve_cucop": "25301-3434",
-      "subtotal": 6896551.72,
-      "precio_unitario": 6896551.72,
-      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00025231",
@@ -16839,6 +22379,13 @@
       "cantidad_derivada": 87
     },
     {
+      "codigo_contrato": "C-2026-00070864",
+      "cve_cucop": "25301-4496",
+      "subtotal": 84694,
+      "precio_unitario": 1598,
+      "cantidad_derivada": 53
+    },
+    {
       "codigo_contrato": "C-2026-00069452",
       "cve_cucop": "25301-4496",
       "subtotal": 31960,
@@ -16851,13 +22398,6 @@
       "subtotal": 2508,
       "precio_unitario": 41.8,
       "cantidad_derivada": 60
-    },
-    {
-      "codigo_contrato": "C-2026-00070864",
-      "cve_cucop": "25301-4496",
-      "subtotal": 84694,
-      "precio_unitario": 1598,
-      "cantidad_derivada": 53
     },
     {
       "codigo_contrato": "C-2026-00000013",
@@ -16902,10 +22442,10 @@
       "cantidad_derivada": 3900
     },
     {
-      "codigo_contrato": "C-2026-00025194",
+      "codigo_contrato": "C-2026-00009605",
       "cve_cucop": "25301-0002",
-      "subtotal": 101328,
-      "precio_unitario": 101328,
+      "subtotal": 491960,
+      "precio_unitario": 491960,
       "cantidad_derivada": 1
     },
     {
@@ -16916,10 +22456,10 @@
       "cantidad_derivada": 1
     },
     {
-      "codigo_contrato": "C-2026-00009605",
+      "codigo_contrato": "C-2026-00025194",
       "cve_cucop": "25301-0002",
-      "subtotal": 491960,
-      "precio_unitario": 491960,
+      "subtotal": 101328,
+      "precio_unitario": 101328,
       "cantidad_derivada": 1
     },
     {

@@ -61,7 +61,7 @@ const DICCIONARIO = [
   ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
   ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
   ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato.'],
+  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2.'],
   ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
   ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
   ['procedimiento', 'Número de procedimiento de contratación.'],
@@ -114,6 +114,10 @@ function contarCoincidenciasNumericas(numsA, numsB) {
   return n;
 }
 
+// Duplicado idéntico de scripts/extract.js -- mantener ambas copias en sync.
+// No todas las entradas del catálogo traen el prefijo de clave CSG (~23% de
+// las 25301, ver extract.js); se guardan igual, con `clave: null`, para que
+// `cucopEsValido` pueda seguir usando su `descripcion`.
 function buildCucopMap() {
   const wb = XLSX.readFile(CUCOP_PATH);
   const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
@@ -121,9 +125,12 @@ function buildCucopMap() {
   for (const row of rows) {
     if (String(row['PARTIDA ESPECÍFICA'] || '').trim() !== '25301') continue;
     const cveCucop = String(row['CLAVE CUCoP +'] || '').trim();
-    const m = String(row['DESCRIPCIÓN'] || '').match(CLAVE_RE);
-    if (!cveCucop || !m) continue;
-    map[cveCucop] = { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() };
+    const descripcionCruda = String(row['DESCRIPCIÓN'] || '').trim();
+    if (!cveCucop || !descripcionCruda) continue;
+    const m = descripcionCruda.match(CLAVE_RE);
+    map[cveCucop] = m
+      ? { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() }
+      : { clave: null, descripcion: descripcionCruda };
   }
   return map;
 }
