@@ -441,6 +441,16 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
         continue;
       }
       for (const item of res.data) {
+        // El filtro de la partida 25301 en loadFilteredRows() opera a nivel
+        // de CONTRATO (una fila del CSV masivo), no de ítem: un contrato con
+        // al menos una línea de partida 25301 pasa el filtro, pero
+        // detallepartidas() devuelve TODAS las líneas del contrato, incluidas
+        // las de otras partidas (radiofármacos 25401, material de curación
+        // 25501, etc.) si la compra fue mixta. Sin este segundo filtro por
+        // ítem, esas líneas se colaban al dataset marcadas como MEDICAMENTO
+        // (~32% del dataset en la corrida de 2026-08-09, detectado por cve_cucop
+        // fuera de 25301-*).
+        if (!item.cve_cucop || !String(item.cve_cucop).startsWith('25301')) continue;
         const registro = buildRegistro(contrato, item, compendio, cucopMap, stats);
         if (registro) resultados.push(registro);
       }

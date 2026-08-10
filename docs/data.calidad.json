@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-09T21:18:58.947Z",
-  "total_registros": 24909,
+  "generado": "2026-08-10T03:19:02.064Z",
+  "total_registros": 16920,
   "top_20_valores_mas_altos": [
     {
       "codigo_contrato": "C-2026-00044750",
@@ -22,13 +22,6 @@
       "precio_unitario": 28815,
       "cantidad": 19724,
       "valor": 568347060
-    },
-    {
-      "codigo_contrato": "C-2025-00115312",
-      "producto": "060.693.0014 PARAFINAS CON PUNTO DE FUSION ENTRE 40 GRADOS CENTIGRADOS A 51 GRAD",
-      "precio_unitario": 684,
-      "cantidad": 808510,
-      "valor": 553020840
     },
     {
       "codigo_contrato": "C-2025-00110579",
@@ -57,13 +50,6 @@
       "precio_unitario": 34359.81,
       "cantidad": 12422,
       "valor": 426817559.82
-    },
-    {
-      "codigo_contrato": "C-2025-00109688",
-      "producto": "060.693.0014 PARAFINAS CON PUNTO DE FUSION ENTRE 40 GRADOS CENTIGRADOS A 51 GRAD",
-      "precio_unitario": 728,
-      "cantidad": 539006,
-      "valor": 392396368
     },
     {
       "codigo_contrato": "C-2026-00063132",
@@ -97,7 +83,7 @@
       "codigo_contrato": "C-2025-00137512",
       "producto": "PARTIDA 35 D.F. SUR",
       "precio_unitario": 66.04,
-      "cantidad": 4539342.656,
+      "cantidad": 4539343,
       "valor": 299778189
     },
     {
@@ -141,6 +127,20 @@
       "precio_unitario": 189.67,
       "cantidad": 1407516,
       "valor": 266963559.72
+    },
+    {
+      "codigo_contrato": "C-2025-00110280",
+      "producto": "PIRFENIDONA TABLETA DE LIBERACION PROLONGADA 600 MG 90 TABLETAS",
+      "precio_unitario": 8950,
+      "cantidad": 29448,
+      "valor": 263559600
+    },
+    {
+      "codigo_contrato": "C-2026-00071104",
+      "producto": "00 DARATUMUMAB",
+      "precio_unitario": 7203,
+      "cantidad": 34962,
+      "valor": 251831286
     }
   ],
   "registros_con_precio_o_cantidad_en_cero_o_negativo": [
@@ -190,102 +190,6 @@
       "codigo_contrato": "C-2026-00059324",
       "producto": "SOLUCIÓN OFTÁLMICA DE 3/1 MG(TOBRAMICINA, DEXAMETASONA) CAJA CON FRASCO GOTERO C",
       "precio_unitario": 71.44,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 4, TALLA F, CON CUBIERTA EXTERNA IMPERMEABLE, C",
-      "precio_unitario": 157.63,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 5, TALLA XG, CON CUBIERTA EXTERNA IMPERMEABLE, ",
-      "precio_unitario": 180.69,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "BOLSA RECOLECTORA DE ORINA ADULTO DE 650ML PARA PIERNA",
-      "precio_unitario": 37.33,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS  DE 20 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 396.67,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS DE 21 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 396.67,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS DE 22 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 434,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS DE 23 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 396.67,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS DE 24 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 434,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CANULA NASAL PEDIATRICAS (PUNTAS NASALES)",
-      "precio_unitario": 19.07,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "SONDA ALIMENTACION  DE 8FR 38.5CM DESECHABLE",
-      "precio_unitario": 8.12,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "BATA CON PUÑOS AJUSTABLES Y REFUERZO EN MANGAS Y PECHO, REPELENTE UNISEX",
-      "precio_unitario": 29.59,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 4, TALLA F, CON CUBIERTA EXTERNA IMPERMEABLE, C",
-      "precio_unitario": 157.63,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 5, TALLA XG, CON CUBIERTA EXTERNA IMPERMEABLE, ",
-      "precio_unitario": 180.69,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS  DE 20 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 396.67,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CATETER PERIFÉRICO PARA VENOCLISIS DE 24 G CAJA CON 50 PIEZAS",
-      "precio_unitario": 434,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "producto": "CANULA NASAL PEDIATRICAS (PUNTAS NASALES)",
-      "precio_unitario": 19.07,
       "cantidad": 0
     },
     {
@@ -572,6 +476,12 @@
     },
     {
       "codigo_contrato": "C-2026-00059328",
+      "producto": "HEPARINA SOLUCION INYECTABLE CADA FRASCO AMPULA CONTIENE HEPARINA SODICA EQUIVAL",
+      "precio_unitario": 3617.75,
+      "cantidad": 0
+    },
+    {
+      "codigo_contrato": "C-2026-00059328",
       "producto": "SUCRALFATO DE 1 G CAJA 40 TABLETAS",
       "precio_unitario": 130.75,
       "cantidad": 0
@@ -682,174 +592,6 @@
       "codigo_contrato": "C-2026-00059328",
       "producto": "ANESTESIA DENTAL CARTUCHOS CAJA CON 50 PIEZAS",
       "precio_unitario": 917.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "ABATELENGUAS DE MADERA BOLSA CON 500 PIEZAS",
-      "precio_unitario": 451.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "EQUIPO DE VENOCLISIS NORMOGOTERO ESTERILIZADO, DESECHABLE,CON PAQUETE CON 12 PIE",
-      "precio_unitario": 201.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "CATETER INTRAVENOSO DE 20 G X 32 MM PAQUETE CON 5 PIEZAS",
-      "precio_unitario": 477.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "CATETER INTRAVENOSO DE 24 G X 19 MM PAQUETE CON 5 PIEZAS",
-      "precio_unitario": 469.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "TELA ADHESIVA DE ACETATO DE 1.25 CM X 10 M CAJA CON 24 PIEZAS.",
-      "precio_unitario": 616.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "JERINGA PARA INSULINA DE PLÁSTICO DE 30 G X 13 MM DE 1 ML CAJA CON 100 PIEZAS",
-      "precio_unitario": 451.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "SONDA FOLEY DE 2 VIAS, 14 FR GLOBO 5ML  DE SILICON TRANSPARENTE",
-      "precio_unitario": 347.45,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "SONDA FOLEY DE 2 VIAS 24 FR GLOBO 5ML DE SILICON TRANSPARENTE",
-      "precio_unitario": 239.55,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "SONDA NELATON DESECHABLE 10 FR ESTERIL ELABORADO DE PVC FLEXIBLE",
-      "precio_unitario": 44.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "COLLARIN CERVICAL BLANDO PEDIATRICO DE HULE DE ESPUMA FORRADO DE ALGODÓN CON AJU",
-      "precio_unitario": 150.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "CEPILLO DENTAL TAMAÑO INFANTIL VARIOS COLORES INFANTIL SIMILAR O SUPERIOR A  COL",
-      "precio_unitario": 114.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "CEPILLO DENTAL CON CERDAS SUAVES, CABEZA OVALADA, MANGO ERGONÓMICO SIMILAR O SUP",
-      "precio_unitario": 92.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "VENDAS. ELASTICAS DE TEJIDO PLANO; DE ALGODON CON FIBRAS SINTETICAS. LONGITUD: 5",
-      "precio_unitario": 218.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "CEPILLO PARA PULIDO DE AMALGAMAS Y PROFILAXIS CERDAS SUAVES PAQUETE CON 100 UNID",
-      "precio_unitario": 406.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "ALGODÓN EN PLISADO DE 300 G",
-      "precio_unitario": 113.55,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "NEBULIZADOR. EQUIPO DESECHABLE PARA NEBULIZADOR DE COMPRESOR PARA NIÑOS Y ADULTO",
-      "precio_unitario": 2347.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "RASTRILLO PARA AFEITAR DESECHABLE  DE 2 HOJAS SIMILAR O SUPERIOR A GILLETTE PRES",
-      "precio_unitario": 537.25,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "TIRAS REACTIVAS PARA MEDICIÓN DE GLUCOSA EN SANGRE CAJA CON 50 PIEZAS",
-      "precio_unitario": 423.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "GLUCÓMETRO PARA DETERMINACIÓN CUANTITATIVA DE GLUCOSA EN SANGRE CAPILAR, DE LECT",
-      "precio_unitario": 1351.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PAÑAL PARA ADULTO, DISEÑO ANATÓMICO, TALLA GRANDE, DE ALTA O MÁXIMA ABSORCIÓN, C",
-      "precio_unitario": 340.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PAÑAL PARA ADULTO, DISEÑO ANATÓMICO, TALLA MEDIANA, DESECHABLE, DE ALTA ABSORCIÓ",
-      "precio_unitario": 684.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PROTECTOR DE CAMA DESECHABLE (EMPAPADOR), PREDOBLADO, CON CAPA ABSORBENTE Y CUBI",
-      "precio_unitario": 778.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PUNTA CANULA NASAL ADULTO PARA OXIGENO 2.1 METROS TRASPARENTE PAQUETE CON  10 PI",
-      "precio_unitario": 346.95,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "BOLSA RECOLECTORA DE ORINA PARA CAMA, SISTEMA CERRADO, CAPACIDAD DE 2000 ML, DES",
-      "precio_unitario": 627.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "TORUNDERA CON TAPA DE ACERO INOXIDABLE 250 ML DE CAPACIDAD.",
-      "precio_unitario": 225.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 2, CON CUBIERTA EXTERNA IMPERMEABLE, CAPA ABSOR",
-      "precio_unitario": 463.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PAÑAL DESECHABLE INFANTIL, ETAPA 3, CON CUBIERTA EXTERNA IMPERMEABLE, CAPA ABSOR",
-      "precio_unitario": 493.75,
-      "cantidad": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "producto": "PAÑAL DESECHABLE INFANTIL PARA RECIÉN NACIDO (RN), CON CUBIERTA EXTERNA IMPERMEA",
-      "precio_unitario": 578.75,
       "cantidad": 0
     },
     {
@@ -1023,18 +765,6 @@
       "precio_calculado": 30492
     },
     {
-      "codigo_contrato": "C-2025-00110185",
-      "cve_cucop": "25401-9298",
-      "precio_api": 30.15,
-      "precio_calculado": 29.71
-    },
-    {
-      "codigo_contrato": "C-2026-00023353",
-      "cve_cucop": "21101-0133",
-      "precio_api": 66,
-      "precio_calculado": 60
-    },
-    {
       "codigo_contrato": "C-2026-00037289",
       "cve_cucop": "25301-0351",
       "precio_api": 1650,
@@ -1057,12 +787,6 @@
       "cve_cucop": "25301-3313",
       "precio_api": 682,
       "precio_calculado": 1071.45
-    },
-    {
-      "codigo_contrato": "C-2026-00043789",
-      "cve_cucop": "25401-0603",
-      "precio_api": 530,
-      "precio_calculado": 555
     },
     {
       "codigo_contrato": "C-2026-00057217",
@@ -1138,12 +862,6 @@
     },
     {
       "codigo_contrato": "C-2026-00051716",
-      "cve_cucop": "25101-0062",
-      "precio_api": 75,
-      "precio_calculado": 76.2
-    },
-    {
-      "codigo_contrato": "C-2026-00051716",
       "cve_cucop": "25301-1397",
       "precio_api": 142,
       "precio_calculado": 71
@@ -1215,12 +933,6 @@
       "precio_calculado": 79.69
     },
     {
-      "codigo_contrato": "C-2025-00131587",
-      "cve_cucop": "25401-9194",
-      "precio_api": 606.24,
-      "precio_calculado": 0.01
-    },
-    {
       "codigo_contrato": "C-2026-00036254",
       "cve_cucop": "25301-0786",
       "precio_api": 367.1,
@@ -1270,36 +982,6 @@
     },
     {
       "codigo_contrato": "C-2026-00041199",
-      "cve_cucop": "25401-0496",
-      "precio_api": 27.03,
-      "precio_calculado": 46.33
-    },
-    {
-      "codigo_contrato": "C-2026-00041199",
-      "cve_cucop": "25401-0230",
-      "precio_api": 16.68,
-      "precio_calculado": 1.67
-    },
-    {
-      "codigo_contrato": "C-2026-00041199",
-      "cve_cucop": "25401-0230",
-      "precio_api": 30.94,
-      "precio_calculado": 3.09
-    },
-    {
-      "codigo_contrato": "C-2026-00041199",
-      "cve_cucop": "25401-0539",
-      "precio_api": 7.82,
-      "precio_calculado": 3.91
-    },
-    {
-      "codigo_contrato": "C-2026-00041199",
-      "cve_cucop": "25401-0539",
-      "precio_api": 16.24,
-      "precio_calculado": 8.12
-    },
-    {
-      "codigo_contrato": "C-2026-00041199",
       "cve_cucop": "25301-1979",
       "precio_api": 2888.32,
       "precio_calculado": 5776.63
@@ -1315,12 +997,6 @@
       "cve_cucop": "25301-3447",
       "precio_api": 1631.5,
       "precio_calculado": 1189.64
-    },
-    {
-      "codigo_contrato": "C-2026-00005599",
-      "cve_cucop": "25401-0605",
-      "precio_api": 9000,
-      "precio_calculado": 11357.93
     },
     {
       "codigo_contrato": "C-2026-00076220",
@@ -1353,82 +1029,10 @@
       "precio_calculado": 55.7
     },
     {
-      "codigo_contrato": "C-2026-00031020",
-      "cve_cucop": "25401-8670",
-      "precio_api": 20.49,
-      "precio_calculado": 260.49
-    },
-    {
       "codigo_contrato": "C-2025-00109845",
       "cve_cucop": "25301-1442",
       "precio_api": 4.2,
       "precio_calculado": 4.04
-    },
-    {
-      "codigo_contrato": "C-2025-00115308",
-      "cve_cucop": "25401-4629",
-      "precio_api": 122.94,
-      "precio_calculado": 94.45
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25101-0061",
-      "precio_api": 1515.84,
-      "precio_calculado": 3.03
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-0061",
-      "precio_api": 215.62,
-      "precio_calculado": 7.19
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-1354",
-      "precio_api": 375.19,
-      "precio_calculado": 1.5
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25401-6716",
-      "precio_api": 847.4,
-      "precio_calculado": 3.39
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25401-6870",
-      "precio_api": 715.87,
-      "precio_calculado": 2.86
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-1766",
-      "precio_api": 16038.11,
-      "precio_calculado": 32.08
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-0742",
-      "precio_api": 3773.42,
-      "precio_calculado": 7.55
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-0019",
-      "precio_api": 2479.68,
-      "precio_calculado": 5.51
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25401-7922",
-      "precio_api": 1480.26,
-      "precio_calculado": 2.96
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25901-1715",
-      "precio_api": 4217.61,
-      "precio_calculado": 8.44
     },
     {
       "codigo_contrato": "C-2026-00054275",
@@ -1443,40 +1047,10 @@
       "precio_calculado": 2.05
     },
     {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25401-9053",
-      "precio_api": 161.72,
-      "precio_calculado": 0.32
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25101-0055",
-      "precio_api": 928.26,
-      "precio_calculado": 1.86
-    },
-    {
-      "codigo_contrato": "C-2026-00054275",
-      "cve_cucop": "25401-0964",
-      "precio_api": 206,
-      "precio_calculado": 4.12
-    },
-    {
       "codigo_contrato": "C-2026-00046919",
       "cve_cucop": "25301-3746",
       "precio_api": 157.5,
       "precio_calculado": 3128.77
-    },
-    {
-      "codigo_contrato": "C-2026-00043799",
-      "cve_cucop": "25401-0603",
-      "precio_api": 4685,
-      "precio_calculado": 3904.17
-    },
-    {
-      "codigo_contrato": "C-2026-00027399",
-      "cve_cucop": "25401-9266",
-      "precio_api": 38,
-      "precio_calculado": 36.6
     },
     {
       "codigo_contrato": "C-2026-00023546",
@@ -1509,52 +1083,16 @@
       "precio_calculado": 7.5
     },
     {
-      "codigo_contrato": "C-2026-00058596",
-      "cve_cucop": "25401-0001",
-      "precio_api": 623.7,
-      "precio_calculado": 178.2
-    },
-    {
-      "codigo_contrato": "C-2026-00005476",
-      "cve_cucop": "25401-8140",
-      "precio_api": 25000,
-      "precio_calculado": 31981.49
-    },
-    {
-      "codigo_contrato": "C-2026-00005718",
-      "cve_cucop": "25401-10149",
-      "precio_api": 360,
-      "precio_calculado": 300
-    },
-    {
-      "codigo_contrato": "C-2026-00005718",
-      "cve_cucop": "25401-8068",
-      "precio_api": 280,
-      "precio_calculado": 336
-    },
-    {
       "codigo_contrato": "C-2025-00112545",
       "cve_cucop": "25301-1143",
       "precio_api": 101,
       "precio_calculado": 94.69
     },
     {
-      "codigo_contrato": "C-2025-00128193",
-      "cve_cucop": "25101-0049",
-      "precio_api": 0.9,
-      "precio_calculado": 746.61
-    },
-    {
       "codigo_contrato": "C-2025-00115305",
       "cve_cucop": "25301-3552",
       "precio_api": 31561.2,
       "precio_calculado": 31017.04
-    },
-    {
-      "codigo_contrato": "C-2026-00019321",
-      "cve_cucop": "25401-8714",
-      "precio_api": 860.97,
-      "precio_calculado": 430.49
     },
     {
       "codigo_contrato": "C-2026-00016489",
@@ -1579,12 +1117,6 @@
       "cve_cucop": "25301-3887",
       "precio_api": 54.21,
       "precio_calculado": 48.43
-    },
-    {
-      "codigo_contrato": "C-2025-00110104",
-      "cve_cucop": "25401-4629",
-      "precio_api": 116.24,
-      "precio_calculado": 114.34
     },
     {
       "codigo_contrato": "C-2025-00110112",
@@ -1817,13 +1349,6 @@
     },
     {
       "codigo_contrato": "C-2026-00054184",
-      "cve_cucop": "25401-8209",
-      "subtotal": 1432028.95,
-      "precio_unitario": 1432028.95,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00054184",
       "cve_cucop": "25301-1352",
       "subtotal": 3453985.2,
       "precio_unitario": 3453985.2,
@@ -1933,27 +1458,6 @@
       "subtotal": 6504.9,
       "precio_unitario": 84.9,
       "cantidad_derivada": 77
-    },
-    {
-      "codigo_contrato": "C-2026-00040587",
-      "cve_cucop": "21201-0030",
-      "subtotal": 25680,
-      "precio_unitario": 25680,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00040587",
-      "cve_cucop": "21401-0001",
-      "subtotal": 23300,
-      "precio_unitario": 23300,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00042452",
-      "cve_cucop": "25401-0001",
-      "subtotal": 56534.48,
-      "precio_unitario": 56534.48,
-      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00042452",
@@ -2069,118 +1573,6 @@
     },
     {
       "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1130.13,
-      "precio_unitario": 21.65,
-      "cantidad_derivada": 52
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 94.19,
-      "precio_unitario": 8.12,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 16647.34,
-      "precio_unitario": 29.59,
-      "cantidad_derivada": 563
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10070.42,
-      "precio_unitario": 20.67,
-      "cantidad_derivada": 487
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 126167.05,
-      "precio_unitario": 157.63,
-      "cantidad_derivada": 800
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 167680.32,
-      "precio_unitario": 180.69,
-      "cantidad_derivada": 928
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1299.08,
-      "precio_unitario": 37.33,
-      "cantidad_derivada": 35
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 13804.12,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 35
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 13804.12,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 35
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 20137.6,
-      "precio_unitario": 434,
-      "cantidad_derivada": 46
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 18405.49,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 46
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10068.8,
-      "precio_unitario": 434,
-      "cantidad_derivada": 23
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 68369.24,
-      "precio_unitario": 34.67,
-      "cantidad_derivada": 1972
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3812.86,
-      "precio_unitario": 38.67,
-      "cantidad_derivada": 99
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1961.15,
-      "precio_unitario": 8.67,
-      "cantidad_derivada": 226
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 774.24,
-      "precio_unitario": 19.07,
-      "cantidad_derivada": 41
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
       "cve_cucop": "25301-0002",
       "subtotal": 0,
       "precio_unitario": 62.67,
@@ -2212,118 +1604,6 @@
       "cve_cucop": "25301-0002",
       "subtotal": 0,
       "precio_unitario": 71.44,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 251.14,
-      "precio_unitario": 21.65,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 47.1,
-      "precio_unitario": 8.12,
-      "cantidad_derivada": 6
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 171.62,
-      "precio_unitario": 29.59,
-      "cantidad_derivada": 6
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 119.89,
-      "precio_unitario": 20.67,
-      "cantidad_derivada": 6
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 157.63,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 180.69,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 37.33,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 434,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 434,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1005.43,
-      "precio_unitario": 34.67,
-      "cantidad_derivada": 29
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 448.57,
-      "precio_unitario": 38.67,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 251.43,
-      "precio_unitario": 8.67,
-      "cantidad_derivada": 29
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 19.07,
       "cantidad_derivada": 0
     },
     {
@@ -2360,118 +1640,6 @@
       "subtotal": 1428.8,
       "precio_unitario": 71.44,
       "cantidad_derivada": 20
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 502.28,
-      "precio_unitario": 21.65,
-      "cantidad_derivada": 23
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 8.12,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 29.59,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 959.09,
-      "precio_unitario": 20.67,
-      "cantidad_derivada": 46
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 157.63,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 180.69,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 433.03,
-      "precio_unitario": 37.33,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4601.37,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 5034.4,
-      "precio_unitario": 434,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4601.37,
-      "precio_unitario": 396.67,
-      "cantidad_derivada": 12
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 434,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4021.72,
-      "precio_unitario": 34.67,
-      "cantidad_derivada": 116
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 2242.86,
-      "precio_unitario": 38.67,
-      "cantidad_derivada": 58
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 502.86,
-      "precio_unitario": 8.67,
-      "cantidad_derivada": 58
-    },
-    {
-      "codigo_contrato": "C-2026-00059324",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 19.07,
-      "cantidad_derivada": 0
     },
     {
       "codigo_contrato": "C-2026-00059328",
@@ -3658,517 +2826,6 @@
     },
     {
       "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 451.75,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 201.75,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 477.75,
-      "precio_unitario": 477.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 469.75,
-      "precio_unitario": 469.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 616.75,
-      "precio_unitario": 616.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 907.75,
-      "precio_unitario": 907.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 266.75,
-      "precio_unitario": 266.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 465.75,
-      "precio_unitario": 465.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 19263.75,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 43
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 14920,
-      "precio_unitario": 454.95,
-      "cantidad_derivada": 33
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 108941.25,
-      "precio_unitario": 347.45,
-      "cantidad_derivada": 314
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 9593.75,
-      "precio_unitario": 239.55,
-      "cantidad_derivada": 40
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 29250,
-      "precio_unitario": 44.75,
-      "cantidad_derivada": 654
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 46068.75,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 306
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 14812.5,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 98
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 12416.25,
-      "precio_unitario": 114.75,
-      "cantidad_derivada": 108
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 17111.25,
-      "precio_unitario": 92.75,
-      "cantidad_derivada": 184
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 26250,
-      "precio_unitario": 163.75,
-      "cantidad_derivada": 160
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10187.5,
-      "precio_unitario": 218.75,
-      "cantidad_derivada": 47
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 9930.25,
-      "precio_unitario": 278.75,
-      "cantidad_derivada": 36
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1675,
-      "precio_unitario": 687.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1162.5,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 3
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1087.5,
-      "precio_unitario": 139.75,
-      "cantidad_derivada": 8
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 716.25,
-      "precio_unitario": 292.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 2126.25,
-      "precio_unitario": 113.55,
-      "cantidad_derivada": 19
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 76087.5,
-      "precio_unitario": 2347.75,
-      "cantidad_derivada": 32
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 27692.5,
-      "precio_unitario": 537.25,
-      "cantidad_derivada": 52
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 28146.25,
-      "precio_unitario": 423.75,
-      "cantidad_derivada": 66
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 40273.75,
-      "precio_unitario": 1351.75,
-      "cantidad_derivada": 30
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 267791.77,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 718
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1808.75,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 5
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 471837.25,
-      "precio_unitario": 340.75,
-      "cantidad_derivada": 1385
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1401957.15,
-      "precio_unitario": 684.75,
-      "cantidad_derivada": 2047
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 32687.5,
-      "precio_unitario": 778.75,
-      "cantidad_derivada": 42
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 49718.75,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 246
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 31575,
-      "precio_unitario": 346.95,
-      "cantidad_derivada": 91
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 37707.5,
-      "precio_unitario": 627.75,
-      "cantidad_derivada": 60
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4952.5,
-      "precio_unitario": 225.75,
-      "cantidad_derivada": 22
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 9333.75,
-      "precio_unitario": 6016.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 7532.5,
-      "precio_unitario": 463.75,
-      "cantidad_derivada": 16
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 254425,
-      "precio_unitario": 493.75,
-      "cantidad_derivada": 515
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 184797.5,
-      "precio_unitario": 578.75,
-      "cantidad_derivada": 319
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 136875,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 254
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 25184,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 47
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 29793.75,
-      "precio_unitario": 348.75,
-      "cantidad_derivada": 85
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 31465,
-      "precio_unitario": 468.75,
-      "cantidad_derivada": 67
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 69168.75,
-      "precio_unitario": 343.75,
-      "cantidad_derivada": 201
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 6787.5,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 4
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1376.25,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 5662.5,
-      "precio_unitario": 244.75,
-      "cantidad_derivada": 23
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 11708.75,
-      "precio_unitario": 740.75,
-      "cantidad_derivada": 16
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 17205,
-      "precio_unitario": 989.75,
-      "cantidad_derivada": 17
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 14756.25,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 36
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3133.75,
-      "precio_unitario": 87.75,
-      "cantidad_derivada": 36
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 398031.25,
-      "precio_unitario": 666.25,
-      "cantidad_derivada": 597
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 101295,
-      "precio_unitario": 388.75,
-      "cantidad_derivada": 261
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 20150,
-      "precio_unitario": 1595.75,
-      "cantidad_derivada": 13
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 22187.5,
-      "precio_unitario": 546.75,
-      "cantidad_derivada": 41
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 233.75,
-      "precio_unitario": 188.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 18940,
-      "precio_unitario": 280.75,
-      "cantidad_derivada": 67
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 18273.75,
-      "precio_unitario": 102.75,
-      "cantidad_derivada": 178
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 36177.5,
-      "precio_unitario": 345.75,
-      "cantidad_derivada": 105
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 807.5,
-      "precio_unitario": 455.55,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3575,
-      "precio_unitario": 60.75,
-      "cantidad_derivada": 59
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1912.5,
-      "precio_unitario": 906.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 45512.5,
-      "precio_unitario": 101.95,
-      "cantidad_derivada": 446
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 13158.75,
-      "precio_unitario": 380.75,
-      "cantidad_derivada": 35
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10253.75,
-      "precio_unitario": 160.75,
-      "cantidad_derivada": 64
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 21225,
-      "precio_unitario": 117.75,
-      "cantidad_derivada": 180
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10346.25,
-      "precio_unitario": 683.75,
-      "cantidad_derivada": 15
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 488.75,
-      "precio_unitario": 196.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 8002.5,
-      "precio_unitario": 116.75,
-      "cantidad_derivada": 69
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25501-0001",
-      "subtotal": 4706.25,
-      "precio_unitario": 74.75,
-      "cantidad_derivada": 63
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
       "cve_cucop": "25301-0002",
       "subtotal": 7043.75,
       "precio_unitario": 23.75,
@@ -5349,517 +4006,6 @@
       "subtotal": 0,
       "precio_unitario": 917.75,
       "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 477.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 469.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 616.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1258.75,
-      "precio_unitario": 907.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1223.75,
-      "precio_unitario": 266.75,
-      "cantidad_derivada": 5
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1847.5,
-      "precio_unitario": 465.75,
-      "cantidad_derivada": 4
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 425.5,
-      "precio_unitario": 454.95,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 347.45,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 239.55,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 44.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 488.75,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 3
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 114.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 92.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 503.75,
-      "precio_unitario": 163.75,
-      "cantidad_derivada": 3
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 218.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1597.5,
-      "precio_unitario": 278.75,
-      "cantidad_derivada": 6
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 283.75,
-      "precio_unitario": 687.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 2293.75,
-      "precio_unitario": 139.75,
-      "cantidad_derivada": 16
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 577.5,
-      "precio_unitario": 292.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 113.55,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 2347.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 537.25,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 423.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 1351.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1555,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 4
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 197.5,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 340.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 684.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 778.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4595,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 23
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 346.95,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 627.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 225.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 258.75,
-      "precio_unitario": 6016.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 463.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 493.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 0,
-      "precio_unitario": 578.75,
-      "cantidad_derivada": 0
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 538.75,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 538.75,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 348.75,
-      "precio_unitario": 348.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 468.75,
-      "precio_unitario": 468.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 343.75,
-      "precio_unitario": 343.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1760.75,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1760.75,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 244.75,
-      "precio_unitario": 244.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 740.75,
-      "precio_unitario": 740.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 989.75,
-      "precio_unitario": 989.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 406.75,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 87.75,
-      "precio_unitario": 87.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 666.25,
-      "precio_unitario": 666.25,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 388.75,
-      "precio_unitario": 388.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1595.75,
-      "precio_unitario": 1595.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 546.75,
-      "precio_unitario": 546.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 188.75,
-      "precio_unitario": 188.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 280.75,
-      "precio_unitario": 280.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 102.75,
-      "precio_unitario": 102.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 345.75,
-      "precio_unitario": 345.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 455.55,
-      "precio_unitario": 455.55,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 60.75,
-      "precio_unitario": 60.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 906.75,
-      "precio_unitario": 906.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 101.95,
-      "precio_unitario": 101.95,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 380.75,
-      "precio_unitario": 380.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 160.75,
-      "precio_unitario": 160.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 117.75,
-      "precio_unitario": 117.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 683.75,
-      "precio_unitario": 683.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 196.75,
-      "precio_unitario": 196.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 116.75,
-      "precio_unitario": 116.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25501-0001",
-      "subtotal": 74.75,
-      "precio_unitario": 74.75,
-      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00059328",
@@ -7045,524 +5191,6 @@
       "cantidad_derivada": 1
     },
     {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 451.75,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 201.75,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 477.75,
-      "precio_unitario": 477.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 469.75,
-      "precio_unitario": 469.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 616.75,
-      "precio_unitario": 616.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 907.75,
-      "precio_unitario": 907.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 266.75,
-      "precio_unitario": 266.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 465.75,
-      "precio_unitario": 465.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 451.75,
-      "precio_unitario": 451.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 454.95,
-      "precio_unitario": 454.95,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 347.45,
-      "precio_unitario": 347.45,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 239.55,
-      "precio_unitario": 239.55,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 44.75,
-      "precio_unitario": 44.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 150.75,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 150.75,
-      "precio_unitario": 150.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 114.75,
-      "precio_unitario": 114.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 92.75,
-      "precio_unitario": 92.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 163.75,
-      "precio_unitario": 163.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 218.75,
-      "precio_unitario": 218.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 278.75,
-      "precio_unitario": 278.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 687.75,
-      "precio_unitario": 687.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 406.75,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 139.75,
-      "precio_unitario": 139.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 292.75,
-      "precio_unitario": 292.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 113.55,
-      "precio_unitario": 113.55,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 2347.75,
-      "precio_unitario": 2347.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 537.25,
-      "precio_unitario": 537.25,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 423.75,
-      "precio_unitario": 423.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1351.75,
-      "precio_unitario": 1351.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 372.75,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 372.75,
-      "precio_unitario": 372.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 340.75,
-      "precio_unitario": 340.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 684.75,
-      "precio_unitario": 684.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 778.75,
-      "precio_unitario": 778.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 201.75,
-      "precio_unitario": 201.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 346.95,
-      "precio_unitario": 346.95,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 627.75,
-      "precio_unitario": 627.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 225.75,
-      "precio_unitario": 225.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 6016.75,
-      "precio_unitario": 6016.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 463.75,
-      "precio_unitario": 463.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 493.75,
-      "precio_unitario": 493.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 578.75,
-      "precio_unitario": 578.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 538.75,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 538.75,
-      "precio_unitario": 538.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 348.75,
-      "precio_unitario": 348.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 468.75,
-      "precio_unitario": 468.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 343.75,
-      "precio_unitario": 343.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1760.75,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1760.75,
-      "precio_unitario": 1760.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 244.75,
-      "precio_unitario": 244.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 740.75,
-      "precio_unitario": 740.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 989.75,
-      "precio_unitario": 989.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 406.75,
-      "precio_unitario": 406.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 87.75,
-      "precio_unitario": 87.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 666.25,
-      "precio_unitario": 666.25,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 388.75,
-      "precio_unitario": 388.75,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3087.5,
-      "precio_unitario": 1595.75,
-      "cantidad_derivada": 2
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 5535,
-      "precio_unitario": 546.75,
-      "cantidad_derivada": 10
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 13986.25,
-      "precio_unitario": 188.75,
-      "cantidad_derivada": 74
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 1450,
-      "precio_unitario": 280.75,
-      "cantidad_derivada": 5
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 23450,
-      "precio_unitario": 102.75,
-      "cantidad_derivada": 228
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 16301.25,
-      "precio_unitario": 345.75,
-      "cantidad_derivada": 47
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 527.5,
-      "precio_unitario": 455.55,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 21750,
-      "precio_unitario": 60.75,
-      "cantidad_derivada": 358
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 6007.5,
-      "precio_unitario": 906.75,
-      "cantidad_derivada": 7
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3408.75,
-      "precio_unitario": 101.95,
-      "cantidad_derivada": 33
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 7750,
-      "precio_unitario": 380.75,
-      "cantidad_derivada": 20
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 76308.75,
-      "precio_unitario": 160.75,
-      "cantidad_derivada": 475
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 60008.75,
-      "precio_unitario": 117.75,
-      "cantidad_derivada": 510
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 4775,
-      "precio_unitario": 683.75,
-      "cantidad_derivada": 7
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 31492.5,
-      "precio_unitario": 196.75,
-      "cantidad_derivada": 160
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25401-0001",
-      "subtotal": 3526.25,
-      "precio_unitario": 116.75,
-      "cantidad_derivada": 30
-    },
-    {
-      "codigo_contrato": "C-2026-00059328",
-      "cve_cucop": "25501-0001",
-      "subtotal": 28015,
-      "precio_unitario": 74.75,
-      "cantidad_derivada": 375
-    },
-    {
-      "codigo_contrato": "C-2026-00054170",
-      "cve_cucop": "25401-0944",
-      "subtotal": 1623967.5,
-      "precio_unitario": 1623967.5,
-      "cantidad_derivada": 1
-    },
-    {
       "codigo_contrato": "C-2026-00054170",
       "cve_cucop": "25301-1233",
       "subtotal": 1610562.5,
@@ -7994,13 +5622,6 @@
       "cve_cucop": "25301-4492",
       "subtotal": 18433407.79,
       "precio_unitario": 18433407.79,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00012821",
-      "cve_cucop": "25101-0049",
-      "subtotal": 1709347.33,
-      "precio_unitario": 1709347.33,
       "cantidad_derivada": 1
     },
     {
@@ -9052,13 +6673,6 @@
       "subtotal": 12316228.2,
       "precio_unitario": 68423.49,
       "cantidad_derivada": 180
-    },
-    {
-      "codigo_contrato": "C-2026-00030750",
-      "cve_cucop": "25501-0131",
-      "subtotal": 6186.6,
-      "precio_unitario": 98.2,
-      "cantidad_derivada": 63
     },
     {
       "codigo_contrato": "C-2026-00030750",
@@ -10966,13 +8580,6 @@
     },
     {
       "codigo_contrato": "C-2026-00031096",
-      "cve_cucop": "25501-0131",
-      "subtotal": 4374.9,
-      "precio_unitario": 97.22,
-      "cantidad_derivada": 45
-    },
-    {
-      "codigo_contrato": "C-2026-00031096",
       "cve_cucop": "25301-4492",
       "subtotal": 451368.45,
       "precio_unitario": 10030.41,
@@ -11945,88 +9552,11 @@
       "cantidad_derivada": 1
     },
     {
-      "codigo_contrato": "C-2026-00036473",
-      "cve_cucop": "33603-0002",
-      "subtotal": 4105,
-      "precio_unitario": 4105,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "21101-0304",
-      "subtotal": 21382,
-      "precio_unitario": 21382,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "21601-0084",
-      "subtotal": 67.27,
-      "precio_unitario": 67.27,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "24601-0001",
-      "subtotal": 19058.62,
-      "precio_unitario": 19058.62,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "24801-0001",
-      "subtotal": 4621.24,
-      "precio_unitario": 4621.24,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "24901-0001",
-      "subtotal": 1393.09,
-      "precio_unitario": 1393.09,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "27401-0001",
-      "subtotal": 15600,
-      "precio_unitario": 15600,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "29101-0001",
-      "subtotal": 3808.65,
-      "precio_unitario": 3808.65,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "29301-0001",
-      "subtotal": 844.3,
-      "precio_unitario": 844.3,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00036468",
-      "cve_cucop": "29601-0001",
-      "subtotal": 11840,
-      "precio_unitario": 11840,
-      "cantidad_derivada": 1
-    },
-    {
       "codigo_contrato": "C-2026-00036470",
       "cve_cucop": "25301-0002",
       "subtotal": 600,
       "precio_unitario": 60,
       "cantidad_derivada": 10
-    },
-    {
-      "codigo_contrato": "C-2026-00036470",
-      "cve_cucop": "25401-0001",
-      "subtotal": 10421.88,
-      "precio_unitario": 1305.83,
-      "cantidad_derivada": 8
     },
     {
       "codigo_contrato": "C-2026-00076211",
@@ -12128,13 +9658,6 @@
     },
     {
       "codigo_contrato": "C-2026-00064740",
-      "cve_cucop": "25401-0149",
-      "subtotal": 125832.1,
-      "precio_unitario": 125832.1,
-      "cantidad_derivada": 1
-    },
-    {
-      "codigo_contrato": "C-2026-00064740",
       "cve_cucop": "25301-3434",
       "subtotal": 78463.07,
       "precio_unitario": 78463.07,
@@ -12148,25 +9671,11 @@
       "cantidad_derivada": 1
     },
     {
-      "codigo_contrato": "C-2026-00074707",
-      "cve_cucop": "22201-0026",
-      "subtotal": 4419.5,
-      "precio_unitario": 4419.5,
-      "cantidad_derivada": 1
-    },
-    {
       "codigo_contrato": "C-2026-00003434",
       "cve_cucop": "25301-3434",
       "subtotal": 90863101.68,
       "precio_unitario": 74.44,
       "cantidad_derivada": 1220622
-    },
-    {
-      "codigo_contrato": "C-2026-00012455",
-      "cve_cucop": "32601-0002",
-      "subtotal": 255409.37,
-      "precio_unitario": 896.25,
-      "cantidad_derivada": 285
     },
     {
       "codigo_contrato": "C-2026-00012455",
@@ -12891,13 +10400,6 @@
     },
     {
       "codigo_contrato": "C-2026-00031402",
-      "cve_cucop": "25501-0131",
-      "subtotal": 1266.3,
-      "precio_unitario": 70.35,
-      "cantidad_derivada": 18
-    },
-    {
-      "codigo_contrato": "C-2026-00031402",
       "cve_cucop": "25301-4492",
       "subtotal": 3182465.7,
       "precio_unitario": 70721.46,
@@ -13280,13 +10782,6 @@
       "subtotal": 435600,
       "precio_unitario": 1100,
       "cantidad_derivada": 396
-    },
-    {
-      "codigo_contrato": "C-2026-00058017",
-      "cve_cucop": "25401-0001",
-      "subtotal": 34259.26,
-      "precio_unitario": 34259.26,
-      "cantidad_derivada": 1
     },
     {
       "codigo_contrato": "C-2026-00058017",

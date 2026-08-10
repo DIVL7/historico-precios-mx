@@ -21,22 +21,14 @@
   }
   button { touch-action: manipulation; }
 
-  /* La marca es la propia partida CUCoP (25301) que define el alcance del
-     dataset (Metodologia.md §2.1) -- un identificador real, no un logo
-     decorativo. El header queda como una franja delgada de "registro", no
-     un banner de marketing: es una herramienta de consulta diaria, no una
-     portada. */
+  /* El header queda como una franja delgada de "registro", no un banner de
+     marketing: es una herramienta de consulta diaria, no una portada. */
   header {
     background: var(--panel); border-bottom: 2px solid var(--accent);
     padding: 14px 32px;
   }
   .header-inner {
     max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 14px;
-  }
-  .partida-tag {
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent);
-    border: 1px solid var(--accent); border-radius: 3px; padding: 3px 7px;
-    flex-shrink: 0; letter-spacing: 0.02em;
   }
   header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; }
   header p { margin: 2px 0 0; font-size: 0.78rem; color: var(--muted); }
@@ -167,7 +159,6 @@
 
 <header>
   <div class="header-inner">
-    <span class="partida-tag" title="Partida CUCoP+ 25301 — Medicinas y productos farmacéuticos">25301</span>
     <div>
       <h1>Precios de Medicamentos</h1>
       <p>Compras públicas de México · Compras MX × Compendio CSG</p>

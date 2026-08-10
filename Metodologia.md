@@ -103,11 +103,11 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 ### 5.1 Extracción (`scripts/extract.js`)
 
 1. Descargar el CSV anual desde Datos Abiertos (`scripts/download-csv.js`, vía navegador automatizado).
-2. Filtrar filas donde `Partida específica` contiene `25301`.
+2. Filtrar filas donde `Partida específica` contiene `25301` — este filtro opera a nivel de **contrato** (una fila del CSV masivo), no de ítem individual.
 3. Agrupar filas por expediente (hash extraído de `Dirección del anuncio`).
 4. Por cada expediente, navegar al detalle y localizar cada contrato dentro de la tabla paginada de resultados.
-5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`).
-6. Por cada ítem, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor`, y construir el registro final.
+5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`). Un contrato que pasó el filtro del paso 2 puede traer aquí líneas de **otras partidas** (compra mixta: radiofármacos, material de curación, papelería, etc.) — se descarta cualquier ítem cuyo `cve_cucop` no empiece con `25301`, para no marcarlo como medicamento solo por venir en el mismo contrato. (Detectado el 2026-08-09: sin este segundo filtro, ~32% del dataset — 7,989 de 24,909 registros — eran contaminación de otras partidas; se limpió retroactivamente y se corrigió el pipeline.)
+6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor`, y construir el registro final.
 7. Escribir a `docs/data.json` con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
 
 ### 5.2 Asignación y validación de clave
