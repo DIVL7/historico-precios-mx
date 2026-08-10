@@ -3,28 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#f6f7f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1c1b19" media="(prefers-color-scheme: dark)">
 <title>Precios de Medicamentos — Compras Públicas México</title>
 <style>
   :root {
     color-scheme: light dark;
-    --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0db; --text: #2b2a27;
+    --bg: #f6f7f5; --panel: #ffffff; --border: #e0ded8; --text: #201f1d;
     --muted: #6b6a65; --accent: #6b1930; --accent-light: #f4e9ec;
+    --font-sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    margin: 0; font-family: var(--font-sans);
     background: var(--bg); color: var(--text);
   }
   button { touch-action: manipulation; }
-  header {
-    background: var(--accent); color: white; padding: 24px 32px;
-  }
-  header h1 { margin: 0 0 4px; font-size: 1.4rem; text-wrap: balance; }
-  header p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
 
-  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+  /* La marca es la propia partida CUCoP (25301) que define el alcance del
+     dataset (Metodologia.md §2.1) -- un identificador real, no un logo
+     decorativo. El header queda como una franja delgada de "registro", no
+     un banner de marketing: es una herramienta de consulta diaria, no una
+     portada. */
+  header {
+    background: var(--panel); border-bottom: 2px solid var(--accent);
+    padding: 14px 32px;
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 14px;
+  }
+  .partida-tag {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 3px; padding: 3px 7px;
+    flex-shrink: 0; letter-spacing: 0.02em;
+  }
+  header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; }
+  header p { margin: 2px 0 0; font-size: 0.78rem; color: var(--muted); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
 
   .sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -42,59 +59,70 @@
     outline: 2px solid var(--accent); outline-offset: 2px;
   }
 
+  /* Los filtros dejan de vivir en una tarjeta flotante -- son parte del
+     mismo plano que la tabla, separados solo por una regla delgada. Menos
+     cajas anidadas, más "una sola superficie de consulta". */
   .filters {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
-    padding: 16px; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding: 0 0 16px; display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;
   }
   .filters input, .filters select {
-    padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
-    font-size: 0.9rem; background: white;
+    padding: 7px 10px; border: 1px solid var(--border); border-radius: 3px;
+    font-size: 0.85rem; background: var(--panel); color: var(--text);
+    font-family: var(--font-sans);
   }
   .filters input[type=search] { flex: 2; min-width: 220px; }
   .filters input[type=search]::-webkit-search-cancel-button { cursor: pointer; }
   .filters select { flex: 1; min-width: 160px; }
 
-  .result-count { font-size: 0.85rem; color: var(--muted); margin: 8px 0 12px; }
+  .result-count { font-size: 0.8rem; color: var(--muted); margin: 0 0 10px; }
 
-  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); }
   table { width: 100%; min-width: 900px; border-collapse: collapse; }
   thead th {
-    background: var(--accent-light); text-align: left; font-size: 0.75rem;
-    text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent);
+    background: var(--panel); text-align: left; font-size: 0.68rem;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted);
+    border-bottom: 2px solid var(--accent);
     position: sticky; top: 0; white-space: nowrap;
   }
-  thead th.static { padding: 10px 12px; }
+  thead th.static { padding: 9px 12px; }
   .sort-btn {
     all: unset; box-sizing: border-box; display: block; width: 100%;
-    padding: 10px 12px; cursor: pointer; font: inherit; color: inherit;
+    padding: 9px 12px; cursor: pointer; font: inherit; color: inherit;
     text-transform: inherit; letter-spacing: inherit; white-space: inherit;
     user-select: none;
   }
-  .sort-btn:hover { background: #ecd9de; }
+  .sort-btn:hover { background: var(--accent-light); color: var(--accent); }
   tbody td {
-    padding: 10px 12px; font-size: 0.85rem; border-top: 1px solid var(--border);
+    padding: 9px 12px; font-size: 0.83rem; border-top: 1px solid var(--border);
     vertical-align: top; overflow-wrap: break-word;
   }
-  tbody tr:hover { background: #fafafa; }
+  tbody tr:hover { background: var(--bg); }
   .muted { color: var(--muted); }
 
+  /* Identificadores, montos, cantidades y fechas van en monoespaciada --
+     misma lógica que un folio o una etiqueta de dispensario: el código se
+     lee distinto del texto libre. El resto (producto, institución,
+     proveedor) se queda en la tipografía humana. */
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 0.92em; }
+
   .detalle-btn {
-    padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px;
-    background: var(--accent-light); color: var(--accent); font-size: 0.78rem;
+    padding: 4px 10px; border: 1px solid var(--border); border-radius: 3px;
+    background: var(--panel); color: var(--accent); font-size: 0.76rem;
     font-weight: 600; cursor: pointer; white-space: nowrap;
   }
-  .detalle-btn:hover { background: #ecd9de; }
+  .detalle-btn:hover { background: var(--accent-light); border-color: var(--accent); }
 
   .pager { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
   .pager button {
-    padding: 6px 14px; border: 1px solid var(--border); background: white; border-radius: 6px;
-    cursor: pointer; font-size: 0.85rem;
+    padding: 6px 14px; border: 1px solid var(--border); background: var(--panel); border-radius: 3px;
+    cursor: pointer; font-size: 0.82rem; color: var(--text);
   }
-  .pager button:hover:not(:disabled) { background: #ecd9de; }
+  .pager button:hover:not(:disabled) { background: var(--accent-light); border-color: var(--accent); }
   .pager button:disabled { opacity: 0.4; cursor: default; }
 
-  .empty { text-align: center; padding: 40px; color: var(--muted); }
-  .empty .detail { margin-top: 8px; font-size: 0.75rem; opacity: 0.7; }
+  .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 0.9rem; }
+  .empty .detail { margin-top: 8px; font-size: 0.75rem; opacity: 0.7; font-family: var(--font-mono); }
 
   .modal-backdrop {
     position: fixed; inset: 0; background: rgba(20, 18, 16, 0.5);
@@ -102,32 +130,33 @@
   }
   .modal-backdrop[hidden] { display: none; }
   .modal {
-    background: var(--panel); border-radius: 10px; max-width: 560px; width: 100%;
+    background: var(--panel); border-radius: 4px; max-width: 560px; width: 100%;
     max-height: 85vh; overflow-y: auto; overscroll-behavior: contain;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   }
   .modal-header {
     display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-    padding: 20px 24px 14px; border-bottom: 1px solid var(--border);
+    padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
   }
-  .modal-header h2 { margin: 0; font-size: 1.05rem; text-wrap: balance; }
+  .modal-header h2 { margin: 0; font-size: 1rem; font-weight: 650; text-wrap: balance; }
   .modal-close {
     background: none; border: 0; font-size: 1.1rem; line-height: 1; cursor: pointer;
-    color: var(--muted); padding: 4px 8px; border-radius: 6px; flex-shrink: 0;
+    color: var(--muted); padding: 4px 8px; border-radius: 3px; flex-shrink: 0;
   }
-  .modal-close:hover { background: #ecd9de; color: var(--accent); }
-  .modal-body { margin: 0; padding: 16px 24px 24px; display: grid; grid-template-columns: max-content 1fr; gap: 10px 16px; }
-  .modal-body dt { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); white-space: nowrap; }
-  .modal-body dd { margin: 0; font-size: 0.9rem; }
+  .modal-close:hover { background: var(--accent-light); color: var(--accent); }
+  .modal-body { margin: 0; padding: 16px 22px 22px; display: grid; grid-template-columns: max-content 1fr; gap: 10px 16px; }
+  .modal-body dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); white-space: nowrap; padding-top: 1px; }
+  .modal-body dd { margin: 0; font-size: 0.88rem; }
+  .modal-body dd.mono { font-size: 0.85rem; }
 
+  /* El resto de la hoja usa variables para color, así que los estados de
+     hover/tabla ya heredan el tema oscuro solos -- aquí solo hace falta
+     redefinir la paleta y lo que no está tokenizado (el overlay del modal). */
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #1c1b19; --panel: #262523; --border: #3a3833; --text: #ece9e4;
       --muted: #9a9890; --accent: #d98fa3; --accent-light: #33262a;
     }
-    .sort-btn:hover, .detalle-btn:hover, .modal-close:hover, .pager button:hover:not(:disabled) { background: #3d2c31; }
-    tbody tr:hover { background: #2c2b28; }
-    .filters input, .filters select { background: #1c1b19; color: var(--text); }
     .modal-backdrop { background: rgba(0, 0, 0, 0.65); }
   }
 </style>
@@ -137,8 +166,13 @@
 <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
 <header>
-  <h1>Precios de Medicamentos — Compras Públicas de México</h1>
-  <p>Base construida a partir de Compras MX (Secretaría Anticorrupción y Buen Gobierno), cruzada contra el Compendio Nacional de Medicamentos (CSG)</p>
+  <div class="header-inner">
+    <span class="partida-tag" title="Partida CUCoP+ 25301 — Medicinas y productos farmacéuticos">25301</span>
+    <div>
+      <h1>Precios de Medicamentos</h1>
+      <p>Compras públicas de México · Compras MX × Compendio CSG</p>
+    </div>
+  </div>
 </header>
 
 <main id="main" tabindex="-1">
@@ -189,18 +223,20 @@ const columns = [
   { key: 'detalle', label: 'Detalle', sortable: false },
 ];
 
+// Tercer elemento (mono): true para campos que son código/monto/fecha --
+// misma distinción tipográfica que en las columnas de la tabla.
 const DETALLE_CAMPOS = [
-  ['Clave (Compendio CSG)', r => r.clave || '—'],
-  ['Unidad de medida', r => r.unidad_medida || '—'],
-  ['Precio unitario', r => money(r.precio_unitario)],
-  ['Cantidad', r => num(r.cantidad)],
-  ['Valor', r => money(r.valor)],
-  ['Valor mínimo', r => money(r.valor_minimo)],
-  ['Valor máximo', r => money(r.valor_maximo)],
-  ['Tipo de procedimiento', r => r.tipo_procedimiento || '—'],
-  ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato)],
-  ['Fecha de fallo', r => fechaHora(r.fecha_fallo)],
-  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—'],
+  ['Clave (Compendio CSG)', r => r.clave || '—', true],
+  ['Unidad de medida', r => r.unidad_medida || '—', false],
+  ['Precio unitario', r => money(r.precio_unitario), true],
+  ['Cantidad', r => num(r.cantidad), true],
+  ['Valor', r => money(r.valor), true],
+  ['Valor mínimo', r => money(r.valor_minimo), true],
+  ['Valor máximo', r => money(r.valor_maximo), true],
+  ['Tipo de procedimiento', r => r.tipo_procedimiento || '—', false],
+  ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato), true],
+  ['Fecha de fallo', r => fechaHora(r.fecha_fallo), true],
+  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—', true],
 ];
 
 function money(n) {
@@ -342,11 +378,11 @@ function renderTable() {
     }).join('')}</tr></thead>`;
 
     const tbody = '<tbody>' + pageRows.map((r, i) => `<tr>
-      <td>${r.codigo_contrato || '—'}</td>
-      <td>${r.num_contrato || '—'}</td>
+      <td class="mono">${r.codigo_contrato || '—'}</td>
+      <td class="mono">${r.num_contrato || '—'}</td>
       <td>${r.institucion || '—'}</td>
       <td>${r.proveedor || '—'}</td>
-      <td class="muted">${r.cve_cucop || '—'}</td>
+      <td class="mono muted">${r.cve_cucop || '—'}</td>
       <td>${r.producto || ''}</td>
       <td class="muted">${(r.grupo_terapeutico || []).join(', ') || '—'}</td>
       <td><button type="button" class="detalle-btn" data-idx="${start + i}">Ver detalle</button></td>
@@ -381,7 +417,7 @@ function openDetalle(r) {
   lastFocusedEl = document.activeElement;
   document.getElementById('modalTitle').textContent = r.producto || 'Detalle';
   document.getElementById('modalBody').innerHTML = DETALLE_CAMPOS
-    .map(([label, get]) => `<dt>${label}</dt><dd>${get(r)}</dd>`).join('');
+    .map(([label, get, mono]) => `<dt>${label}</dt><dd${mono ? ' class="mono"' : ''}>${get(r)}</dd>`).join('');
   document.getElementById('modalBackdrop').hidden = false;
   document.getElementById('modalClose').focus();
   document.addEventListener('keydown', onModalKeydown);
