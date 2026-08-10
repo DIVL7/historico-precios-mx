@@ -19,7 +19,7 @@
     margin: 0; font-family: var(--font-sans);
     background: var(--bg); color: var(--text);
   }
-  button { touch-action: manipulation; }
+  button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 
   /* El header queda como una franja delgada de "registro", no un banner de
      marketing: es una herramienta de consulta diaria, no una portada. */
@@ -106,12 +106,12 @@
   .detalle-btn:hover { background: var(--accent-light); border-color: var(--accent); }
 
   .pager { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
-  .pager button {
-    padding: 6px 14px; border: 1px solid var(--border); background: var(--panel); border-radius: 3px;
-    cursor: pointer; font-size: 0.82rem; color: var(--text);
+  .pager-link {
+    display: inline-block; padding: 6px 14px; border: 1px solid var(--border); background: var(--panel); border-radius: 3px;
+    cursor: pointer; font-size: 0.82rem; color: var(--text); text-decoration: none;
   }
-  .pager button:hover:not(:disabled) { background: var(--accent-light); border-color: var(--accent); }
-  .pager button:disabled { opacity: 0.4; cursor: default; }
+  .pager-link:hover:not([aria-disabled="true"]) { background: var(--accent-light); border-color: var(--accent); }
+  .pager-link[aria-disabled="true"] { opacity: 0.4; cursor: default; pointer-events: none; }
 
   .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 0.9rem; }
   .empty .detail { margin-top: 8px; font-size: 0.75rem; opacity: 0.7; font-family: var(--font-mono); }
@@ -161,7 +161,7 @@
   <div class="header-inner">
     <div>
       <h1>Precios de Medicamentos</h1>
-      <p>Compras públicas de México · Compras MX × Compendio CSG</p>
+      <p>Compras públicas de México · Compras&nbsp;MX × Compendio&nbsp;CSG</p>
     </div>
   </div>
 </header>
@@ -308,10 +308,10 @@ function fillSelect(id, values) {
   });
 }
 
-// Refleja filtros/orden/página en la URL (query params) para poder compartir
-// o guardar un enlace a una vista específica -- se usa replaceState (no
-// pushState) para no llenar el historial del navegador en cada tecla.
-function writeStateToURL() {
+// Construye los query params para un estado dado -- compartido entre
+// writeStateToURL (refleja la página actual) y pageHref (calcula el href de
+// los enlaces Anterior/Siguiente sin mutar currentPage).
+function buildQueryParams(pageOverride) {
   const p = new URLSearchParams();
   const q = document.getElementById('q').value.trim();
   const inst = document.getElementById('fInstitucion').value;
@@ -322,9 +322,22 @@ function writeStateToURL() {
   if (sortKey !== 'fecha_firma_contrato' || sortDir !== -1) {
     p.set('sort', sortKey); p.set('dir', sortDir === 1 ? 'asc' : 'desc');
   }
-  if (currentPage > 1) p.set('page', String(currentPage));
-  const qs = p.toString();
+  const page = pageOverride ?? currentPage;
+  if (page > 1) p.set('page', String(page));
+  return p;
+}
+
+// Refleja filtros/orden/página en la URL (query params) para poder compartir
+// o guardar un enlace a una vista específica -- se usa replaceState (no
+// pushState) para no llenar el historial del navegador en cada tecla.
+function writeStateToURL() {
+  const qs = buildQueryParams().toString();
   history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+}
+
+function pageHref(page) {
+  const qs = buildQueryParams(page).toString();
+  return qs ? `?${qs}` : location.pathname;
 }
 
 function restoreStateFromURL() {
@@ -392,8 +405,9 @@ function renderTable() {
       if (c.sortable === false) return `<th class="static">${c.label}</th>`;
       const active = sortKey === c.key;
       const ariaSort = active ? (sortDir === 1 ? 'ascending' : 'descending') : 'none';
-      const arrow = active ? (sortDir === 1 ? ' ▲' : ' ▼') : '';
-      return `<th aria-sort="${ariaSort}"><button type="button" class="sort-btn" data-key="${c.key}">${c.label}${arrow}</button></th>`;
+      const arrow = active ? (sortDir === 1 ? '▲' : '▼') : '';
+      const arrowHtml = arrow ? ` <span aria-hidden="true">${arrow}</span>` : '';
+      return `<th aria-sort="${ariaSort}"><button type="button" class="sort-btn" data-key="${c.key}">${c.label}${arrowHtml}</button></th>`;
     }).join('')}</tr></thead>`;
 
     const tbody = '<tbody>' + pageRows.map((r, i) => `<tr>
@@ -422,13 +436,32 @@ function renderTable() {
     });
   }
 
+  const prevDisabled = currentPage <= 1;
+  const nextDisabled = currentPage >= totalPages;
   document.getElementById('pager').innerHTML = `
-    <button id="prevBtn" ${currentPage <= 1 ? 'disabled' : ''}>← Anterior</button>
+    ${prevDisabled
+      ? '<a class="pager-link" aria-disabled="true">← Anterior</a>'
+      : `<a id="prevBtn" class="pager-link" href="${pageHref(currentPage - 1)}">← Anterior</a>`}
     <span>Página ${currentPage} de ${totalPages}</span>
-    <button id="nextBtn" ${currentPage >= totalPages ? 'disabled' : ''}>Siguiente →</button>
+    ${nextDisabled
+      ? '<a class="pager-link" aria-disabled="true">Siguiente →</a>'
+      : `<a id="nextBtn" class="pager-link" href="${pageHref(currentPage + 1)}">Siguiente →</a>`}
   `;
-  document.getElementById('prevBtn')?.addEventListener('click', () => { currentPage--; renderTable(); writeStateToURL(); });
-  document.getElementById('nextBtn')?.addEventListener('click', () => { currentPage++; renderTable(); writeStateToURL(); });
+  document.getElementById('prevBtn')?.addEventListener('click', (e) => handlePagerClick(e, -1));
+  document.getElementById('nextBtn')?.addEventListener('click', (e) => handlePagerClick(e, 1));
+}
+
+// Los enlaces del pager llevan href real (deep-link a la página destino), así
+// que Cmd/Ctrl/Shift+click y click central los abren en pestaña/ventana
+// nueva vía el comportamiento nativo del navegador -- solo el click normal
+// (botón izquierdo, sin modificadoras) se intercepta para actualizar la
+// tabla in-place sin recargar.
+function handlePagerClick(e, delta) {
+  if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  currentPage += delta;
+  renderTable();
+  writeStateToURL();
 }
 
 function openDetalle(r) {

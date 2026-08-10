@@ -8,7 +8,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 32.8% de los registros (5,552 de 16,911)
+## 1. Grupo terapéutico: falta en 30.5% de los registros (5,155 de 16,911)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
@@ -27,7 +27,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
 - De los registros con clave vía CUCoP, **38% no pasan** la autoverificación contra la dosis que ese código declara.
-- De los **7,225 productos canónicos** del dataset, **2,528 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los **6,548 productos canónicos** del dataset, **2,402 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
 
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,600 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
@@ -78,15 +78,16 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 7. Texto de producto: dos patrones degenerados corregidos automáticamente; typos sueltos no
+## 7. Texto de producto: tres patrones degenerados corregidos automáticamente; typos sueltos no
 
-**Qué se detectó (2026-08-10), verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en dos patrones estructurales recurrentes:
+**Qué se detectó (2026-08-10), verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en tres patrones estructurales recurrentes:
 - Referencia vacía de contenido: el texto es literalmente `CONFORME A PARTIDA N DE LA CONVOCATORIA` — remite a su propia partida sin describir el producto (128 registros en la corrida donde se detectó).
 - Sin espacios entre palabras: el texto sí describe el producto pero viene concatenado, ej. `ACICLOVIR200MGENVASECON25COMPRIMIDOSOTABLETAS...` (134 registros).
+- Numeración de partida, viñetas o una clave con separador raro pegadas al inicio, ajenas al nombre del medicamento: ej. `13040096 UPADACITINIB...`, `2. 1 TEOFILINA...`, `-OLANZAPINA...`, `•\tASPIRINA...` (965 registros).
 
-**Qué se hizo:** el pipeline detecta ambos patrones y sustituye `producto` por la ficha del catálogo CUCoP+, que siempre viene bien formada (Metodologia.md §5.3.2). Cobertura completa en la corrida vigente — 0 casos de estos dos patrones en los 16,911 registros.
+**Qué se hizo:** el pipeline detecta los dos primeros patrones y sustituye `producto` por la ficha del catálogo CUCoP+, que siempre viene bien formada (Metodologia.md §5.3.2). El tercero se recorta con una regex que exige que el prefijo termine justo antes de una letra, para no comerse dígitos que sí son parte del texto (ej. `5% DIOXIDO DE CARBONO...` se conserva intacto) — Metodologia.md §5.3.3. Cobertura completa en la corrida vigente — 0 casos de los dos primeros patrones y solo 3 del tercero (protegidos a propósito por las guardas de la regex: 2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico truncable) en los 16,911 registros.
 
-**Lo que sigue sin corregir:** errores de digitación sueltos (typos evidentes que no siguen ninguno de los dos patrones de arriba) no se detectan ni corrigen.
+**Lo que sigue sin corregir:** errores de digitación sueltos (typos evidentes que no siguen ninguno de los tres patrones de arriba) no se detectan ni corrigen.
 
 **Alternativas:**
 - No hay forma automática de "arreglar" texto corrupto de origen sin arriesgar inventar datos.

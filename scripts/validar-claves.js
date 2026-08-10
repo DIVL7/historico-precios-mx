@@ -38,48 +38,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const XLSX = require('xlsx');
+const { guardarExcel } = require('./lib/dataset');
 
 const DATA_PATH = path.join(__dirname, '..', 'docs', 'data.json');
 const REPORTE_PATH = path.join(__dirname, '..', 'docs', 'data.correcciones.json');
 const EXCEL_PATH = path.join(__dirname, '..', 'docs', 'data.xlsx');
 const COMPENDIO_PATH = path.join(__dirname, '..', 'data', 'compendio_medicamentos.json');
-const CUCOP_PATH = path.join(__dirname, '..', 'data', 'raw', 'cucop.xlsx');
-
-const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
-
-// Descripción de cada columna de la hoja "Precios" del Excel (Metodologia.md
-// §4) -- quien reciba data.xlsx suelto, sin este repo a la mano, necesita
-// saber qué significa cada campo. Los nombres coinciden con docs/data.json
-// salvo cantidad_min/cantidad_max, que en el Excel reemplazan a
-// cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
-// guardarExcel). Duplicado idéntico en scripts/extract.js; mantener ambas
-// copias en sync si se edita.
-const DICCIONARIO = [
-  ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
-  ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
-  ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
-  ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
-  ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2.'],
-  ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
-  ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
-  ['procedimiento', 'Número de procedimiento de contratación.'],
-  ['tipo_procedimiento', 'CONSOLIDADA (varias instituciones agrupadas en un solo procedimiento) o NO CONSOLIDADA (una sola institución).'],
-  ['tipo_contrato', 'Abierto (rango mín-máx) o Cerrado (cantidad fija), valor oficial de la fuente.'],
-  ['proveedor', 'Nombre del proveedor o contratista.'],
-  ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
-  ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
-  ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
-  ['cantidad_min', 'Cantidad mínima comprometida en el contrato (no lo entregado realmente). Igual a cantidad_max cuando el contrato no tiene rango genuino -- Cerrado, o "por monto" derivado de subtotal/precio_unitario -- y solo difiere de cantidad_max en contratos Abierto con rango real.'],
-  ['cantidad_max', 'Cantidad máxima comprometida en el contrato. Igual a cantidad_min cuando no hay rango genuino (ver cantidad_min).'],
-  ['valor_minimo', 'Piso de exposición contractual garantizado (precio_unitario × cantidad_min, o subtotal directo). Igual a valor_maximo cuando no hay rango genuino.'],
-  ['valor_maximo', 'Techo de exposición contractual posible (precio_unitario × cantidad_max, o subtotal directo). Igual a valor_minimo cuando no hay rango genuino -- usar cualquiera de los dos (nunca sumar ambos) para sumas/promedios agregados (Metodologia.md §5.5).'],
-  ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
-  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
-  ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
-  ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
-];
+const CUCOP_PATH = path.join(__dirname, '..', 'data', 'cucop_medicamentos.json');
 
 function normalizarTexto(s) {
   return String(s || '')
@@ -114,25 +79,12 @@ function contarCoincidenciasNumericas(numsA, numsB) {
   return n;
 }
 
-// Duplicado idéntico de scripts/extract.js -- mantener ambas copias en sync.
-// No todas las entradas del catálogo traen el prefijo de clave CSG (~23% de
-// las 25301, ver extract.js); se guardan igual, con `clave: null`, para que
+// Precomputado por scripts/build-cucop.js a partir del catálogo CUCoP+ --
+// ver ahí. No todas las entradas traen clave CSG (~23% de las 25301, ver
+// build-cucop.js); se guardan igual, con `clave: null`, para que
 // `cucopEsValido` pueda seguir usando su `descripcion`.
-function buildCucopMap() {
-  const wb = XLSX.readFile(CUCOP_PATH);
-  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
-  const map = {};
-  for (const row of rows) {
-    if (String(row['PARTIDA ESPECÍFICA'] || '').trim() !== '25301') continue;
-    const cveCucop = String(row['CLAVE CUCoP +'] || '').trim();
-    const descripcionCruda = String(row['DESCRIPCIÓN'] || '').trim();
-    if (!cveCucop || !descripcionCruda) continue;
-    const m = descripcionCruda.match(CLAVE_RE);
-    map[cveCucop] = m
-      ? { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() }
-      : { clave: null, descripcion: descripcionCruda };
-  }
-  return map;
+function loadCucopMap() {
+  return JSON.parse(fs.readFileSync(CUCOP_PATH, 'utf8'));
 }
 
 // Solo infiere para registros generados antes de que clave_fuente existiera
@@ -184,48 +136,6 @@ function buscarEnCompendioLocal(producto, compendio) {
   return mejorScore >= 2 ? { clave: mejorClave, score: mejorScore } : null;
 }
 
-// cantidad_minima/cantidad_maxima y valor_minimo/valor_maximo ya vienen
-// siempre poblados en docs/data.json (iguales entre sí cuando el contrato no
-// tiene rango genuino, ver extract.js buildRegistro) -- no hace falta
-// colapsarlos a una sola columna. Solo se renombran cantidad_minima/
-// cantidad_maxima a cantidad_min/cantidad_max (más cortos) para las columnas
-// del Excel; no hay columna `valor` suelta porque sería idéntica a
-// valor_maximo en el 100% de los casos -- misma lógica en scripts/extract.js.
-function guardarExcel(outPath, resultados) {
-  const filas = resultados.map(r => ({
-    codigo_contrato: r.codigo_contrato,
-    num_contrato: r.num_contrato,
-    clave: r.clave,
-    clave_fuente: r.clave_fuente,
-    cve_cucop: r.cve_cucop,
-    producto: r.producto,
-    tipo_insumo: r.tipo_insumo,
-    grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
-    procedimiento: r.procedimiento,
-    tipo_procedimiento: r.tipo_procedimiento,
-    tipo_contrato: r.tipo_contrato,
-    proveedor: r.proveedor,
-    institucion: r.institucion,
-    unidad_medida: r.unidad_medida,
-    precio_unitario: r.precio_unitario,
-    cantidad_min: r.cantidad_minima,
-    cantidad_max: r.cantidad_maxima,
-    valor_minimo: r.valor_minimo,
-    valor_maximo: r.valor_maximo,
-    fecha_firma_contrato: r.fecha_firma_contrato,
-    fecha_fallo: r.fecha_fallo,
-    fecha_inicio_contrato: r.fecha_inicio_contrato,
-    fecha_fin_contrato: r.fecha_fin_contrato,
-  }));
-  const ws = XLSX.utils.json_to_sheet(filas);
-  const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
-  wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, wsDiccionario, 'Diccionario');
-  XLSX.utils.book_append_sheet(wb, ws, 'Precios');
-  XLSX.writeFile(wb, outPath);
-}
-
 function asignar(data, i, clave, compendio, fuente, corregidos, representante) {
   if (data[i].clave === clave && data[i].clave_fuente === fuente) return;
   corregidos.push({
@@ -243,7 +153,7 @@ function asignar(data, i, clave, compendio, fuente, corregidos, representante) {
 function main() {
   const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
   const compendio = JSON.parse(fs.readFileSync(COMPENDIO_PATH, 'utf8'));
-  const cucopMap = buildCucopMap();
+  const cucopMap = loadCucopMap();
 
   console.log('Agrupando TODOS los registros por producto canónico (nombre + dosis normalizados)...');
   const grupos = new Map(); // claveCanonica -> [indices en data]

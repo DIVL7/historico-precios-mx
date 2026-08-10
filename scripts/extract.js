@@ -9,12 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const { parse } = require('csv-parse/sync');
 const { chromium } = require('playwright');
-const XLSX = require('xlsx');
+const { CLAVE_RE, guardarExcel } = require('./lib/dataset');
 
-// La clave CSG viene a veces con puntos ("010.000.6153.00") y a veces sin ellos
-// ("010000430400") al inicio de la descripción -- se capturan los 4 grupos de
-// dígitos por separado y se reconstruye siempre en formato con puntos.
-const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
 // La institución a veces captura "Descripción detallada" del requerimiento de
 // forma degenerada: como mera referencia a su propia partida, sin texto de
 // producto ("CONFORME A PARTIDA 3 DE LA CONVOCATORIA"). Verificado en vivo
@@ -29,6 +25,17 @@ const CONFORME_PARTIDA_RE = /^CONFORME\s+A\s+PARTIDA\s+\d+\s+DE\s+LA\s+CONVOCATO
 // caracteres para evitar falsos positivos en descripciones cortas
 // legítimamente compactas.
 const PRODUCTO_SIN_ESPACIOS_RE = (s) => s.length > 25 && !s.includes(' ');
+// Numeración de partida, viñetas o claves con separador distinto al esperado
+// que algunas instituciones anteponen a "Descripción detallada", ajenas al
+// nombre del medicamento -- ej. "13040096 UPADACITINIB...", "2. 1
+// TEOFILINA...", "-OLANZAPINA...", "•\tASPIRINA...", "10.   010.000.2739.00
+// - DIETA...". Exigir que el prefijo termine justo antes de una letra evita
+// comerse dígitos que sí son parte del texto (ej. "5% DIOXIDO DE
+// CARBONO..." -- el "5" no se toca porque le sigue "%", no una letra). La
+// guarda negativa evita truncar a la mitad un sufijo de clave alfanumérico
+// (ej. "...1757.P0 MELFALAN..." se deja intacto en vez de dejar "P0
+// MELFALAN...").
+const LEADING_JUNK_RE = /^[\d\s.\-•"“]+(?=[A-Za-zÀ-ÿ])(?![A-Za-zÀ-ÿ]\d\s)/;
 const HASH_RE = /detalle\/([a-f0-9]+)\/procedimiento/i;
 const NAV_TIMEOUT = 30000;
 const CLICK_TIMEOUT = 15000;
@@ -38,40 +45,6 @@ const DELAY_BETWEEN_EXPEDIENTES_MS = 800;
 const CONTRATO_HARD_TIMEOUT_MS = 25000; // nunca dejar que un solo contrato cuelgue el pipeline (sube un poco vs. antes: ahora la búsqueda es exhaustiva y puede recorrer más páginas)
 const MAX_INTENTOS = 3; // tras esto, un expediente con error se marca como fallo permanente y ya no se reintenta solo
 const CHECKPOINT_CADA_N_EXPEDIENTES = 10; // escritura incremental a disco, para no perder progreso si el proceso se corta
-
-// Descripción de cada columna de la hoja "Precios" del Excel (Metodologia.md
-// §4) -- quien reciba data.xlsx suelto, sin este repo a la mano, necesita
-// saber qué significa cada campo. Los nombres coinciden con docs/data.json
-// salvo cantidad_min/cantidad_max, que en el Excel reemplazan a
-// cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
-// guardarExcel). Duplicado idéntico en scripts/validar-claves.js (que
-// también escribe data.xlsx de forma independiente); mantener ambas copias
-// en sync si se edita.
-const DICCIONARIO = [
-  ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
-  ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
-  ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
-  ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
-  ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2.'],
-  ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
-  ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
-  ['procedimiento', 'Número de procedimiento de contratación.'],
-  ['tipo_procedimiento', 'CONSOLIDADA (varias instituciones agrupadas en un solo procedimiento) o NO CONSOLIDADA (una sola institución).'],
-  ['tipo_contrato', 'Abierto (rango mín-máx) o Cerrado (cantidad fija), valor oficial de la fuente.'],
-  ['proveedor', 'Nombre del proveedor o contratista.'],
-  ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
-  ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
-  ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
-  ['cantidad_min', 'Cantidad mínima comprometida en el contrato (no lo entregado realmente). Igual a cantidad_max cuando el contrato no tiene rango genuino -- Cerrado, o "por monto" derivado de subtotal/precio_unitario -- y solo difiere de cantidad_max en contratos Abierto con rango real.'],
-  ['cantidad_max', 'Cantidad máxima comprometida en el contrato. Igual a cantidad_min cuando no hay rango genuino (ver cantidad_min).'],
-  ['valor_minimo', 'Piso de exposición contractual garantizado (precio_unitario × cantidad_min, o subtotal directo). Igual a valor_maximo cuando no hay rango genuino.'],
-  ['valor_maximo', 'Techo de exposición contractual posible (precio_unitario × cantidad_max, o subtotal directo). Igual a valor_minimo cuando no hay rango genuino -- usar cualquiera de los dos (nunca sumar ambos) para sumas/promedios agregados (Metodologia.md §5.5).'],
-  ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
-  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
-  ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
-  ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
-];
 
 function withTimeout(promise, ms, label) {
   return Promise.race([
@@ -98,46 +71,20 @@ function loadCompendio() {
   return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
-// Construye, en memoria, el mapa cve_cucop -> clave CSG a partir del catálogo
-// oficial CUCoP (data/raw/cucop.xlsx). Hallazgo clave: en el catálogo, la
-// columna "DESCRIPCIÓN" de la mayoría de las entradas bajo la partida 25301
-// (medicamentos) trae la clave del Compendio Nacional como prefijo -- es
-// estático, no depende de qué institución compre, así que sirve de respaldo
-// cuando la descripción libre de Compras MX no la incluye.
-// Se guarda también la descripción propia de CUCoP (sin la clave) -- no se
-// usa durante la extracción (que solo busca ser rápida y agarrar una clave
-// por el medio que se pueda), pero queda disponible para quien lea el mapa
-// más adelante. Toda la verificación real (¿esta clave vía CUCoP es
+// Mapa cve_cucop -> clave CSG, precomputado una sola vez por
+// scripts/build-cucop.js a partir del catálogo oficial CUCoP+
+// (data/raw/cucop.xlsx) y commiteado como data/cucop_medicamentos.json --
+// igual que data/compendio_medicamentos.json (§ loadCompendio). Evita
+// parsear el xlsx crudo en cada corrida y, sobre todo, evita depender de que
+// ese xlsx exista en el entorno de CI (no se versiona, ver .gitignore; solo
+// el JSON derivado sí). Toda la verificación real (¿esta clave vía CUCoP es
 // consistente con lo que el contrato describe? ¿coincide con otras instancias
 // del mismo producto?) vive en scripts/validar-claves.js, que corre después
 // sobre el dataset completo -- un solo lugar para toda la lógica de
 // confiabilidad, en vez de repartirla entre extracción y validación.
-//
-// No todas las entradas traen el prefijo de clave CSG: ~23% de las 25301
-// (verificado 2026-08-10, sobre todo altas más recientes al catálogo, sin
-// fecha de alta o de 2023-2024 en adelante) solo tienen el nombre del
-// producto, sin clave. Antes se descartaban por completo -- perdiendo
-// también su descripción, utilizable aunque no traiga clave. Se guardan
-// igual, con `clave: null` (nunca hay dos filas con la misma cve_cucop, una
-// con prefijo y otra sin -- verificado, no hay riesgo de que una pise a la
-// otra).
-function buildCucopMap() {
-  const p = path.join(__dirname, '..', 'data', 'raw', 'cucop.xlsx');
-  const wb = XLSX.readFile(p);
-  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
-
-  const map = {};
-  for (const row of rows) {
-    if (String(row['PARTIDA ESPECÍFICA'] || '').trim() !== '25301') continue;
-    const cveCucop = String(row['CLAVE CUCoP +'] || '').trim();
-    const descripcionCruda = String(row['DESCRIPCIÓN'] || '').trim();
-    if (!cveCucop || !descripcionCruda) continue;
-    const m = descripcionCruda.match(CLAVE_RE);
-    map[cveCucop] = m
-      ? { clave: `${m[1]}.${m[2]}.${m[3]}.${m[4]}`, descripcion: m[5].trim() }
-      : { clave: null, descripcion: descripcionCruda };
-  }
-  return map;
+function loadCucopMap() {
+  const p = path.join(__dirname, '..', 'data', 'cucop_medicamentos.json');
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
 function loadFilteredRows(csvPath, limit) {
@@ -318,6 +265,8 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
     if (viaCucop) producto = viaCucop.descripcion;
   }
 
+  producto = producto.replace(LEADING_JUNK_RE, '').trim();
+
   // Prioridad para asignar clave: 1) extraerla directamente de la descripción
   // de la institución (más confiable); 2) si no vino, recuperarla vía el
   // catálogo CUCoP. Se guarda clave_fuente para que scripts/validar-claves.js
@@ -329,7 +278,7 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   if (!clave) {
     const viaCucop = cucopMap[item.cve_cucop];
     // viaCucop.clave puede ser null (entrada del catálogo sin prefijo de
-    // clave CSG en su descripción -- ver buildCucopMap) -- ahí no hay clave
+    // clave CSG en su descripción -- ver scripts/build-cucop.js) -- ahí no hay clave
     // que adoptar, solo descripción (ya usada arriba para `producto`).
     if (viaCucop && viaCucop.clave) {
       clave = viaCucop.clave;
@@ -520,54 +469,6 @@ function guardarCheckpoint(outPath, errPath, resultados, errores) {
   fs.writeFileSync(errPath, JSON.stringify(errores, null, 2), 'utf8');
 }
 
-// Copia del dataset final en Excel, para quien prefiera trabajarlo ahí en vez
-// del JSON que consume el dashboard. grupo_terapeutico es un arreglo en el
-// JSON (un medicamento puede pertenecer a más de un grupo) -- en Excel se
-// aplana a texto separado por coma, porque una celda no puede guardar un arreglo.
-//
-// cantidad_minima/cantidad_maxima y valor_minimo/valor_maximo ya vienen
-// siempre poblados en docs/data.json (iguales entre sí cuando el contrato no
-// tiene rango genuino, ver buildRegistro) -- no hace falta colapsarlos a una
-// sola columna aquí. Solo se renombran cantidad_minima/cantidad_maxima a
-// cantidad_min/cantidad_max (más cortos) para las columnas del Excel; no hay
-// columna `valor` suelta porque sería idéntica a valor_maximo en el 100% de
-// los casos (verificado contra el dataset completo -- `cantidad` siempre
-// usaba cantidad_maxima cuando había una disponible).
-function guardarExcel(outPath, resultados) {
-  const filas = resultados.map(r => ({
-    codigo_contrato: r.codigo_contrato,
-    num_contrato: r.num_contrato,
-    clave: r.clave,
-    clave_fuente: r.clave_fuente,
-    cve_cucop: r.cve_cucop,
-    producto: r.producto,
-    tipo_insumo: r.tipo_insumo,
-    grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
-    procedimiento: r.procedimiento,
-    tipo_procedimiento: r.tipo_procedimiento,
-    tipo_contrato: r.tipo_contrato,
-    proveedor: r.proveedor,
-    institucion: r.institucion,
-    unidad_medida: r.unidad_medida,
-    precio_unitario: r.precio_unitario,
-    cantidad_min: r.cantidad_minima,
-    cantidad_max: r.cantidad_maxima,
-    valor_minimo: r.valor_minimo,
-    valor_maximo: r.valor_maximo,
-    fecha_firma_contrato: r.fecha_firma_contrato,
-    fecha_fallo: r.fecha_fallo,
-    fecha_inicio_contrato: r.fecha_inicio_contrato,
-    fecha_fin_contrato: r.fecha_fin_contrato,
-  }));
-  const ws = XLSX.utils.json_to_sheet(filas);
-  const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
-  wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, wsDiccionario, 'Diccionario');
-  XLSX.utils.book_append_sheet(wb, ws, 'Precios');
-  XLSX.writeFile(wb, outPath);
-}
-
 async function worker(queue, browser, compendio, cucopMap, stats, ctx, allResultados, allErrores, outPath, errPath) {
   while (queue.length) {
     const [hash, contratos] = queue.shift();
@@ -663,9 +564,9 @@ async function main() {
   const compendio = loadCompendio();
   console.log(`Compendio cargado: ${Object.keys(compendio).length} claves.`);
 
-  console.log(`Construyendo mapa CUCoP+ -> clave CSG desde el catálogo...`);
-  const cucopMap = buildCucopMap();
-  console.log(`Mapa construido: ${Object.keys(cucopMap).length} claves CUCoP+.`);
+  console.log(`Cargando mapa CUCoP+ -> clave CSG (data/cucop_medicamentos.json)...`);
+  const cucopMap = loadCucopMap();
+  console.log(`Mapa cargado: ${Object.keys(cucopMap).length} claves CUCoP+.`);
 
   console.log(`Leyendo y filtrando CSV: ${args.input}`);
   const filtered = loadFilteredRows(args.input, args.limit);

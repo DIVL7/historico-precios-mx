@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build:compendio": "node scripts/build-compendio.js",
+    "build:cucop": "node scripts/build-cucop.js",
     "download": "node scripts/download-csv.js",
     "extract": "node scripts/extract.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "validate": "node scripts/validar-claves.js"
   },
   "keywords": [],
   "author": "",

@@ -69,6 +69,8 @@ La celda `Grupo` trae cada grupo prefijado con un marcador tipo `Grupo Nº 23:` 
 
 Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna `DESCRIPCIÓN` trae la clave del Compendio como prefijo — es estático (no depende de qué institución compre), así que sirve de respaldo cuando la descripción libre del contrato no incluye la clave directamente.
 
+Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se convierte una sola vez a un JSON liviano indexado por `cve_cucop` — `scripts/build-cucop.js` genera `data/cucop_medicamentos.json`, que sí se commitea. `extract.js` y `validar-claves.js` solo leen ese JSON en runtime; ninguno de los dos necesita el xlsx crudo, lo cual importa en particular para CI (el workflow de GitHub Actions nunca descarga ni recibe ese archivo).
+
 ---
 
 ## 4. Modelo de datos
@@ -79,7 +81,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | `num_contrato` | Compras MX ("Núm. del contrato") | Número de contrato asignado por la institución compradora — formato libre, distinto de `codigo_contrato` |
 | `clave` | Ver §5.2 (asignación y validación de clave) | Formato CSG `NNN.NNN.NNNN.NN`, o `null` si no se pudo determinar |
 | `clave_fuente` | Interno | De dónde salió `clave`: `descripcion` (del texto del contrato), `cucop` (vía catálogo CUCoP), `validacion_nombre_local` (por nombre contra el Compendio), `propagacion_confiable` (heredada de otro registro del mismo producto), o `null` |
-| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave, salvo cuando viene degenerado — ahí se usa la ficha CUCoP+ en su lugar, ver §5.3.2 | |
+| `producto` | "Descripción detallada" (`detallepartidas`), texto restante tras remover la clave, salvo cuando viene degenerado — ahí se usa la ficha CUCoP+ en su lugar, ver §5.3.2. Prefijos de numeración/viñetas al inicio se recortan, ver §5.3.3 | |
 | `tipo_insumo` | Constante `MEDICAMENTO` | |
 | `grupo_terapéutico` | Join contra Compendio CSG por `clave` | `null` si `clave` es `null` o no existe en el Compendio |
 | `procedimiento` | "Número de procedimiento" | |
@@ -142,6 +144,14 @@ La institución compradora a veces captura "Descripción detallada" (el campo qu
 
 En ambos casos, la página del expediente muestra una columna separada, "Descripción CUCoP+", que siempre viene bien formada — es la ficha oficial del catálogo, no depende de cómo la institución tecleó su propia descripción. El pipeline detecta ambos patrones (regex para el primero, longitud + ausencia de espacios para el segundo) y sustituye `producto` por `cucopMap[cve_cucop].descripcion` — el mismo catálogo CUCoP+ (§3.4) ya cargado en memoria para resolver `clave` (§5.2), reutilizado aquí. Cuando el `cve_cucop` del ítem no está en el catálogo local (puede ser más nuevo que el snapshot descargado), no hay mejor fuente disponible y el texto degenerado queda tal cual.
 
+### 5.3.3 Limpieza de numeración/viñetas al inicio de `producto`
+
+Algunas instituciones anteponen a "Descripción detallada" numeración de partida, viñetas o una clave CSG con separador distinto al esperado (espacios en vez de puntos, o sin el cero inicial) — texto ajeno al nombre del medicamento. Ejemplos reales vistos en el dataset: `"13040096 UPADACITINIB..."`, `"2. 1 TEOFILINA..."`, `"-OLANZAPINA..."`, `"•\tASPIRINA..."`, `"10.   010.000.2739.00 - DIETA..."`.
+
+`buildRegistro` limpia esto con `LEADING_JUNK_RE`: recorta cualquier prefijo de dígitos/espacios/puntos/guiones/viñetas/comillas, pero solo si justo después empieza una letra — así no se come dígitos que sí son parte del texto (`"5% DIOXIDO DE CARBONO..."`: al `5` le sigue `%`, no una letra, así que se conserva intacto). Una guarda adicional evita truncar a la mitad un sufijo de clave alfanumérico como `"...1757.P0 MELFALAN..."` (se deja el texto completo en vez de cortar a `"P0 MELFALAN..."`). Se aplica después del reemplazo por CUCoP+ de §5.3.2, así que corre sobre cualquiera de las dos fuentes por igual.
+
+Corrida del 2026-08-10: 965 de 16,911 registros tenían este prefijo; los 3 casos protegidos por las guardas de arriba quedaron sin tocar (2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico). Como efecto colateral, el agrupamiento canónico de `scripts/validar-claves.js` (agrupa por nombre+dosis extraídos de `producto`) mejoró para estos registros — cobertura de `clave` subió de 72.5% a 74.9%.
+
 ### 5.4 Reporte de calidad
 
 Cada corrida de `extract.js` genera `docs/data.calidad.json`: top 20 valores más altos (por `valor_maximo`, para detectar outliers), registros con precio o cantidad en cero/negativo, y el detalle de cada corrección de `precio_unitario`.
@@ -181,7 +191,9 @@ El modal muestra cantidad y valor de forma condicional: si el contrato tiene ran
 | Archivo | Función |
 |---|---|
 | `scripts/build-compendio.js` | Convierte el Compendio Nacional de Medicamentos (.xlsm del CSG) a `data/compendio_medicamentos.json` |
+| `scripts/build-cucop.js` | Convierte el catálogo CUCoP+ (.xlsx) a `data/cucop_medicamentos.json` — ver §3.4 |
 | `scripts/download-csv.js` | Descarga el CSV anual de "Contratos de la Plataforma Integral" desde Datos Abiertos |
+| `scripts/lib/dataset.js` | Piezas compartidas entre `extract.js` y `validar-claves.js` (regex de clave, diccionario de columnas, escritura de `data.xlsx`) — un solo lugar para no duplicar lo que ambos necesitan |
 | `scripts/extract.js` | Pipeline principal — ver §5.1 |
 | `scripts/validar-claves.js` | Sanity check de claves post-corrida — ver §5.2 |
 | `docs/index.html` | Dashboard estático: búsqueda, filtros, orden por columna, paginación, modal de detalle por registro — ver §6 |
