@@ -146,3 +146,11 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Alternativas:**
 - Ninguna automatizable: el dato no está disponible en el CSV masivo para estos procedimientos. Se podría intentar buscarlo en la página de detalle del expediente (`https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento`, ya visitada durante la extracción) para los 150 procedimientos afectados — no implementado, mismo criterio de simplicidad que el punto 13.
 - Aceptar el vacío: `fecha_firma_contrato` (siempre presente) sigue siendo confiable para ordenar/filtrar por fecha aunque falte `fecha_fallo`.
+
+---
+
+## 15. Un registro trae `cantidad_minima` > `cantidad_maxima`
+
+**Por qué pasa:** viene así invertido desde la propia API de Compras MX (`C-2026-00068873`, contrato "Cerrado" con min=200 y max=20) — no es un bug del pipeline, que preserva el rango tal cual lo reporta la fuente cuando ambos valores vienen poblados y distintos.
+
+**Alternativas:** ninguna sin volver a la fuente original para confirmar cuál de los dos números es el correcto. Caso aislado (1 de 16,920 registros); revisar `docs/data.json` si se necesita excluirlo puntualmente.
