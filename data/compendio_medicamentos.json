@@ -1038,7 +1038,6 @@
   "010.000.6228.00": {
     "insumo": "RAMIPRIL",
     "grupos_terapeuticos": [
-      "Cardiología",
       "Cardiología"
     ],
     "descripcion": "CÁPSULA O TABLETA Cada cápsula o tableta contiene: Ramipril 5.0 mg. Envase con 30 cápsulas o tabletas"
@@ -2529,7 +2528,7 @@
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
       "Endocrinología y Metabolismo",
-      "Reumatologia y Trauma",
+      "Reumatología y Traumatología",
       "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene Dexametasona 0.5 mg. Envase con 30 tabletas."
@@ -2537,28 +2536,36 @@
   "010.000.7200.00": {
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
-      "Endocrinología y Metabolismo\r\nGrupo Nº 20: \r\nReumatología y Traumatología\r\nGrupo Nº 23: \r\nCuidados Paliativos"
+      "Endocrinología y Metabolismo",
+      "Reumatología y Traumatología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene Dexametasona 4 mg. Envase con 10 tabletas."
   },
   "010.000.7200.01": {
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
-      "Endocrinología y Metabolismo\r\nGrupo Nº 20: \r\nReumatología y Traumatología\r\nGrupo Nº 23: \r\nCuidados Paliativos"
+      "Endocrinología y Metabolismo",
+      "Reumatología y Traumatología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene Dexametasona 4 mg. Envase con 20 tabletas."
   },
   "010.000.7201.00": {
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
-      "Endocrinología y Metabolismo\r\nGrupo Nº 20: \r\nReumatología y Traumatología\r\nGrupo Nº 23: \r\nCuidados Paliativos"
+      "Endocrinología y Metabolismo",
+      "Reumatología y Traumatología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Dexametasona 6 mg. Envase con 10 tabletas."
   },
   "010.000.7201.01": {
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
-      "Endocrinología y Metabolismo\r\nGrupo Nº 20: \r\nReumatología y Traumatología\r\nGrupo Nº 23: \r\nCuidados Paliativos"
+      "Endocrinología y Metabolismo",
+      "Reumatología y Traumatología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Dexametasona 6 mg. Envase con 20 tabletas"
   },
@@ -5093,8 +5100,8 @@
     "insumo": "BETAMETASONA",
     "grupos_terapeuticos": [
       "Enfermedades Inmunoalérgicas",
-      "Grupo Nº 20°: \r\nReumatologia y Traumatologia",
-      "Cuidados paliativos"
+      "Reumatología y Traumatología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta o frasco ámpula contiene: Fosfato sódico de betametasona 5.3 mg equivalente a 4 mg de betametasona. Envase con un frasco ámpula o una ampolleta con 1 mL."
   },
@@ -5241,7 +5248,8 @@
   "010.000.4141.00": {
     "insumo": "MOMETASONA",
     "grupos_terapeuticos": [
-      "Enfermedades Inmunoalérgicas\r\nGrupo Nº 17: \r\nOtorrinolaringología"
+      "Enfermedades Inmunoalérgicas",
+      "Otorrinolaringología"
     ],
     "descripcion": "SUSPENSIÓN PARA INHALACIÓN Cada 100 mL contienen: Furoato de mometasona monohidratada equivalente a 0.050 g de furoato de mometasona anhidro. Envase nebulizador con 18 mL y válvula dosificadora (140 nebulizaciones de 50 µg cada una)."
   },
@@ -5824,7 +5832,7 @@
     "insumo": "SUCRALFATO",
     "grupos_terapeuticos": [
       "Gastroenterología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Sucralfato 1 g. Envase con 40 tabletas."
   },
@@ -6160,14 +6168,16 @@
   "010.000.4142.00": {
     "insumo": "FOLITROPINA BETA",
     "grupos_terapeuticos": [
-      "Gineco-obstetricia\r\nGrupo Nº 18: \r\nPlanificación Familiar"
+      "Gineco-obstetricia",
+      "Planificación Familiar"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada frasco ámpula con solución contiene: Folitropina beta 50 UI. Envase con un frasco ámpula con 0.5 mL."
   },
   "010.000.4143.00": {
     "insumo": "FOLITROPINA BETA",
     "grupos_terapeuticos": [
-      "Gineco-obstetricia\r\nGrupo Nº 18: \r\nPlanificación Familiar"
+      "Gineco-obstetricia",
+      "Planificación Familiar"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada frasco ámpula con solución contiene: Folitropina beta 100 UI. Envase con un frasco ámpula con 0.5 mL."
   },
@@ -6704,7 +6714,7 @@
     "insumo": "DEXAMETASONA",
     "grupos_terapeuticos": [
       "Hematología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada frasco ámpula o ampolleta contiene: Fosfato sódico de dexametasona equivalente a 8 mg. de fosfato de dexametasona. Envase con un frasco ámpula o ampolleta con 2 mL."
   },
@@ -7378,7 +7388,7 @@
     "grupos_terapeuticos": [
       "Intoxicaciones",
       "Neumología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION AL 20% Cada ampolleta contiene: Acetilcisteína 400 mg. Envase con 5 ampolletas con 2 mL (200 mg/mL)."
   },
@@ -7428,7 +7438,7 @@
     "insumo": "FUROSEMIDA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN ORAL Cada mL contiene: Furosemida 10 mg. Envase con un frasco gotero con 60 mL."
   },
@@ -7436,7 +7446,7 @@
     "insumo": "FUROSEMIDA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Furosemida 40 mg. Envase con 20 tabletas"
   },
@@ -7444,7 +7454,7 @@
     "insumo": "FUROSEMIDA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta contiene: Furosemida 20 mg. Envase con 5 ampolletas de 2 mL."
   },
@@ -7564,7 +7574,7 @@
     "insumo": "ERITROPOYETINA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada frasco ámpula con liofilizado o solución contiene: Eritropoyetina humana recombinante o Eritropoyetina alfa o Eritropoyetina beta 4000 UI. Envase con 6 frascos ámpula con o sin diluyente."
   },
@@ -7572,7 +7582,7 @@
     "insumo": "ERITROPOYETINA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada frasco ámpula con liofilizado o solución contiene: Eritropoyetina humana recombinante o Eritropoyetina alfa o Eritropoyetina beta 4000 UI. Envase con 1 jeringa precargada."
   },
@@ -7580,7 +7590,7 @@
     "insumo": "ERITROPOYETINA",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada frasco ámpula con liofilizado o solución contiene: Eritropoyetina humana recombinante o Eritropoyetina alfa o Eritropoyetina beta 4000 UI. Envase con 6 jeringas precargadas"
   },
@@ -7713,7 +7723,7 @@
   "010.000.4309.00": {
     "insumo": "SILDENAFIL",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Citrato de sildenafil equivalente a Sildenafil 100 mg. Envase con 1 tableta."
   },
@@ -7721,7 +7731,7 @@
     "insumo": "SILDENAFIL",
     "grupos_terapeuticos": [
       "Nefrología y Urología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Citrato de sildenafil equivalente a Sildenafil 100 mg. Envase con 4 tableta."
   },
@@ -7917,14 +7927,16 @@
   "010.000.0477.00": {
     "insumo": "BECLOMETASONA, DIPROPIONATO DE",
     "grupos_terapeuticos": [
-      "Neumología\r\nGrupo N° 23: \r\nCuidados paliativos"
+      "Neumología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN EN AEROSOL Cada inhalación contiene: Dipropionato de Beclometasona 50 µg. Envase con dispositivo inhalador para 200 dosis."
   },
   "010.000.2508.00": {
     "insumo": "BECLOMETASONA, DIPROPIONATO DE",
     "grupos_terapeuticos": [
-      "Neumología\r\nGrupo N° 23: \r\nCuidados paliativos"
+      "Neumología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN EN AEROSOL Cada inhalación contiene: Dipropionato de Beclometasona 250 µg. Envase con dispositivo inhalador para 200 dosis."
   },
@@ -7938,7 +7950,7 @@
   "010.000.2161.00": {
     "insumo": "DEXTROMETORFANO",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "JARABE Cada 100 mL contiene: Bromhidrato de dextrometorfano 200 mg. Envase con 120 mL y dosificador (10 mg/5 mL)."
   },
@@ -7946,7 +7958,7 @@
     "insumo": "DEXTROMETORFANO",
     "grupos_terapeuticos": [
       "Neumología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "JARABE Cada 100 mL contienen: Bromhidrato de dextrometorfano 300 mg. Envase con 60 mL y dosificador (15 mg/5 mL)."
   },
@@ -8556,7 +8568,7 @@
     "insumo": "CARBAMAZEPINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Carbamazepina 200 mg. Envase con 20 tabletas."
   },
@@ -8564,7 +8576,7 @@
     "insumo": "CARBAMAZEPINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Carbamazepina 400 mg. Envase con 20 tabletas."
   },
@@ -8572,7 +8584,7 @@
     "insumo": "CARBAMAZEPINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN ORAL Cada 5 mL contienen: Carbamazepina 100 mg. Envase con 120 mL y dosificador de 5 mL."
   },
@@ -8615,7 +8627,7 @@
     "insumo": "FENITOÍNA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta contiene: Fenitoína sódica 250 mg. Envase con una ampolleta (250 mg/5 mL)."
   },
@@ -8735,7 +8747,7 @@
     "insumo": "BIPERIDENO",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Clorhidrato de biperideno 2 mg. Envase con 50 tabletas."
   },
@@ -8771,7 +8783,7 @@
     "insumo": "CLONAZEPAM",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN Cada mL contiene: Clonazepam 2.5 mg. Envase con 10 mL y gotero integral."
   },
@@ -8856,7 +8868,7 @@
     "insumo": "GABAPENTINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Gabapentina 300 mg. Envase con 15 cápsulas."
   },
@@ -9003,7 +9015,8 @@
   "010.000.5356.00": {
     "insumo": "LAMOTRIGINA",
     "grupos_terapeuticos": [
-      "Neurología\r\nGrupo N° 23: \r\nCuidados paliativos"
+      "Neurología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Lamotrigina 100 mg. Envase con 28 tabletas"
   },
@@ -9011,7 +9024,7 @@
     "insumo": "LEVETIRACETAM",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Levetiracetam 500 mg. Envase con 60 tabletas."
   },
@@ -9019,7 +9032,7 @@
     "insumo": "LEVETIRACETAM",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Levetiracetam 1 000 mg. Envase con 30 tabletas."
   },
@@ -9027,7 +9040,7 @@
     "insumo": "LEVETIRACETAM",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN ORAL Cada 100 mL contienen: Levetiracetam 10 g. Envase con 300 mL (100 mg / mL)."
   },
@@ -9049,7 +9062,7 @@
     "insumo": "METILFENIDATO",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "COMPRIMIDO Cada comprimido contiene: Clorhidrato de Metilfenidato 10 mg Envase con 30 comprimidos."
   },
@@ -9176,7 +9189,7 @@
     "insumo": "PREGABALINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Pregabalina 75 mg Envase con 14 cápsulas"
   },
@@ -9184,14 +9197,15 @@
     "insumo": "PREGABALINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Pregabalina 75 mg Envase con 28 cápsulas"
   },
   "010.000.4358.00": {
     "insumo": "PREGABALINA",
     "grupos_terapeuticos": [
-      "Neurología\r\nGrupo N° 23: \r\nCuidados paliativos"
+      "Neurología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Pregabalina 150 mg Envase con 14 cápsulas."
   },
@@ -9199,7 +9213,7 @@
     "insumo": "PREGABALINA",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Pregabalina 150 mg Envase con 28 cápsulas."
   },
@@ -9340,7 +9354,7 @@
     "insumo": "TOXINA BOTULÍNICA TIPO A",
     "grupos_terapeuticos": [
       "Neurología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada frasco ámpula con polvo contiene: Toxina onabotulínica A 100 U* *Complejo purificado de neurotoxina (900 KD) 100 U de toxina onabotulínica A contienen 4.8 ng de complejo purificado de neurotoxina Envase con un frasco ámpula."
   },
@@ -9411,7 +9425,7 @@
     "insumo": "HIPROMELOSA",
     "grupos_terapeuticos": [
       "Oftalmología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN OFTÁLMICA AL 0.5% Cada mL contiene: Hipromelosa 5 mg Envase con gotero integral con 15 mL."
   },
@@ -9796,7 +9810,8 @@
   "010.000.5468.00": {
     "insumo": "ÁCIDO ZOLEDRÓNICO",
     "grupos_terapeuticos": [
-      "Oncología\r\nGrupo Nº 23: \r\nCuidados palIativos"
+      "Oncología",
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada frasco ámpula con 5 mL contiene: Ácido zoledrónico monohidratado equivalente a 4.0 mg de ácido zoledrónico. Envase con un frasco ámpula"
   },
@@ -9860,7 +9875,7 @@
     "insumo": "APREPITANT",
     "grupos_terapeuticos": [
       "Oncología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsulacontiene: 125 mg de Aprepitant. Cada cápsula contiene: 80 mg de Aprepitant. Envase con una cápsula de 125 mg y 2 cápsulas de 80 mg."
   },
@@ -10875,14 +10890,14 @@
   "010.000.5430.00": {
     "insumo": "MEGESTROL",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Acetato de megestrol 40 mg Envase con 100 tabletas."
   },
   "010.000.5464.00": {
     "insumo": "MEGESTROL",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN ORAL. Cada 100 mL contienen: Acetato de megestrol 4 g Envase con 240 mL (40mg/mL)."
   },
@@ -11051,7 +11066,7 @@
     "insumo": "ONDANSETRÓN",
     "grupos_terapeuticos": [
       "Oncología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Clorhidrato dihidratado de ondansetrón equivalente a 8 mg de ondansetrón. Envase con 10 tabletas."
   },
@@ -11059,7 +11074,7 @@
     "insumo": "ONDANSETRÓN",
     "grupos_terapeuticos": [
       "Oncología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION INYECTABLE Cada ampolleta o frasco ámpula contiene: Clorhidrato dihidratado de ondansetrón equivalente a 8 mg de ondansetrón. Envase con 3 ampolletas o frascos ámpula con 4 mL."
   },
@@ -11648,7 +11663,7 @@
     "insumo": "CLORFENAMINA COMPUESTA",
     "grupos_terapeuticos": [
       "Otorrinolaringología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Paracetamol 500 mg Cafeína 25 mg Clorhidrato de fenilefrina 5 mg Maleato de clorfenamina 4 mg Envase con 10 tabletas."
   },
@@ -11691,7 +11706,7 @@
     "insumo": "BUDESONIDA",
     "grupos_terapeuticos": [
       "Otorrinolaringología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN PARA INHALACIÓN Cada mL contiene Budesonida 1.280 mg Envase con frasco pulverizador con 6 mL (120 dosis de 64 µg cada una)."
   },
@@ -11860,7 +11875,7 @@
     "insumo": "ALPRAZOLAM",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Alprazolam 2.0 mg Envase con 30 tabletas."
   },
@@ -11868,7 +11883,7 @@
     "insumo": "ALPRAZOLAM",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Alprazolam 0.25 mg Envase con 30 tabletas."
   },
@@ -11876,14 +11891,14 @@
     "insumo": "ALPRAZOLAM",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Alprazolam 0.5 mg Envase con 30 tabletas."
   },
   "040.000.3305.00": {
     "insumo": "AMITRIPTILINA",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Clorhidrato de Amitriptilina 25 mg Envase con 20 tabletas."
   },
@@ -11912,7 +11927,7 @@
     "insumo": "ESCITALOPRAM",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Oxalato de escitalopram equivalente a 10 mg de escitalopram. Envase con 28 tabletas."
   },
@@ -11927,7 +11942,7 @@
     "insumo": "FLUOXETINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA O TABLETA Cada cápsula o tableta contiene: Clorhidrato de fluoxetina equivalente a 20 mg de fluoxetina. Envase con 14 cápsulas o tabletas."
   },
@@ -11935,7 +11950,7 @@
     "insumo": "FLUOXETINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA O TABLETA Cada cápsula o tableta contiene: Clorhidrato de fluoxetina equivalente a 20 mg de fluoxetina. Envase con 28 cápsulas o tabletas."
   },
@@ -11943,7 +11958,7 @@
     "insumo": "IMIPRAMINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "GRAGEA O TABLETA Cada gragea o tableta contiene: Clorhidrato de Imipramina 25 mg. Envase con 20 grageas o tabletas."
   },
@@ -11951,7 +11966,7 @@
     "insumo": "LORAZEPAM",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Lorazepam 1 mg. Envase con 40 tabletas."
   },
@@ -12008,7 +12023,7 @@
     "insumo": "DULOXETINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA DE LIBERACIÓN RETARDADA Cada cápsula de liberación retardada contiene: Clorhidrato de duloxetina equivalente a 60 mg de duloxetina. Envase con 14 cápsulas de liberación retardada."
   },
@@ -12023,7 +12038,7 @@
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN ORAL Cada mL contiene: Haloperidol 2 mg Envase con gotero integral con 15 mL."
   },
@@ -12031,7 +12046,7 @@
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN ORAL Cada mL contiene: Haloperidol 2 mg Envase con gotero integral con 30 mL."
   },
@@ -12039,7 +12054,7 @@
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Haloperidol 5 mg Envase con 20 tabletas."
   },
@@ -12047,7 +12062,7 @@
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta contiene: Haloperidol 5 mg. Envase con 6 ampolletas (5 mg/ mL)."
   },
@@ -12055,28 +12070,28 @@
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta contiene: Decanoato de haloperidol equivalente a 50 mg de haloperidol. Envase con 1 ampolleta con 1 mL."
   },
   "040.000.4481.01": {
     "insumo": "HALOPERIDOL",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada ampolleta contiene: Decanoato de haloperidol equivalente a 50 mg de haloperidol. Envase con 5 ampolletas con 1 mL"
   },
   "040.000.5476.00": {
     "insumo": "LEVOMEPROMAZINA",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada mL contiene: Clorhidrato de levomepromazina equivalente a 25 mg de levomepromazina. Envase con 10 ampolletas de 1 mL."
   },
   "040.000.3204.00": {
     "insumo": "LEVOMEPROMAZINA",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Maleato de levomepromazina equivalente a 25 mg de levomepromazina. Envase con 20 tabletas."
   },
@@ -12105,7 +12120,7 @@
     "insumo": "MIRTAZAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA O TABLETA DISPERSABLE Cada tableta o tableta dispersable contiene: Mirtazapina 30 mg Envase con 30 tabletas o tabletas dispersables."
   },
@@ -12113,7 +12128,7 @@
     "insumo": "OLANZAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Olanzapina 5 mg Envase con 14 tabletas."
   },
@@ -12121,14 +12136,14 @@
     "insumo": "OLANZAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Olanzapina 5 mg Envase con 28 tabletas."
   },
   "010.000.5486.00": {
     "insumo": "OLANZAPINA",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Olanzapina 10 mg Envase con 14 tabletas."
   },
@@ -12136,7 +12151,7 @@
     "insumo": "OLANZAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Olanzapina 10 mg Envase con 28 tabletas."
   },
@@ -12144,7 +12159,7 @@
     "insumo": "OLANZAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE Cada frasco ámpula con liofilizado contiene: Olanzapina 10 mg Envase con un frasco ámpula."
   },
@@ -12173,7 +12188,7 @@
     "insumo": "QUETIAPINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Grupo Nº 23. \r\nCuidados Paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Fumarato de quetiapina equivalente a 100 mg de quetiapina. Envase con 60 tabletas."
   },
@@ -12195,7 +12210,7 @@
     "insumo": "RISPERIDONA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Risperidona 2 mg Envase con 40 tabletas."
   },
@@ -12203,7 +12218,7 @@
     "insumo": "RISPERIDONA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCION ORAL Cada mililitro contiene: Risperidona 1 mg. Envase con 60 mL y gotero dosificador."
   },
@@ -12211,7 +12226,7 @@
     "insumo": "RISPERIDONA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN INYECTABLE DE LIBERACIÓN PROLONGADA Cada frasco ámpula contiene: Risperidona 25 mg Envase con frasco ámpula y jeringa prellenada con 2 mL de diluyente."
   },
@@ -12219,7 +12234,7 @@
     "insumo": "SERTRALINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA O TABLETA Cada cápsula o tableta contiene: Clorhidrato de sertralina equivalente a 50 mg de sertralina. Envase con 14 cápsulas o tabletas."
   },
@@ -12248,7 +12263,7 @@
     "insumo": "VENLAFAXINA",
     "grupos_terapeuticos": [
       "Psiquiatría",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA O GRAGEA DE LIBERACION PROLONGADA Cada cápsula o gragea de liberación prolongada contiene: Clorhidrato de venlafaxina equivalente a 75 mg de venlafaxina. Envase con 10 cápsulas o grageas de liberación prolongada."
   },
@@ -12347,14 +12362,14 @@
     "insumo": "MELOXICAM",
     "grupos_terapeuticos": [
       "Reumatología y Traumatología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Meloxicam 15 mg Envase con 10 tabletas."
   },
   "010.000.3444.00": {
     "insumo": "METOCARBAMOL",
     "grupos_terapeuticos": [
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Metocarbamol 400 mg Envase con 30 tabletas."
   },
@@ -12362,7 +12377,7 @@
     "insumo": "NAPROXENO",
     "grupos_terapeuticos": [
       "Reumatología y Traumatología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "TABLETA Cada tableta contiene: Naproxeno 250 mg Envase con 30 tabletas."
   },
@@ -12370,7 +12385,7 @@
     "insumo": "NAPROXENO",
     "grupos_terapeuticos": [
       "Reumatología y Traumatología",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SUSPENSIÓN ORAL Cada 5 mL contienen: Naproxeno 125 mg Envase con 100 mL."
   },
@@ -12448,7 +12463,7 @@
     "insumo": "CELECOXIB",
     "grupos_terapeuticos": [
       "Reumatología y Traumatología",
-      "Cuidados N° 23: \r\nCuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Celecoxib 100 mg Envase con 20 cápsulas."
   },
@@ -12456,7 +12471,7 @@
     "insumo": "CELECOXIB",
     "grupos_terapeuticos": [
       "Reumatología y Traumatología",
-      "Cuidados N° 23: \r\nCuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "CÁPSULA Cada cápsula contiene: Celecoxib 200 mg Envase con 10 cápsulas."
   },
@@ -12724,7 +12739,7 @@
     "insumo": "GLUCOSA",
     "grupos_terapeuticos": [
       "Soluciones Electrolíticas y Sustitutos del Plasma",
-      "Cuidados paliativos"
+      "Cuidados Paliativos"
     ],
     "descripcion": "SOLUCIÓN INYECTABLE AL 50 % Cada 100 mL contienen: Glucosa anhidra o glucosa 50 g ó Glucosa monohidratada equivalente a 50.0 g de glucosa. Envase con 50 mL. Contiene: Glucosa 25.0 g"
   },

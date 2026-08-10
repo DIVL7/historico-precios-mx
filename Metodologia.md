@@ -63,6 +63,8 @@ Ambos requieren headers de reCAPTCHA v3 (`grc`, `igrc`, `xgrc`) generados dinám
 
 Fuente: `https://csg.gob.mx/COMPENDIO_MEDICAMENTOS_V07042026.xlsm`. Columnas: `Grupo` (grupo terapéutico, puede haber más de uno por clave), `Clave` (formato `NNN.NNN.NNNN.NN`), `Insumo`, `Descripción`, `Indicaciones`. Se usa como tabla de referencia para asignar `grupo_terapéutico` a cada renglón.
 
+La celda `Grupo` trae cada grupo prefijado con un marcador tipo `Grupo Nº 23:` (número de grupo, estable) seguido del nombre en texto libre — pero el separador entre grupos y la ortografía del nombre libre no son consistentes en el archivo fuente (a veces sin acentos, a veces con erratas de mayúsculas, a veces sin salto de línea entre dos grupos). `scripts/build-compendio.js` parte la celda por el marcador (no por saltos de línea) y traduce el número a un nombre canónico fijo (`GRUPOS_TERAPEUTICOS`, 23 grupos) en vez de usar el texto libre tal cual — así una errata en el nombre no genera un grupo terapéutico duplicado. Si el CSG agrega un grupo nuevo (número fuera del catálogo conocido), el build imprime una advertencia y usa el texto libre de respaldo en vez de fallar o inventar un nombre.
+
 ### 3.4 Catálogo CUCoP+
 
 Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna `DESCRIPCIÓN` trae la clave del Compendio como prefijo — es estático (no depende de qué institución compre), así que sirve de respaldo cuando la descripción libre del contrato no incluye la clave directamente.
