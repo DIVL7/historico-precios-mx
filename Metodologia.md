@@ -165,6 +165,8 @@ Todo el filtrado del dashboard ocurre en JavaScript en el navegador del usuario 
 
 La tabla principal muestra solo las columnas de consulta más frecuente (código y número de contrato, institución, proveedor, clave CUCoP, producto, grupo terapéutico); el resto de los campos del modelo (§4) — clave del Compendio, precio, cantidad, valores, fechas — se consulta por registro en el modal "Detalle".
 
+El modal muestra cantidad y valor de forma condicional: si el contrato tiene rango genuino (`cantidad_minima != cantidad_maxima`, ver §5.5), muestra los 4 valores por separado (cantidad mínima/máxima, valor mínimo/máximo); si no, solo un par Cantidad/Valor. Validado contra el dataset completo que ambos campos (cantidad y valor) coinciden en si hay rango o no, salvo un caso trivial (`precio_unitario` en 0, donde el rango de valor colapsa a 0–0 aunque la cantidad sí tenga rango real) — no hay casos donde el valor tenga rango pero la cantidad no.
+
 **Frecuencia de actualización:** pendiente de definir — el cron de GitHub Actions queda configurado pero ajustable (candidatos: semanal, diaria, manual).
 
 **Prerrequisito:** una cuenta de GitHub (gratuita) para alojar el repositorio, correr las Actions y servir Pages.
