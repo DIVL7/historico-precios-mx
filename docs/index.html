@@ -201,7 +201,7 @@ let lastFocusedEl = null;
 
 // Columnas principales de la tabla -- las que se listan de un vistazo. El
 // resto de los campos del registro vive en el modal "Detalle" (ver
-// DETALLE_CAMPOS) para no saturar la tabla con las ~19 columnas del dataset
+// detalleCampos) para no saturar la tabla con las ~19 columnas del dataset
 // completo (Metodologia.md §4).
 const columns = [
   { key: 'codigo_contrato', label: 'Código de contrato' },
@@ -216,19 +216,45 @@ const columns = [
 
 // Tercer elemento (mono): true para campos que son código/monto/fecha --
 // misma distinción tipográfica que en las columnas de la tabla.
-const DETALLE_CAMPOS = [
+const DETALLE_CAMPOS_INICIO = [
   ['Clave (Compendio CSG)', r => r.clave || '—', true],
   ['Unidad de medida', r => r.unidad_medida || '—', false],
   ['Precio unitario', r => money(r.precio_unitario), true],
-  ['Cantidad', r => num(r.cantidad), true],
-  ['Valor', r => money(r.valor), true],
-  ['Valor mínimo', r => money(r.valor_minimo), true],
-  ['Valor máximo', r => money(r.valor_maximo), true],
+];
+const DETALLE_CAMPOS_FIN = [
   ['Tipo de procedimiento', r => r.tipo_procedimiento || '—', false],
   ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato), true],
   ['Fecha de fallo', r => fechaHora(r.fecha_fallo), true],
   ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—', true],
 ];
+
+// Contratos "Abierto" con rango genuino de cantidad (cantidad_minima !=
+// cantidad_maxima) comprometen un piso y un techo, no un solo número --
+// colapsar a una sola "Cantidad"/"Valor" perdería esa información. El resto
+// (Cerrado, o Abierto sin rango real) sí tiene un único compromiso, así que
+// un par Cantidad/Valor basta. Misma condición que `hayRangoGenuino` en
+// scripts/extract.js (Metodologia.md §5.5) -- validado contra el dataset
+// completo que valor_minimo/valor_maximo siempre coinciden con este mismo
+// criterio (única excepción: precio_unitario en 0, donde el rango de valor
+// colapsa a 0–0 aunque la cantidad sí tenga rango real).
+function hayRangoGenuino(r) {
+  return r.cantidad_minima != null && r.cantidad_maxima != null && r.cantidad_minima !== r.cantidad_maxima;
+}
+
+const CAMPOS_CON_RANGO = [
+  ['Cantidad mínima', r => num(r.cantidad_minima), true],
+  ['Cantidad máxima', r => num(r.cantidad_maxima), true],
+  ['Valor mínimo', r => money(r.valor_minimo), true],
+  ['Valor máximo', r => money(r.valor_maximo), true],
+];
+const CAMPOS_SIN_RANGO = [
+  ['Cantidad', r => num(r.cantidad), true],
+  ['Valor', r => money(r.valor), true],
+];
+
+function detalleCampos(r) {
+  return [...DETALLE_CAMPOS_INICIO, ...(hayRangoGenuino(r) ? CAMPOS_CON_RANGO : CAMPOS_SIN_RANGO), ...DETALLE_CAMPOS_FIN];
+}
 
 function money(n) {
   if (n == null) return '—';
@@ -407,7 +433,7 @@ function openDetalle(r) {
   if (!r) return;
   lastFocusedEl = document.activeElement;
   document.getElementById('modalTitle').textContent = r.producto || 'Detalle';
-  document.getElementById('modalBody').innerHTML = DETALLE_CAMPOS
+  document.getElementById('modalBody').innerHTML = detalleCampos(r)
     .map(([label, get, mono]) => `<dt>${label}</dt><dd${mono ? ' class="mono"' : ''}>${get(r)}</dd>`).join('');
   document.getElementById('modalBackdrop').hidden = false;
   document.getElementById('modalClose').focus();
