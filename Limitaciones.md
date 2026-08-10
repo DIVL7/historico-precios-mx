@@ -1,6 +1,6 @@
 # Limitaciones de los Datos
 
-**Aplica a:** dataset de 2026 (`docs/data.json`) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
+**Aplica a:** dataset de 2026 (`docs/data.json`, 16,920 registros) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
 
 Este documento resume dónde puede haber datos erróneos, imprecisos o incompletos en esta base, y qué alternativas existen para cada caso. Cómo funciona la herramienta está en `Metodologia.md`; aquí solo se documenta qué puede estar mal y qué hacer al respecto.
 
@@ -8,7 +8,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 49.0% de los registros (12,214 de 24,909)
+## 1. Grupo terapéutico: falta en 33.4% de los registros (5,650 de 16,920)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
@@ -26,8 +26,8 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Por qué pasa:** cuando la institución no cita la clave directamente en la descripción del contrato, el pipeline la recupera vía el código `cve_cucop` del catálogo CUCoP. Esa recuperación puede fallar cuando la institución usó un código genérico o de la dosis/presentación equivocada — confirmado contra la respuesta cruda de la API (no es un error de la extracción, viene así desde el origen).
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
-- De los registros con clave vía CUCoP, **33% no pasan** la autoverificación contra la dosis que ese código declara.
-- De los **12,474 productos canónicos** del dataset, **6,683 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los registros con clave vía CUCoP, **39% no pasan** la autoverificación contra la dosis que ese código declara.
+- De los **7,456 productos canónicos** del dataset, **2,665 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
 
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,596 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
