@@ -32,7 +32,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,596 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
 - Descargar y parsear `https://www.csg.gob.mx/Comp26042025.pdf` (Compendio en PDF, +10MB) como fuente alterna si vademecum dejara de existir — no implementado.
-- **Corrección manual dirigida** (priorizar por `valor` del contrato en vez de cubrir el 100%): tomar el `producto` de `docs/data.correcciones.json` (`sin_resolver`), determinar la clave correcta a mano, y editar `docs/data.json` poniendo `clave`, `grupo_terapeutico` y **`clave_fuente: "manual"`** en todos los registros con ese `producto`. Cualquier `clave_fuente` distinto de `null`/`"cucop"` se trata como confiable, así que la corrección sobrevive a la siguiente corrida de `validar-claves.js` y se propaga sola a otros registros del mismo producto canónico. Correr `node scripts/validar-claves.js` una vez después de editar para regenerar la propagación y el Excel.
+- **Corrección manual dirigida** (priorizar por `valor_maximo` del contrato en vez de cubrir el 100%): tomar el `producto` de `docs/data.correcciones.json` (`sin_resolver`), determinar la clave correcta a mano, y editar `docs/data.json` poniendo `clave`, `grupo_terapeutico` y **`clave_fuente: "manual"`** en todos los registros con ese `producto`. Cualquier `clave_fuente` distinto de `null`/`"cucop"` se trata como confiable, así que la corrección sobrevive a la siguiente corrida de `validar-claves.js` y se propaga sola a otros registros del mismo producto canónico. Correr `node scripts/validar-claves.js` una vez después de editar para regenerar la propagación y el Excel.
 
 ---
 
@@ -48,9 +48,9 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 4. Contratos "por monto": `cantidad` se deriva, no viene directa de la fuente
+## 4. Contratos "por monto": `cantidad_minima`/`cantidad_maxima` se derivan, no vienen directas de la fuente
 
-**Por qué pasa:** algunos ítems (`tipo_contrato_abierto: "MONTO"` en la API de origen) comprometen un techo de gasto en pesos, no una cantidad de piezas — la fuente no publica `cantidad`, `cantidad_minima` ni `cantidad_maxima` para estos casos, ni siquiera `precio_unitario` en algunos (servicios, medicina magistral). Sí publica `subtotal` (el "Monto de la Oferta" visible en el detalle del contrato en el sitio de Compras MX) — ver Metodologia.md §5.3.1 para cómo se usa para derivar `cantidad` y respaldar `valor`.
+**Por qué pasa:** algunos ítems (`tipo_contrato_abierto: "MONTO"` en la API de origen) comprometen un techo de gasto en pesos, no una cantidad de piezas — la fuente no publica ninguna cantidad para estos casos, ni siquiera `precio_unitario` en algunos (servicios, medicina magistral; ahí `cantidad_minima`/`cantidad_maxima` quedan en `null` — el único caso donde eso ocurre, ver Metodologia.md §5.3.1). Sí publica `subtotal` (el "Monto de la Oferta" visible en el detalle del contrato en el sitio de Compras MX) — ver Metodologia.md §5.3.1 para cómo se usa para derivar `cantidad_minima`/`cantidad_maxima` (ambas iguales, sin rango) y respaldar `valor_minimo`/`valor_maximo`.
 
 **Riesgo residual:** la cantidad derivada asume que `subtotal` es exactamente `precio_unitario × cantidad` sin redondeos raros del proveedor; no se ha visto un caso donde no cuadre, pero no está garantizado matemáticamente.
 
@@ -58,7 +58,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 5. `cantidad` es el compromiso contractual, no lo entregado realmente
+## 5. `cantidad_minima`/`cantidad_maxima` son el compromiso contractual, no lo entregado realmente
 
 **Por qué pasa:** las fuentes de contratación pública solo exponen la cantidad pactada en el contrato. No existe una fuente pública que reporte cuánto se entregó/facturó realmente — puede haber diferencia si el contrato no se ejecutó completo.
 
@@ -136,3 +136,13 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Alternativas:**
 - Filtrar/interpretar con cautela cuando `tipo_procedimiento = CONSOLIDADA` — la institución ahí es menos confiable que en NO CONSOLIDADA.
 - Scrapear "Dependencia o entidad contratante" de la tabla de contratos de la página de detalle (ya se visita esa página) para los casos consolidados — evaluado, no implementado por decisión explícita de mantener el pipeline simple.
+
+---
+
+## 14. `fecha_fallo` ausente en algunas compras consolidadas
+
+**Por qué pasa:** el campo ya viene vacío así en el CSV fuente — el pipeline solo lo copia, no lo transforma. Afecta **856 de 16,920 registros (641 contratos únicos)**, y **el 100% son compras consolidadas** (`tipo_procedimiento = CONSOLIDADA`). Es todo-o-nada por procedimiento: de 1,138 procedimientos con partida 25301, **150 (13.2%)** carecen de `fecha_fallo` en *todos* sus contratos, y los 988 restantes la tienen en *todos* — no se encontró ni un solo procedimiento mixto (algunos contratos con fallo, otros sin él). Explicación probable: "Fecha de fallo" registra el acto de adjudicación del procedimiento completo, y en compras consolidadas (varias instituciones bajo un mismo procedimiento) ese dato a veces no se replica hacia el registro exportado en el CSV masivo — un hueco de publicación del sistema fuente para ciertos procedimientos, no un error de captura del pipeline.
+
+**Alternativas:**
+- Ninguna automatizable: el dato no está disponible en el CSV masivo para estos procedimientos. Se podría intentar buscarlo en la página de detalle del expediente (`https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento`, ya visitada durante la extracción) para los 150 procedimientos afectados — no implementado, mismo criterio de simplicidad que el punto 13.
+- Aceptar el vacío: `fecha_firma_contrato` (siempre presente) sigue siendo confiable para ordenar/filtrar por fecha aunque falte `fecha_fallo`.
