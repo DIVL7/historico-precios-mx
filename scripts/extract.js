@@ -25,11 +25,14 @@ const CONTRATO_HARD_TIMEOUT_MS = 25000; // nunca dejar que un solo contrato cuel
 const MAX_INTENTOS = 3; // tras esto, un expediente con error se marca como fallo permanente y ya no se reintenta solo
 const CHECKPOINT_CADA_N_EXPEDIENTES = 10; // escritura incremental a disco, para no perder progreso si el proceso se corta
 
-// Descripción de cada columna de docs/data.json (Metodologia.md §4), para la
-// hoja "Diccionario" del Excel -- quien reciba data.xlsx suelto, sin este
-// repo a la mano, necesita saber qué significa cada campo. Duplicado idéntico
-// en scripts/validar-claves.js (que también escribe data.xlsx de forma
-// independiente); mantener ambas copias en sync si se edita.
+// Descripción de cada columna de la hoja "Precios" del Excel (Metodologia.md
+// §4) -- quien reciba data.xlsx suelto, sin este repo a la mano, necesita
+// saber qué significa cada campo. Los nombres coinciden con docs/data.json
+// salvo cantidad_min/cantidad_max, que en el Excel reemplazan a
+// cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
+// guardarExcel). Duplicado idéntico en scripts/validar-claves.js (que
+// también escribe data.xlsx de forma independiente); mantener ambas copias
+// en sync si se edita.
 const DICCIONARIO = [
   ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
   ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
@@ -46,14 +49,12 @@ const DICCIONARIO = [
   ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
   ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
   ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
-  ['cantidad', 'Cantidad comprometida en el contrato (no lo entregado realmente). En contratos "por monto" se deriva de subtotal/precio_unitario.'],
-  ['cantidad_minima', 'Cantidad mínima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
-  ['cantidad_maxima', 'Cantidad máxima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
-  ['valor', 'precio_unitario × cantidad (o subtotal directo). Referencia de un registro individual -- no sumar entre muchos registros (ver Metodologia.md §5.5).'],
-  ['valor_minimo', 'Piso de exposición contractual garantizado. Usar este campo (o valor_maximo) para sumas/promedios agregados, nunca "valor".'],
-  ['valor_maximo', 'Techo de exposición contractual posible. En contratos Cerrado es igual a valor_minimo (no hay rango que representar).'],
+  ['cantidad_min', 'Cantidad mínima comprometida en el contrato (no lo entregado realmente). Igual a cantidad_max cuando el contrato no tiene rango genuino -- Cerrado, o "por monto" derivado de subtotal/precio_unitario -- y solo difiere de cantidad_max en contratos Abierto con rango real.'],
+  ['cantidad_max', 'Cantidad máxima comprometida en el contrato. Igual a cantidad_min cuando no hay rango genuino (ver cantidad_min).'],
+  ['valor_minimo', 'Piso de exposición contractual garantizado (precio_unitario × cantidad_min, o subtotal directo). Igual a valor_maximo cuando no hay rango genuino.'],
+  ['valor_maximo', 'Techo de exposición contractual posible (precio_unitario × cantidad_max, o subtotal directo). Igual a valor_minimo cuando no hay rango genuino -- usar cualquiera de los dos (nunca sumar ambos) para sumas/promedios agregados (Metodologia.md §5.5).'],
   ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
-  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma.'],
+  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
   ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
   ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
 ];
@@ -333,40 +334,51 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   // `subtotal` es el monto total ya calculado por la fuente para el ítem --
   // cuando no hay cantidad_minima/cantidad_maxima distintas que preservar
   // (Cerrado, o "por monto" sin ningún rango), es el número más confiable
-  // posible para `valor`, más confiable incluso que recalcularlo multiplicando
-  // por `cantidad`. Esto importa en particular para el caso "por monto": ahí
-  // `cantidad` ya se derivó arriba dividiendo subtotal/precio_unitario, así
-  // que multiplicarla de vuelta por precio_unitario para obtener `valor`
-  // sería un viaje de ida y vuelta innecesario (subtotal → cantidad →
-  // subtotal) que además puede perder precisión por el redondeo intermedio
-  // de `cantidad` -- si ya se tiene subtotal, se usa directo.
+  // posible para valor_minimo/valor_maximo, más confiable incluso que
+  // recalcularlo multiplicando por `cantidad`. Esto importa en particular
+  // para el caso "por monto": ahí `cantidad` ya se derivó arriba dividiendo
+  // subtotal/precio_unitario, así que multiplicarla de vuelta por
+  // precio_unitario sería un viaje de ida y vuelta innecesario (subtotal →
+  // cantidad → subtotal) que además puede perder precisión por el redondeo
+  // intermedio de `cantidad` -- si ya se tiene subtotal, se usa directo.
   const valorDirecto = item.subtotal != null ? +item.subtotal.toFixed(2) : null;
 
-  // valor_minimo/valor_maximo: piso y techo de exposición contractual, bien
-  // definidos para los dos tipos de contrato sin necesidad de segmentar antes
-  // de calcular. En "Cerrado" cantidad_maxima es null de origen, así que cae
-  // a la misma cantidad_minima -- ambos quedan iguales entre sí y a `valor`
-  // (no hay rango que representar). En "Abierto" sí divergen. Esto es lo que
-  // permite sumar/agregar valor entre ambos tipos sin mezclar un "techo
-  // posible" (abierto, vía `valor`) con un "monto real" (cerrado, vía
-  // `valor`) como si fueran la misma clase de número -- cualquier análisis
-  // agregado de gasto debería usar valor_minimo (piso garantizado) o
-  // valor_maximo (techo de exposición) explícitamente, no `valor` a secas.
+  // cantidad_minima/cantidad_maxima quedan SIEMPRE pobladas (nunca null): si
+  // el ítem no trae un rango genuino de origen (Cerrado, o "por monto"),
+  // AMBAS colapsan al mismo valor -- `cantidad`, la única cifra disponible en
+  // ese caso -- en vez de dejarlas en null o (peor) dejar que cada una caiga
+  // a un respaldo distinto. La API puede traer `item.cantidad_minima` poblado
+  // con un número que no guarda relación con el resto del ítem incluso cuando
+  // `item.cantidad_maxima` viene vacío (visto en casos reales) -- si cada
+  // campo cayera a su propio `?? cantidad` por separado, cantidad_minima
+  // podría quedar en ese número suelto mientras cantidad_maxima cae a
+  // `cantidad`, produciendo un "rango" falso (min != max) que no tiene
+  // ninguna relación con valor_minimo/valor_maximo (que si son iguales entre
+  // sí en este caso). Por eso ambas dependen del MISMO `hayRangoGenuino` que
+  // decide valor_minimo/valor_maximo abajo, no de su propio `??` independiente.
+  //
+  // Mismo criterio para valor_minimo/valor_maximo: piso y techo de exposición
+  // contractual, bien definidos para los dos tipos de contrato sin necesidad
+  // de segmentar antes de calcular. En "Cerrado" caen al mismo número (no hay
+  // rango que representar); en "Abierto" divergen. Esto permite sumar/agregar
+  // valor entre ambos tipos sin mezclar un "techo posible" (Abierto) con un
+  // "monto real" (Cerrado) como si fueran la misma clase de número --
+  // cualquier análisis agregado de gasto debe usar valor_minimo (piso
+  // garantizado) o valor_maximo (techo de exposición) explícitamente
+  // (Metodologia.md §5.5).
   //
   // Solo cuando SÍ hay un rango genuino (cantidad_minima y cantidad_maxima
   // distintas, "Abierto" real) hace falta calcular piso/techo por separado
   // multiplicando -- ahí `subtotal` no sirve como respaldo porque la API lo
   // reporta consistente con cantidad_minima únicamente (ver corrección de
   // precio_unitario arriba), así que usarlo para el techo estaría mal.
-  const cantidadMinimaEfectiva = item.cantidad_minima ?? cantidad;
-  const cantidadMaximaEfectiva = item.cantidad_maxima ?? cantidad;
   const hayRangoGenuino = item.cantidad_minima != null && item.cantidad_maxima != null && item.cantidad_minima !== item.cantidad_maxima;
+  const cantidadMinimaEfectiva = hayRangoGenuino ? item.cantidad_minima : cantidad;
+  const cantidadMaximaEfectiva = hayRangoGenuino ? item.cantidad_maxima : cantidad;
 
-  const valorCalculado = (precioUnitario != null && cantidad != null) ? +(precioUnitario * cantidad).toFixed(2) : null;
   const valorMinimoCalculado = (precioUnitario != null && cantidadMinimaEfectiva != null) ? +(precioUnitario * cantidadMinimaEfectiva).toFixed(2) : null;
   const valorMaximoCalculado = (precioUnitario != null && cantidadMaximaEfectiva != null) ? +(precioUnitario * cantidadMaximaEfectiva).toFixed(2) : null;
 
-  const valor = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorCalculado ?? valorDirecto);
   const valorMinimo = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorMinimoCalculado ?? valorDirecto);
   const valorMaximo = (!hayRangoGenuino && valorDirecto != null) ? valorDirecto : (valorMaximoCalculado ?? valorDirecto);
 
@@ -391,10 +403,8 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
     institucion: contrato.institucion,
     unidad_medida: item.um || null,
     precio_unitario: precioUnitario,
-    cantidad,
-    cantidad_minima: item.cantidad_minima ?? null,
-    cantidad_maxima: item.cantidad_maxima ?? null,
-    valor,
+    cantidad_minima: cantidadMinimaEfectiva,
+    cantidad_maxima: cantidadMaximaEfectiva,
     valor_minimo: valorMinimo,
     valor_maximo: valorMaximo,
     fecha_firma_contrato: contrato.fechaFirmaContrato,
@@ -475,28 +485,40 @@ function guardarCheckpoint(outPath, errPath, resultados, errores) {
 // JSON (un medicamento puede pertenecer a más de un grupo) -- en Excel se
 // aplana a texto separado por coma, porque una celda no puede guardar un arreglo.
 //
-// `cantidad_minima`/`cantidad_maxima` se colapsan en la misma columna
-// `cantidad`: un número si es contrato de cantidad fija (min == max, o solo
-// viene uno de los dos), o un rango "mín–máx" si es contrato abierto -- en
-// docs/data.json se conservan los tres campos por separado (los necesita el
-// cálculo de `valor` y cualquier análisis programático), esto es solo para
-// que el Excel no tenga dos columnas casi siempre vacías.
-function formatearCantidad(r) {
-  if (r.cantidad_minima != null && r.cantidad_maxima != null && r.cantidad_minima !== r.cantidad_maxima) {
-    return `${r.cantidad_minima}–${r.cantidad_maxima}`;
-  }
-  return r.cantidad;
-}
-
+// cantidad_minima/cantidad_maxima y valor_minimo/valor_maximo ya vienen
+// siempre poblados en docs/data.json (iguales entre sí cuando el contrato no
+// tiene rango genuino, ver buildRegistro) -- no hace falta colapsarlos a una
+// sola columna aquí. Solo se renombran cantidad_minima/cantidad_maxima a
+// cantidad_min/cantidad_max (más cortos) para las columnas del Excel; no hay
+// columna `valor` suelta porque sería idéntica a valor_maximo en el 100% de
+// los casos (verificado contra el dataset completo -- `cantidad` siempre
+// usaba cantidad_maxima cuando había una disponible).
 function guardarExcel(outPath, resultados) {
-  const filas = resultados.map(r => {
-    const { cantidad_minima, cantidad_maxima, ...resto } = r;
-    return {
-      ...resto,
-      cantidad: formatearCantidad(r),
-      grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
-    };
-  });
+  const filas = resultados.map(r => ({
+    codigo_contrato: r.codigo_contrato,
+    num_contrato: r.num_contrato,
+    clave: r.clave,
+    clave_fuente: r.clave_fuente,
+    cve_cucop: r.cve_cucop,
+    producto: r.producto,
+    tipo_insumo: r.tipo_insumo,
+    grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
+    procedimiento: r.procedimiento,
+    tipo_procedimiento: r.tipo_procedimiento,
+    tipo_contrato: r.tipo_contrato,
+    proveedor: r.proveedor,
+    institucion: r.institucion,
+    unidad_medida: r.unidad_medida,
+    precio_unitario: r.precio_unitario,
+    cantidad_min: r.cantidad_minima,
+    cantidad_max: r.cantidad_maxima,
+    valor_minimo: r.valor_minimo,
+    valor_maximo: r.valor_maximo,
+    fecha_firma_contrato: r.fecha_firma_contrato,
+    fecha_fallo: r.fecha_fallo,
+    fecha_inicio_contrato: r.fecha_inicio_contrato,
+    fecha_fin_contrato: r.fecha_fin_contrato,
+  }));
   const ws = XLSX.utils.json_to_sheet(filas);
   const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
   wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];
@@ -571,10 +593,14 @@ function calcularPendientes(groups, resultadosPrevios, erroresPrevios) {
 }
 
 function construirReporteCalidad(resultados, stats) {
-  const topValores = [...resultados].sort((a, b) => (b.valor || 0) - (a.valor || 0)).slice(0, 20)
-    .map(r => ({ codigo_contrato: r.codigo_contrato, producto: r.producto.slice(0, 80), precio_unitario: r.precio_unitario, cantidad: r.cantidad, valor: r.valor }));
-  const enCero = resultados.filter(r => (r.precio_unitario ?? 0) <= 0 || (r.cantidad ?? 0) <= 0)
-    .map(r => ({ codigo_contrato: r.codigo_contrato, producto: r.producto.slice(0, 80), precio_unitario: r.precio_unitario, cantidad: r.cantidad }));
+  // valor_maximo/cantidad_maxima representan el "número único" de referencia
+  // de cada registro (equivalen al antiguo `valor`/`cantidad` -- iguales a
+  // valor_minimo/cantidad_minima cuando no hay rango genuino, ver
+  // buildRegistro), así que sirven igual para ordenar outliers y detectar ceros.
+  const topValores = [...resultados].sort((a, b) => (b.valor_maximo || 0) - (a.valor_maximo || 0)).slice(0, 20)
+    .map(r => ({ codigo_contrato: r.codigo_contrato, producto: r.producto.slice(0, 80), precio_unitario: r.precio_unitario, cantidad_maxima: r.cantidad_maxima, valor_maximo: r.valor_maximo }));
+  const enCero = resultados.filter(r => (r.precio_unitario ?? 0) <= 0 || (r.cantidad_maxima ?? 0) <= 0)
+    .map(r => ({ codigo_contrato: r.codigo_contrato, producto: r.producto.slice(0, 80), precio_unitario: r.precio_unitario, cantidad_maxima: r.cantidad_maxima }));
 
   return {
     generado: new Date().toISOString(),

@@ -48,9 +48,13 @@ const CUCOP_PATH = path.join(__dirname, '..', 'data', 'raw', 'cucop.xlsx');
 
 const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
 
-// Descripción de cada columna de docs/data.json (Metodologia.md §4), para la
-// hoja "Diccionario" del Excel -- quien reciba data.xlsx suelto, sin este
-// repo a la mano, necesita saber qué significa cada campo.
+// Descripción de cada columna de la hoja "Precios" del Excel (Metodologia.md
+// §4) -- quien reciba data.xlsx suelto, sin este repo a la mano, necesita
+// saber qué significa cada campo. Los nombres coinciden con docs/data.json
+// salvo cantidad_min/cantidad_max, que en el Excel reemplazan a
+// cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
+// guardarExcel). Duplicado idéntico en scripts/extract.js; mantener ambas
+// copias en sync si se edita.
 const DICCIONARIO = [
   ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
   ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
@@ -67,14 +71,12 @@ const DICCIONARIO = [
   ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
   ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
   ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
-  ['cantidad', 'Cantidad comprometida en el contrato (no lo entregado realmente). En contratos "por monto" se deriva de subtotal/precio_unitario.'],
-  ['cantidad_minima', 'Cantidad mínima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
-  ['cantidad_maxima', 'Cantidad máxima del rango, solo en contratos Abierto. Vacía en Cerrado o "por monto".'],
-  ['valor', 'precio_unitario × cantidad (o subtotal directo). Referencia de un registro individual -- no sumar entre muchos registros (ver Metodologia.md §5.5).'],
-  ['valor_minimo', 'Piso de exposición contractual garantizado. Usar este campo (o valor_maximo) para sumas/promedios agregados, nunca "valor".'],
-  ['valor_maximo', 'Techo de exposición contractual posible. En contratos Cerrado es igual a valor_minimo (no hay rango que representar).'],
+  ['cantidad_min', 'Cantidad mínima comprometida en el contrato (no lo entregado realmente). Igual a cantidad_max cuando el contrato no tiene rango genuino -- Cerrado, o "por monto" derivado de subtotal/precio_unitario -- y solo difiere de cantidad_max en contratos Abierto con rango real.'],
+  ['cantidad_max', 'Cantidad máxima comprometida en el contrato. Igual a cantidad_min cuando no hay rango genuino (ver cantidad_min).'],
+  ['valor_minimo', 'Piso de exposición contractual garantizado (precio_unitario × cantidad_min, o subtotal directo). Igual a valor_maximo cuando no hay rango genuino.'],
+  ['valor_maximo', 'Techo de exposición contractual posible (precio_unitario × cantidad_max, o subtotal directo). Igual a valor_minimo cuando no hay rango genuino -- usar cualquiera de los dos (nunca sumar ambos) para sumas/promedios agregados (Metodologia.md §5.5).'],
   ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
-  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma.'],
+  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
   ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
   ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
 ];
@@ -175,26 +177,39 @@ function buscarEnCompendioLocal(producto, compendio) {
   return mejorScore >= 2 ? { clave: mejorClave, score: mejorScore } : null;
 }
 
-// cantidad_minima/cantidad_maxima se colapsan en la columna cantidad para el
-// Excel (número si es cantidad fija, rango "mín–máx" si es contrato abierto)
-// -- ver la misma lógica en scripts/extract.js. docs/data.json conserva los
-// tres campos por separado.
-function formatearCantidad(r) {
-  if (r.cantidad_minima != null && r.cantidad_maxima != null && r.cantidad_minima !== r.cantidad_maxima) {
-    return `${r.cantidad_minima}–${r.cantidad_maxima}`;
-  }
-  return r.cantidad;
-}
-
+// cantidad_minima/cantidad_maxima y valor_minimo/valor_maximo ya vienen
+// siempre poblados en docs/data.json (iguales entre sí cuando el contrato no
+// tiene rango genuino, ver extract.js buildRegistro) -- no hace falta
+// colapsarlos a una sola columna. Solo se renombran cantidad_minima/
+// cantidad_maxima a cantidad_min/cantidad_max (más cortos) para las columnas
+// del Excel; no hay columna `valor` suelta porque sería idéntica a
+// valor_maximo en el 100% de los casos -- misma lógica en scripts/extract.js.
 function guardarExcel(outPath, resultados) {
-  const filas = resultados.map(r => {
-    const { cantidad_minima, cantidad_maxima, ...resto } = r;
-    return {
-      ...resto,
-      cantidad: formatearCantidad(r),
-      grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
-    };
-  });
+  const filas = resultados.map(r => ({
+    codigo_contrato: r.codigo_contrato,
+    num_contrato: r.num_contrato,
+    clave: r.clave,
+    clave_fuente: r.clave_fuente,
+    cve_cucop: r.cve_cucop,
+    producto: r.producto,
+    tipo_insumo: r.tipo_insumo,
+    grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
+    procedimiento: r.procedimiento,
+    tipo_procedimiento: r.tipo_procedimiento,
+    tipo_contrato: r.tipo_contrato,
+    proveedor: r.proveedor,
+    institucion: r.institucion,
+    unidad_medida: r.unidad_medida,
+    precio_unitario: r.precio_unitario,
+    cantidad_min: r.cantidad_minima,
+    cantidad_max: r.cantidad_maxima,
+    valor_minimo: r.valor_minimo,
+    valor_maximo: r.valor_maximo,
+    fecha_firma_contrato: r.fecha_firma_contrato,
+    fecha_fallo: r.fecha_fallo,
+    fecha_inicio_contrato: r.fecha_inicio_contrato,
+    fecha_fin_contrato: r.fecha_fin_contrato,
+  }));
   const ws = XLSX.utils.json_to_sheet(filas);
   const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
   wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];

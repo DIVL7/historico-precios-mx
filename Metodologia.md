@@ -87,11 +87,9 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 | `proveedor` | "Proveedor o contratista" | |
 | `institución` | "Siglas de la Institución" (CSV) | En compras consolidadas puede no corresponder a la institución que realmente contrató cada renglón — ver `Limitaciones.md` |
 | `precio_unitario` | "Precio unitario sin impuestos" (`detallepartidas`), recalculado si es inconsistente con el subtotal — ver §5.3 | |
-| `cantidad` | `cantidad_maxima ?? cantidad ?? cantidad_minima`, o derivada de `subtotal / precio_unitario` si las tres vienen vacías — ver §5.3.1 | Usado para `valor`. Es el compromiso contractual, no el volumen entregado |
-| `cantidad_minima` / `cantidad_maxima` | "Cantidad mínima" / "Cantidad máxima" (`detallepartidas`) | `cantidad_maxima` solo viene poblada en contratos tipo "abierto" |
-| `tipo_contrato` | "Tipo de contrato" (CSV) | `Abierto` / `Cerrado`, valor oficial de la fuente — no se infiere de si `cantidad_maxima` viene poblada, para tener una sola fuente de verdad sin ambigüedad al integrar ambos esquemas de cantidad en la misma tabla |
-| `valor` | `precio_unitario × cantidad`, o `subtotal` directo si no se puede calcular así — ver §5.3.1 | Número único de referencia para ver un registro individual — ver §5.5 antes de sumarlo entre muchos registros |
-| `valor_minimo` / `valor_maximo` | `precio_unitario × cantidad_minima` / `precio_unitario × cantidad_maxima`, o `subtotal` directo si no se puede calcular así — ver §5.3.1 | Piso y techo de exposición contractual — ver §5.5 |
+| `cantidad_minima` / `cantidad_maxima` | "Cantidad mínima" / "Cantidad máxima" (`detallepartidas`) cuando hay rango genuino; si no, ambas colapsan al mismo valor único (`cantidad_maxima ?? cantidad ?? cantidad_minima` de la fuente, o derivado de `subtotal / precio_unitario` — ver §5.3.1) | Siempre pobladas con el mismo valor entre sí, salvo en contratos "Abierto" con rango real (divergen) o servicios/medicina magistral sin ninguna cantidad reportada (`null` en ambas — ver `Limitaciones.md`) |
+| `tipo_contrato` | "Tipo de contrato" (CSV) | `Abierto` / `Cerrado`, valor oficial de la fuente — no se infiere de si `cantidad_maxima` difiere de `cantidad_minima`, para tener una sola fuente de verdad sin ambigüedad al integrar ambos esquemas de cantidad en la misma tabla |
+| `valor_minimo` / `valor_maximo` | `precio_unitario × cantidad_minima` / `precio_unitario × cantidad_maxima`, o `subtotal` directo si no se puede calcular así — ver §5.3.1 | Piso y techo de exposición contractual, siempre poblados y coincidentes entre sí salvo en "Abierto" con rango real — ver §5.5 |
 | `fecha_firma_contrato` | "Fecha firma contrato" (CSV) | Cuándo se formalizó el contrato |
 | `fecha_fallo` | "Fecha de fallo" (CSV) | Cuándo se determinó el precio ganador (adjudicación) — normalmente precede a la firma |
 | `fecha_inicio_contrato` / `fecha_fin_contrato` | "Fecha de inicio del contrato" / "Fecha de fin del contrato" (CSV) | Ventana de vigencia del contrato — cuándo ese precio estuvo activo para entregas, distinto de cuándo se firmó |
@@ -107,7 +105,7 @@ Fuente: `data/raw/cucop.xlsx`. Para toda entrada de la partida 25301, la columna
 3. Agrupar filas por expediente (hash extraído de `Dirección del anuncio`).
 4. Por cada expediente, navegar al detalle y localizar cada contrato dentro de la tabla paginada de resultados.
 5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`). Un contrato que pasó el filtro del paso 2 puede traer aquí líneas de **otras partidas** (compra mixta: radiofármacos, material de curación, papelería, etc.) — se descarta cualquier ítem cuyo `cve_cucop` no empiece con `25301`, para no marcarlo como medicamento solo por venir en el mismo contrato. (Detectado el 2026-08-09: sin este segundo filtro, ~32% del dataset — 7,989 de 24,909 registros — eran contaminación de otras partidas; se limpió retroactivamente y se corrigió el pipeline.)
-6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor`, y construir el registro final.
+6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final.
 7. Escribir a `docs/data.json` con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
 
 ### 5.2 Asignación y validación de clave
@@ -128,26 +126,22 @@ La clave ganadora de cada grupo se propaga a todas sus instancias, así el mismo
 
 El subtotal reportado por la API es consistente con `cantidad_minima` en todos los casos verificados. El pipeline recalcula `precio_unitario = subtotal / cantidad_minima` y solo conserva el valor original de la API cuando coincide (±1%); cada corrección queda registrada en `docs/data.calidad.json`.
 
-### 5.3.1 Derivación de `cantidad` y `valor` en contratos "por monto"
+### 5.3.1 Derivación de `cantidad_minima`/`cantidad_maxima` y `valor_minimo`/`valor_maximo` en contratos "por monto"
 
-Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad`, `cantidad_minima` y `cantidad_maxima` vienen vacíos desde el origen (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" visible en el detalle del contrato en el sitio — que permite derivar dos cosas:
+Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta de `detallepartidas`: el compromiso contractual es un techo de gasto, no una cantidad de piezas, así que `cantidad_minima`/`cantidad_maxima` (y la cantidad de origen que las respalda) vienen vacíos desde el origen (no es un hueco de la extracción). Sí trae `subtotal` — el "Monto de la Oferta" visible en el detalle del contrato en el sitio — que permite derivar dos cosas:
 
-- **`cantidad`** (informativa): `subtotal / precio_unitario`, redondeada al entero más cercano, solo cuando las tres vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
-- **`valor` / `valor_minimo` / `valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de `cantidad`. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar `cantidad` tampoco, pero `valor` sí se rescata de `subtotal`.
+- **`cantidad_minima`/`cantidad_maxima`** (informativa, ambas colapsan al mismo valor): `subtotal / precio_unitario`, redondeada al entero más cercano, solo cuando las vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
+- **`valor_minimo`/`valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de la cantidad derivada. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar ninguna cantidad tampoco (`cantidad_minima`/`cantidad_maxima` quedan en `null`, único caso donde eso ocurre — ver `Limitaciones.md`), pero `valor_minimo`/`valor_maximo` sí se rescatan de `subtotal`.
 
 ### 5.4 Reporte de calidad
 
-Cada corrida de `extract.js` genera `docs/data.calidad.json`: top 20 valores más altos (para detectar outliers), registros con precio o cantidad en cero/negativo, y el detalle de cada corrección de `precio_unitario`.
+Cada corrida de `extract.js` genera `docs/data.calidad.json`: top 20 valores más altos (por `valor_maximo`, para detectar outliers), registros con precio o cantidad en cero/negativo, y el detalle de cada corrección de `precio_unitario`.
 
 ### 5.5 Integración de volumen y precio entre contratos "Abierto" y "Cerrado"
 
 Los dos tipos de contrato representan la cantidad de forma distinta (§4): "Cerrado" trae un solo número comprometido, "Abierto" trae un rango mín/máx. Mezclarlos sin criterio en una suma agregada mezclaría un "monto real comprometido" (Cerrado) con un "techo de exposición posible" (Abierto) como si fueran la misma clase de número.
 
-La integración se resuelve con tres campos, cada uno con un propósito distinto:
-
-- **`valor`** — número único (`precio_unitario × cantidad`, con `cantidad` = techo en Abierto). Sirve para ver un registro individual, no para sumar entre muchos.
-- **`valor_minimo` / `valor_maximo`** — piso y techo de exposición contractual, bien definidos para ambos tipos: en "Cerrado" son iguales entre sí (no hay rango que representar); en "Abierto" divergen. **Cualquier suma o promedio agregado debe usar uno de estos dos, no `valor`** — `valor_minimo` para el gasto garantizado, `valor_maximo` para el techo de exposición.
-- **`tipo_contrato`** — permite segmentar/filtrar antes de agregar, cuando se necesita analizar cada esquema por separado en vez de combinarlos.
+La integración se resuelve con `cantidad_minima`/`cantidad_maxima` y `valor_minimo`/`valor_maximo`, siempre poblados (salvo el caso de servicios/medicina magistral sin ninguna cantidad, §5.3.1): en "Cerrado" cada par cae al mismo número (no hay rango que representar); en "Abierto" divergen. No existe un campo `cantidad`/`valor` suelto de "número único" -- se eliminó por ser redundante (siempre igual a `cantidad_maxima`/`valor_maximo`) y por invitar a sumarlo entre registros sin distinguir piso de techo. **Cualquier suma o promedio agregado debe usar explícitamente `valor_minimo` (gasto garantizado) o `valor_maximo` (techo de exposición)**, nunca mezclar ambos. `tipo_contrato` permite segmentar/filtrar antes de agregar, cuando se necesita analizar cada esquema por separado en vez de combinarlos.
 
 ---
 
@@ -165,7 +159,7 @@ Todo el filtrado del dashboard ocurre en JavaScript en el navegador del usuario 
 
 La tabla principal muestra solo las columnas de consulta más frecuente (código y número de contrato, institución, proveedor, clave CUCoP, producto, grupo terapéutico); el resto de los campos del modelo (§4) — clave del Compendio, precio, cantidad, valores, fechas — se consulta por registro en el modal "Detalle".
 
-El modal muestra cantidad y valor de forma condicional: si el contrato tiene rango genuino (`cantidad_minima != cantidad_maxima`, ver §5.5), muestra los 4 valores por separado (cantidad mínima/máxima, valor mínimo/máximo); si no, solo un par Cantidad/Valor. Validado contra el dataset completo que ambos campos (cantidad y valor) coinciden en si hay rango o no, salvo un caso trivial (`precio_unitario` en 0, donde el rango de valor colapsa a 0–0 aunque la cantidad sí tenga rango real) — no hay casos donde el valor tenga rango pero la cantidad no.
+El modal muestra cantidad y valor de forma condicional: si el contrato tiene rango genuino (`cantidad_minima != cantidad_maxima`, ver §5.5), muestra los 4 campos por separado (cantidad mínima/máxima, valor mínimo/máximo); si no, solo un par Cantidad/Valor (tomado de `cantidad_maxima`/`valor_maximo`, idénticos a `cantidad_minima`/`valor_minimo` en ese caso). Validado contra el dataset completo que ambos pares coinciden en si hay rango o no, salvo un caso trivial (`precio_unitario` en 0, donde el rango de valor colapsa a 0–0 aunque la cantidad sí tenga rango real) — no hay casos donde el valor tenga rango pero la cantidad no.
 
 **Frecuencia de actualización:** pendiente de definir — el cron de GitHub Actions queda configurado pero ajustable (candidatos: semanal, diaria, manual).
 
