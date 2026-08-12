@@ -12,10 +12,12 @@
 //      contrato -- la fuente más confiable que existe, se usa tal cual.
 //   2. Algún miembro con clave vía CUCoP que además AUTOVERIFICA: la dosis/
 //      presentación que ese código declara en el propio catálogo CUCoP
-//      coincide (>=2 números) con lo que el contrato describe. Se comprobó
-//      que las instituciones a veces usan un cve_cucop que no corresponde a
-//      lo que compraron (Metodologia.md §7/§9.1, casos Abacavir, Raltegravir,
-//      Agua Inyectable) -- sin esto se arrastraría la clave equivocada.
+//      coincide (>=2 números) con lo que el contrato describe -- o, si
+//      cualquiera de los dos lados no trae ningún número que comparar, se
+//      confía por defecto (no hay evidencia de que esté mal, ver
+//      cucopEsValido). Se comprobó que las instituciones a veces usan un
+//      cve_cucop que no corresponde a lo que compraron -- sin el chequeo
+//      cuando SÍ hay números que comparar, se arrastraría la clave equivocada.
 //   3. Compendio Nacional local (data/compendio_medicamentos.json), buscando
 //      por nombre -- gratis, sin red.
 //   4. Si nada de lo anterior aplica: cualquier clave vía CUCoP que NO haya
@@ -110,14 +112,18 @@ function esFuenteConfiable(fuente) {
 
 // La clave recuperada vía CUCoP solo se confía si la dosis/presentación que
 // el propio catálogo declara para ese código coincide con lo que el contrato
-// describe. Si el contrato no trae ningún número no se puede verificar, así
-// que se confía por defecto (no hay evidencia de que esté mal).
+// describe. Si cualquiera de los dos lados (contrato o la propia ficha CUCoP)
+// no trae ningún número, no hay nada que comparar -- se confía por defecto en
+// vez de tratarlo como 0 coincidencias (que penalizaría fichas CUCoP sin
+// dosis en su descripción, ej. "EMICIZUMAB" a secas, sin ser evidencia real
+// de que el código esté mal citado).
 function cucopEsValido(producto, cveCucop, cucopMap) {
   const entry = cucopMap[cveCucop];
   if (!entry) return false;
   const numsProducto = extraerNumeros(producto);
-  if (numsProducto.length === 0) return true;
-  return contarCoincidenciasNumericas(numsProducto, extraerNumeros(entry.descripcion)) >= 2;
+  const numsEntry = extraerNumeros(entry.descripcion);
+  if (numsProducto.length === 0 || numsEntry.length === 0) return true;
+  return contarCoincidenciasNumericas(numsProducto, numsEntry) >= 2;
 }
 
 function buscarEnCompendioLocal(producto, compendio) {
@@ -171,12 +177,21 @@ function main() {
   for (const [, indices] of grupos.entries()) {
     const representante = indices.map(i => data[i].producto).sort((a, b) => b.length - a.length)[0];
 
+    // Un registro sin fuente confiable asentada (fuente null, o 'cucop' que no
+    // autoverificó en una corrida anterior) puede haber quedado vaciado a
+    // null/null en el pasado -- eso borra el candidato guardado en `clave`,
+    // así que reintentar necesita volver a mirar el catálogo CUCoP en fresco
+    // por `cve_cucop`, no confiar en `data[i].clave` (que ya está en null).
     const miembros = indices.map(i => {
-      const fuente = inferirFuente(data[i], cucopMap);
-      const valido = esFuenteConfiable(fuente) ? true
-        : fuente === 'cucop' ? cucopEsValido(data[i].producto, data[i].cve_cucop, cucopMap)
-        : false;
-      return { i, fuente, valido };
+      const registro = data[i];
+      const fuente = inferirFuente(registro, cucopMap);
+      if (esFuenteConfiable(fuente)) return { i, clave: registro.clave, fuente, valido: true };
+      const cucopEntry = registro.cve_cucop && cucopMap[registro.cve_cucop];
+      const claveCucop = cucopEntry && cucopEntry.clave;
+      if (claveCucop && cucopEsValido(registro.producto, registro.cve_cucop, cucopMap)) {
+        return { i, clave: claveCucop, fuente: 'cucop', valido: true };
+      }
+      return { i, clave: null, fuente, valido: false };
     });
 
     // Prioridad 1: miembro con clave de la descripción del contrato -- la
@@ -188,12 +203,12 @@ function main() {
 
     let claveGanadora = null, fuenteGanadora = null;
     if (conDescripcion) {
-      claveGanadora = data[conDescripcion.i].clave;
+      claveGanadora = conDescripcion.clave;
       fuenteGanadora = 'descripcion';
       contadores.por_descripcion++;
     } else if (conConfiable) {
-      claveGanadora = data[conConfiable.i].clave;
-      fuenteGanadora = data[conConfiable.i].clave_fuente !== undefined ? data[conConfiable.i].clave_fuente : conConfiable.fuente;
+      claveGanadora = conConfiable.clave;
+      fuenteGanadora = conConfiable.fuente;
       contadores.por_cucop_valido++;
     } else {
       const local = buscarEnCompendioLocal(representante, compendio);

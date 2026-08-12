@@ -54,7 +54,11 @@ const DELAY_BETWEEN_CONTRATOS_MS = 400;
 const DELAY_BETWEEN_EXPEDIENTES_MS = 800;
 const CONTRATO_HARD_TIMEOUT_MS = 25000; // nunca dejar que un solo contrato cuelgue el pipeline (sube un poco vs. antes: ahora la búsqueda es exhaustiva y puede recorrer más páginas)
 const MAX_INTENTOS = 3; // tras esto, un expediente con error se marca como fallo permanente y ya no se reintenta solo
-const CHECKPOINT_CADA_N_EXPEDIENTES = 10; // escritura incremental a disco, para no perder progreso si el proceso se corta
+// Bajado de 10 a 2 (2026-08-10): en corridas largas contra este sitio, las
+// ventanas de proceso en background pueden cortarse tras procesar muy pocos
+// expedientes (se observaron cortes con 0-7 expedientes procesados) -- con
+// un checkpoint cada 10, esas ventanas cortas no llegaban a guardar nada.
+const CHECKPOINT_CADA_N_EXPEDIENTES = 2;
 
 function withTimeout(promise, ms, label) {
   return Promise.race([
@@ -64,7 +68,7 @@ function withTimeout(promise, ms, label) {
 }
 
 function parseArgs(argv) {
-  const args = { input: null, limit: Infinity, out: path.join(__dirname, '..', 'docs', 'data.json'), concurrency: 1 };
+  const args = { input: null, limit: Infinity, out: path.join(__dirname, '..', 'docs', 'data.json'), concurrency: 1, reset: false };
   const rest = argv.slice(2);
   args.input = rest.find(a => !a.startsWith('--'));
   const limitIdx = rest.indexOf('--limit');
@@ -73,6 +77,19 @@ function parseArgs(argv) {
   if (outIdx !== -1) args.out = rest[outIdx + 1];
   const concIdx = rest.indexOf('--concurrency');
   if (concIdx !== -1) args.concurrency = parseInt(rest[concIdx + 1], 10);
+  args.reset = rest.includes('--reset');
+
+  // Identifica de qué CSV viene una corrida -- se guarda como `origen` en
+  // cada registro (ver buildRegistro). IMPORTANTE: el prefijo de
+  // codigo_contrato (p. ej. "C-2025-...") NO sirve para esto -- es el año en
+  // que el gobierno numeró el contrato, no el archivo de donde se scrapeó; un
+  // contrato vigente multi-año puede tener prefijo de un año y venir
+  // legítimamente del CSV de otro. `origen` es la única fuente de verdad
+  // confiable sobre qué CSV produjo cada registro (usado por --reset abajo).
+  if (args.input) {
+    const m = path.basename(args.input).match(/(\d{4})/);
+    args.origen = m ? m[1] : path.basename(args.input, path.extname(args.input));
+  }
   return args;
 }
 
@@ -254,7 +271,7 @@ async function extractContrato(page, hash, contrato) {
   }
 }
 
-function buildRegistro(contrato, item, compendio, cucopMap, stats) {
+function buildRegistro(contrato, item, compendio, cucopMap, stats, origen) {
   // Todo lo que llega aquí ya viene de un contrato con Partida específica 25301
   // (medicamentos), así que se conserva aunque no traiga la clave del compendio
   // embebida en la descripción -- solo algunas instituciones (grandes/federales)
@@ -391,6 +408,11 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
 
   return {
     codigo_contrato: contrato.codigoContrato,
+    // De qué CSV vino este registro (p. ej. "2025", "2026") -- NO se puede
+    // derivar del prefijo de codigo_contrato, ver nota en parseArgs(). Es la
+    // clave que usa --reset para poder borrar/reintentar un origen sin
+    // arriesgar los demás.
+    origen,
     num_contrato: contrato.numContrato,
     clave,
     clave_fuente: claveFuente,
@@ -421,7 +443,7 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats) {
   };
 }
 
-async function processExpedienteGroup(browser, hash, contratos, compendio, cucopMap, stats, ctx) {
+async function processExpedienteGroup(browser, hash, contratos, compendio, cucopMap, stats, ctx, origen) {
   const url = `https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/${hash}/procedimiento`;
   const resultados = [];
   const errores = [];
@@ -437,12 +459,27 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
         res => res.url().includes(`/whitney/sitiopublico/expedientes/${hash}?id_proceso=procedimiento`) && res.status() === 200,
         { timeout: NAV_TIMEOUT }
       );
+      // Si page.goto falla antes de que waitDetalle resuelva, esta promesa
+      // queda abandonada; sin este catch, un rechazo tardío (timeout) se
+      // vuelve una unhandled rejection que tumba TODO el proceso Node, no
+      // solo este intento -- verificado en vivo el 2026-08-10.
+      waitDetalle.catch(() => {});
       await page.goto(url, { waitUntil: 'load', timeout: NAV_TIMEOUT });
       await waitDetalle;
       await page.waitForTimeout(800); // margen para que Angular renderice la tabla tras la respuesta
       loaded = true;
     } catch (e) {
-      if (intento === 1) errores.push({ hash, error: 'navegacion_fallida', detalle: String(e) });
+      // Un error POR CONTRATO, no uno solo a nivel expediente: calcularPendientes
+      // indexa reintentos por hash|codigoContrato, así que un error sin
+      // codigoContrato nunca hace match con ningún contrato real -- el
+      // expediente jamás llegaba a "fallo permanente" y se reintentaba para
+      // siempre en cada corrida, sin importar cuántas veces fallara la
+      // navegación (verificado en vivo el 2026-08-10).
+      if (intento === 1) {
+        for (const contrato of contratos) {
+          errores.push({ hash, codigoContrato: contrato.codigoContrato, origen, error: 'navegacion_fallida', detalle: String(e) });
+        }
+      }
     }
   }
 
@@ -454,7 +491,7 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
       const res = await withTimeout(extractContrato(page, hash, contrato), CONTRATO_HARD_TIMEOUT_MS, contrato.codigoContrato)
         .catch(e => ({ error: 'excepcion', detalle: String(e) }));
       if (res.error) {
-        errores.push({ hash, codigoContrato: contrato.codigoContrato, ...res });
+        errores.push({ hash, codigoContrato: contrato.codigoContrato, origen, ...res });
         continue;
       }
       for (const item of res.data) {
@@ -468,7 +505,7 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
         // (~32% del dataset en la corrida de 2026-08-09, detectado por cve_cucop
         // fuera de 25301-*).
         if (!item.cve_cucop || !String(item.cve_cucop).startsWith('25301')) continue;
-        const registro = buildRegistro(contrato, item, compendio, cucopMap, stats);
+        const registro = buildRegistro(contrato, item, compendio, cucopMap, stats, origen);
         if (registro) resultados.push(registro);
       }
     }
@@ -487,10 +524,10 @@ function guardarCheckpoint(outPath, errPath, resultados, errores) {
   fs.writeFileSync(errPath, JSON.stringify(errores, null, 2), 'utf8');
 }
 
-async function worker(queue, browser, compendio, cucopMap, stats, ctx, allResultados, allErrores, outPath, errPath) {
+async function worker(queue, browser, compendio, cucopMap, stats, ctx, allResultados, allErrores, outPath, errPath, origen) {
   while (queue.length) {
     const [hash, contratos] = queue.shift();
-    const { resultados, errores } = await processExpedienteGroup(browser, hash, contratos, compendio, cucopMap, stats, ctx);
+    const { resultados, errores } = await processExpedienteGroup(browser, hash, contratos, compendio, cucopMap, stats, ctx, origen);
     allResultados.push(...resultados);
     allErrores.push(...errores);
 
@@ -574,9 +611,10 @@ function construirReporteCalidad(resultados, stats) {
 async function main() {
   const args = parseArgs(process.argv);
   if (!args.input) {
-    console.error('Uso: node scripts/extract.js <archivo.csv> [--limit N] [--out archivo.json] [--concurrency N]');
+    console.error('Uso: node scripts/extract.js <archivo.csv> [--limit N] [--out archivo.json] [--concurrency N] [--reset]');
     process.exit(1);
   }
+  console.log(`Origen de esta corrida: "${args.origen}"`);
 
   console.log(`Cargando compendio de medicamentos...`);
   const compendio = loadCompendio();
@@ -594,8 +632,20 @@ async function main() {
   console.log(`Agrupadas en ${groups.size} expedientes.`);
 
   const errPath = args.out.replace(/\.json$/, '.errores.json');
-  const { resultados: resultadosPrevios, errores: erroresPrevios } = cargarEstadoPrevio(args.out, errPath);
+  let { resultados: resultadosPrevios, errores: erroresPrevios } = cargarEstadoPrevio(args.out, errPath);
   console.log(`Estado previo: ${resultadosPrevios.length} registros, ${erroresPrevios.length} errores acumulados.`);
+
+  if (args.reset) {
+    const antesR = resultadosPrevios.length;
+    const antesE = erroresPrevios.length;
+    // Solo toca registros/errores marcados con ESTE origen -- cualquier otro
+    // origen (u origen ausente, dato legado) queda intacto sin importar su
+    // codigo_contrato. Ver nota en parseArgs() sobre por qué no se usa el
+    // prefijo de codigo_contrato para esto.
+    resultadosPrevios = resultadosPrevios.filter(r => r.origen !== args.origen);
+    erroresPrevios = erroresPrevios.filter(e => e.origen !== args.origen);
+    console.log(`--reset: descartados ${antesR - resultadosPrevios.length} registros y ${antesE - erroresPrevios.length} errores con origen "${args.origen}" (otros orígenes intactos).`);
+  }
 
   const { pendientes, saltados, fallosPermanentes } = calcularPendientes(groups, resultadosPrevios, erroresPrevios);
   console.log(`${saltados} expedientes ya resueltos (se saltan), ${fallosPermanentes} con fallo permanente (>= ${MAX_INTENTOS} intentos, se saltan), ${pendientes.size} pendientes de procesar. Concurrencia: ${args.concurrency}`);
@@ -616,7 +666,7 @@ async function main() {
   const ctx = { done: 0, total: queue.length };
 
   const workers = Array.from({ length: args.concurrency }, () =>
-    worker(queue, browser, compendio, cucopMap, stats, ctx, resultados, errores, args.out, errPath)
+    worker(queue, browser, compendio, cucopMap, stats, ctx, resultados, errores, args.out, errPath, args.origen)
   );
   await Promise.all(workers);
 

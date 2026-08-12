@@ -8,7 +8,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 1. Grupo terapéutico: falta en 30.3% de los registros (5,126 de 16,911)
+## 1. Grupo terapéutico: falta en 29.2% de los registros (4,939 de 16,911)
 
 **Por qué pasa:** para asignar `grupo_terapeutico` hace falta la `clave` oficial del Compendio Nacional (CNIS), y que esa clave exista en el archivo del Compendio descargado. Dos causas:
 
@@ -26,8 +26,10 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Por qué pasa:** cuando la institución no cita la clave directamente en la descripción del contrato, el pipeline la recupera vía el código `cve_cucop` del catálogo CUCoP. Esa recuperación puede fallar cuando la institución usó un código genérico o de la dosis/presentación equivocada — confirmado contra la respuesta cruda de la API (no es un error de la extracción, viene así desde el origen).
 
 **Cobertura de las dos capas de verificación en producción** (ver Metodologia.md §5.2):
-- De los registros con clave vía CUCoP, **38% no pasan** la autoverificación contra la dosis que ese código declara.
-- De los **6,015 productos canónicos** del dataset, **2,367 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- De los **6,015 productos canónicos** del dataset, **2,326 quedan sin resolver** tras el sanity check completo (sin clave de la descripción, sin CUCoP válido, sin match en el Compendio local) — documentados en `docs/data.correcciones.json`, sin inventar una clave.
+- La autoverificación de CUCoP confía por defecto cuando el contrato o la propia ficha CUCoP+ no traen ningún número de dosis que comparar (ver Metodologia.md §5.2) — evita descartar claves correctas solo porque el catálogo no describe la dosis (ej. `TOCILIZUMAB`, `IVERMECTINA`, vacunas), sin dejar de rechazar los casos donde sí hay números y no coinciden (evidencia real de `cve_cucop` mal citado).
+
+**Números de dosis mal formateados en el origen** (no corregido automáticamente): algunas descripciones traen la dosis partida por un espacio de más — ej. `"EMICIZUMAB 1 50 MG"` en vez de `"EMICIZUMAB 150 MG"`, confirmado que así viene desde el origen (no es un artefacto de la limpieza de prefijos del pipeline). Esto rompe cualquier comparación numérica (autoverificación de CUCoP, agrupamiento canónico, búsqueda en el Compendio local) aunque el resto del dato esté bien. No se intenta recomponer el número automáticamente — no hay forma confiable de distinguir "150" partido en "1"+"50" de dos números genuinamente separados (ej. "2 100 MG" sí puede significar "2 piezas de 100 mg"), y adivinar mal introduciría errores peores que dejar la clave sin resolver.
 
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,600 vs. 1,895) — evaluado pero no automatizado, ver punto 3.

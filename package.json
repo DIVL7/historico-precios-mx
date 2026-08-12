@@ -8,7 +8,9 @@
     "build:cucop": "node scripts/build-cucop.js",
     "download": "node scripts/download-csv.js",
     "extract": "node scripts/extract.js",
-    "validate": "node scripts/validar-claves.js"
+    "run-extract": "bash scripts/run-extract.sh",
+    "validate": "node scripts/validar-claves.js",
+    "audit": "node scripts/audit-dataset.js"
   },
   "keywords": [],
   "author": "",

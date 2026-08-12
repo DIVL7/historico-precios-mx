@@ -30,7 +30,7 @@
   .header-inner {
     max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 14px;
   }
-  header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; }
+  header h1 { margin: 0; font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   header p { margin: 2px 0 0; font-size: 0.78rem; color: var(--muted); }
 
   main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
@@ -69,22 +69,81 @@
 
   .result-count { font-size: 0.8rem; color: var(--muted); margin: 0 0 10px; }
 
-  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); }
-  table { width: 100%; min-width: 900px; border-collapse: collapse; }
+  /* max-height + overflow-y:auto real (no solo el auto implícito que fuerza
+     overflow-x) es lo que hace falta para que el thead sticky tenga un
+     contenedor con scroll de verdad al que pegarse -- sin esto, .table-wrap
+     nunca tiene overflow interno (crece con el contenido) y el header
+     simplemente se va de la pantalla junto con todo lo demás. */
+  .table-wrap {
+    overflow-x: auto; overflow-y: auto; max-height: 70vh;
+    border: 1px solid var(--border); border-radius: 4px; background: var(--panel);
+  }
+  /* border-collapse: collapse rompe position: sticky en <th> en todos los
+     motores -- separate + spacing 0 preserva el look de tabla con líneas
+     mientras deja el header realmente fijo al hacer scroll. */
+  table { width: 100%; min-width: 900px; border-collapse: separate; border-spacing: 0; }
   thead th {
     background: var(--panel); text-align: left; font-size: 0.68rem;
     text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted);
     border-bottom: 2px solid var(--accent);
-    position: sticky; top: 0; white-space: nowrap;
+    position: sticky; top: 0; white-space: nowrap; z-index: 10;
   }
-  thead th.static { padding: 9px 12px; }
-  .sort-btn {
-    all: unset; box-sizing: border-box; display: block; width: 100%;
-    padding: 9px 12px; cursor: pointer; font: inherit; color: inherit;
-    text-transform: inherit; letter-spacing: inherit; white-space: inherit;
-    user-select: none;
+  thead th.static { padding: 0; }
+  /* El ícono vive DENTRO del mismo elemento clickeable que el texto (el botón
+     de orden, o un span equivalente para columnas sin orden) -- una sola área
+     de hover/foco, no dos controles separados compitiendo por el mismo cell. */
+  .th-hoverable {
+    all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 6px;
+    width: 100%; padding: 9px 12px; cursor: pointer; font: inherit; color: inherit;
+    text-transform: inherit; letter-spacing: inherit; white-space: inherit; user-select: none;
   }
-  .sort-btn:hover { background: var(--accent-light); color: var(--accent); }
+  .th-hoverable:hover { background: var(--accent-light); color: var(--accent); }
+  /* La columna sin orden usa un <span tabindex="0"> (no <button>) como
+     objetivo de foco -- el span no está en el selector global de
+     button/input/select/a:focus-visible, necesita su propia regla. */
+  .th-hoverable:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  /* Ícono "info" -- hover/foco del elemento completo (th-hoverable) muestra
+     qué es el campo sin saturar la tabla con texto largo. Tooltip se abre
+     hacia abajo (nunca arriba) para no quedar recortado por el overflow del
+     table-wrap. */
+  .info-icon {
+    position: relative; flex-shrink: 0; display: inline-flex; align-items: center;
+    justify-content: center; width: 14px; height: 14px; color: var(--muted); border-radius: 50%;
+  }
+  .th-hoverable:hover .info-icon, .th-hoverable:focus-visible .info-icon { color: var(--accent); }
+  .info-icon svg { width: 100%; height: 100%; display: block; }
+  .info-icon .tooltip {
+    position: absolute; top: calc(100% + 7px); left: 0;
+    background: var(--text); color: var(--bg); font-size: 0.72rem; font-weight: 400;
+    text-transform: none; letter-spacing: normal; white-space: normal;
+    width: max-content; max-width: 220px; padding: 7px 10px; border-radius: 4px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22); text-align: left; line-height: 1.4;
+    opacity: 0; visibility: hidden; pointer-events: none; z-index: 20;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .info-icon .tooltip { transition: opacity 0.12s ease; }
+  }
+  .th-hoverable:hover .tooltip, .th-hoverable:focus-visible .tooltip { opacity: 1; visibility: visible; }
+  /* El tooltip de la última columna (Detalle) se abre left:0 por default y se
+     sale del borde derecho real de la tabla -- eso no se ve (opacity:0) pero
+     sigue contando para el scrollWidth de .table-wrap, dejando un hueco en
+     blanco al scrollear hasta el final. Alinearlo a la derecha del ícono lo
+     mantiene dentro de los límites de la tabla. */
+  thead th:last-child .info-icon .tooltip { left: auto; right: 0; }
+  /* Variante standalone del ícono (fuera de un botón, ej. modal Detalle) --
+     ahí sí es su propio elemento enfocable/hoverable. */
+  .info-icon.standalone { cursor: help; }
+  .info-icon.standalone:hover, .info-icon.standalone:focus-visible { color: var(--accent); }
+  .info-icon.standalone:hover .tooltip, .info-icon.standalone:focus-visible .tooltip { opacity: 1; visibility: visible; }
+  /* Mismo problema que el de la última columna de la tabla, en vertical: el
+     tooltip del último campo del modal se abre hacia abajo y su caja (aunque
+     invisible) se sale del fondo del modal, sumando al scrollHeight y
+     forzando scroll interno aunque el contenido visible quepa. Se abre hacia
+     arriba en el último campo para quedarse dentro de los límites del modal. */
+  .modal-body dt:nth-last-of-type(-n+2) .tooltip { top: auto; bottom: calc(100% + 7px); }
+  .modal-body dt { display: flex; align-items: center; gap: 6px; }
+
   tbody td {
     padding: 9px 12px; font-size: 0.83rem; border-top: 1px solid var(--border);
     vertical-align: top; overflow-wrap: break-word;
@@ -130,7 +189,16 @@
     display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
     padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
   }
-  .modal-header h2 { margin: 0; font-size: 1rem; font-weight: 650; text-wrap: balance; }
+  /* Line-clamp evita que una descripción de producto extremadamente larga
+     (algunas superan 1000 caracteres, compras de varios fármacos en un solo
+     renglón) infle el modal más allá del viewport y fuerce scroll interno --
+     el texto completo sigue disponible vía el atributo title (tooltip nativo
+     al pasar el mouse) y en la columna Producto de la tabla, que no clampea. */
+  .modal-header h2 {
+    margin: 0; font-size: 1rem; font-weight: 650; text-wrap: balance;
+    display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .modal-close {
     background: none; border: 0; font-size: 1.1rem; line-height: 1; cursor: pointer;
     color: var(--muted); padding: 4px 8px; border-radius: 3px; flex-shrink: 0;
@@ -204,28 +272,59 @@ let lastFocusedEl = null;
 // detalleCampos) para no saturar la tabla con las ~19 columnas del dataset
 // completo (Metodologia.md §4).
 const columns = [
-  { key: 'codigo_contrato', label: 'Código de contrato' },
-  { key: 'num_contrato', label: 'Número de contrato' },
-  { key: 'institucion', label: 'Institución' },
-  { key: 'proveedor', label: 'Proveedor' },
-  { key: 'cve_cucop', label: 'Clave CUCoP' },
-  { key: 'producto', label: 'Producto' },
-  { key: 'grupo_terapeutico', label: 'Grupo terapéutico', sortable: false },
-  { key: 'detalle', label: 'Detalle', sortable: false },
+  { key: 'codigo_contrato', label: 'Código de contrato', info: 'Identificador único del contrato en Compras MX.' },
+  { key: 'num_contrato', label: 'Número de contrato', info: 'Número asignado por la institución compradora — formato libre, distinto del código de contrato.' },
+  { key: 'institucion', label: 'Institución', info: 'Institución de gobierno que reporta la compra. En compras consolidadas puede no ser quien contrató este renglón en particular.' },
+  { key: 'proveedor', label: 'Proveedor', info: 'Empresa o persona que vendió el medicamento.' },
+  { key: 'cve_cucop', label: 'Clave CUCoP', info: 'Clave del Clasificador Único de Contrataciones Públicas (partida 25301) reportada por Compras MX para este renglón.' },
+  { key: 'producto', label: 'Producto', info: 'Descripción del medicamento: nombre, dosis y presentación. Puede no venir directo del contrato — en algunos casos se completa con la ficha del catálogo oficial cuando la descripción original viene incompleta.' },
+  { key: 'grupo_terapeutico', label: 'Grupo terapéutico', sortable: false, info: 'Categoría terapéutica del Compendio Nacional CSG, asignada según la clave del medicamento. Vacío si no se pudo determinar la clave.' },
+  { key: 'detalle', label: 'Detalle', sortable: false, info: 'Abre precio, cantidad, fechas y el resto de los campos del registro completo.' },
 ];
+
+const INFO_ICON_SVG = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="4.9" r="0.9" fill="currentColor"/></svg>';
+let tooltipIdSeq = 0;
+
+// El tooltip visual (span.tooltip) va aria-hidden -- sin esto, un lector de
+// pantalla concatena su texto dentro del nombre accesible del elemento que lo
+// contiene (botón de orden, ej.), volviendo "Institución" en "Institución
+// Institución de gobierno que reporta la compra...". La descripción real se
+// expone aparte vía aria-describedby, que sí puede apuntar a contenido oculto.
+//
+// Embebido: vive dentro de un elemento ya enfocable (botón de orden) -- sin
+// tabindex propio, un control anidado dentro de otro rompería accesibilidad.
+// El caller debe agregar aria-describedby="{id}" al elemento contenedor.
+function infoIcon(text) {
+  const id = `tooltip-${++tooltipIdSeq}`;
+  return { id, html: `<span class="info-icon">${INFO_ICON_SVG}<span class="tooltip" id="${id}" role="tooltip" aria-hidden="true">${esc(text)}</span></span>` };
+}
+// Standalone: no hay botón que lo contenga (ej. modal Detalle) -- necesita
+// su propio tabindex para ser alcanzable con teclado, y su propio
+// aria-describedby ya que no hay un contenedor externo que lo agregue.
+function infoIconStandalone(text) {
+  const id = `tooltip-${++tooltipIdSeq}`;
+  return { id, html: `<span class="info-icon standalone" tabindex="0" aria-describedby="${id}">${INFO_ICON_SVG}<span class="tooltip" id="${id}" role="tooltip" aria-hidden="true">${esc(text)}</span></span>` };
+}
+
+// Texto de origen externo (Compras MX, CUCoP+) insertado vía innerHTML en vez
+// de textContent -- sin escapar, un producto/institución/proveedor con "<" o
+// "&" en la descripción rompería el parseo o inyectaría markup.
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 // Tercer elemento (mono): true para campos que son código/monto/fecha --
 // misma distinción tipográfica que en las columnas de la tabla.
 const DETALLE_CAMPOS_INICIO = [
-  ['Clave (Compendio CSG)', r => r.clave || '—', true],
-  ['Unidad de medida', r => r.unidad_medida || '—', false],
-  ['Precio unitario', r => money(r.precio_unitario), true],
+  ['Clave (Compendio CSG)', r => r.clave || '—', true, 'Clave del Compendio Nacional de Insumos para la Salud, formato NNN.NNN.NNNN.NN. Vacía cuando no se pudo determinar con confianza.', true],
+  ['Unidad de medida', r => r.unidad_medida || '—', false, 'Unidad en que la institución reportó la cantidad (pieza, caja, frasco, etc.).'],
+  ['Precio unitario', r => money(r.precio_unitario), true, 'Precio por unidad de medida, verificado o recalculado contra el subtotal del contrato.'],
 ];
 const DETALLE_CAMPOS_FIN = [
-  ['Tipo de procedimiento', r => r.tipo_procedimiento || '—', false],
-  ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato), true],
-  ['Fecha de fallo', r => fechaHora(r.fecha_fallo), true],
-  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—', true],
+  ['Tipo de procedimiento', r => r.tipo_procedimiento || '—', false, 'Consolidada: varias instituciones agruparon su compra en un solo procedimiento. No consolidada: una institución compró por su cuenta.'],
+  ['Fecha de firma', r => fechaHora(r.fecha_firma_contrato), true, 'Cuándo se formalizó el contrato.'],
+  ['Fecha de fallo', r => fechaHora(r.fecha_fallo), true, 'Cuándo se determinó el precio ganador (adjudicación) — normalmente antes de la firma.'],
+  ['Vigencia', r => (r.fecha_inicio_contrato || r.fecha_fin_contrato) ? `${fecha(r.fecha_inicio_contrato)} – ${fecha(r.fecha_fin_contrato)}` : '—', true, 'Ventana de fechas en que ese precio estuvo activo para entregas.'],
 ];
 
 // Contratos "Abierto" con rango genuino de cantidad (cantidad_minima !=
@@ -244,14 +343,14 @@ function hayRangoGenuino(r) {
 }
 
 const CAMPOS_CON_RANGO = [
-  ['Cantidad mínima', r => num(r.cantidad_minima), true],
-  ['Cantidad máxima', r => num(r.cantidad_maxima), true],
-  ['Valor mínimo', r => money(r.valor_minimo), true],
-  ['Valor máximo', r => money(r.valor_maximo), true],
+  ['Cantidad mínima', r => num(r.cantidad_minima), true, 'Piso de piezas comprometidas en este contrato Abierto.'],
+  ['Cantidad máxima', r => num(r.cantidad_maxima), true, 'Techo de piezas comprometidas en este contrato Abierto.'],
+  ['Valor mínimo', r => money(r.valor_minimo), true, 'Monto comprometido al piso de cantidad (precio unitario × cantidad mínima).'],
+  ['Valor máximo', r => money(r.valor_maximo), true, 'Monto comprometido al techo de cantidad (precio unitario × cantidad máxima).'],
 ];
 const CAMPOS_SIN_RANGO = [
-  ['Cantidad', r => num(r.cantidad_maxima), true],
-  ['Valor', r => money(r.valor_maximo), true],
+  ['Cantidad', r => num(r.cantidad_maxima), true, 'Piezas comprometidas en el contrato.'],
+  ['Valor', r => money(r.valor_maximo), true, 'Monto total comprometido en el contrato (precio unitario × cantidad).'],
 ];
 
 function detalleCampos(r) {
@@ -402,28 +501,30 @@ function renderTable() {
     document.getElementById('tableWrap').innerHTML = '<div class="empty">Sin resultados para estos filtros.</div>';
   } else {
     const thead = `<thead><tr>${columns.map(c => {
-      if (c.sortable === false) return `<th class="static">${c.label}</th>`;
+      const icon = c.info ? infoIcon(c.info) : null;
+      const describedby = icon ? ` aria-describedby="${icon.id}"` : '';
+      if (c.sortable === false) return `<th class="static"><span class="th-hoverable" tabindex="0"${describedby}>${icon ? icon.html : ''}${c.label}</span></th>`;
       const active = sortKey === c.key;
       const ariaSort = active ? (sortDir === 1 ? 'ascending' : 'descending') : 'none';
       const arrow = active ? (sortDir === 1 ? '▲' : '▼') : '';
       const arrowHtml = arrow ? ` <span aria-hidden="true">${arrow}</span>` : '';
-      return `<th aria-sort="${ariaSort}"><button type="button" class="sort-btn" data-key="${c.key}">${c.label}${arrowHtml}</button></th>`;
+      return `<th aria-sort="${ariaSort}"><button type="button" class="th-hoverable" data-key="${c.key}"${describedby}>${icon ? icon.html : ''}${c.label}${arrowHtml}</button></th>`;
     }).join('')}</tr></thead>`;
 
     const tbody = '<tbody>' + pageRows.map((r, i) => `<tr>
-      <td class="mono">${r.codigo_contrato || '—'}</td>
-      <td class="mono">${r.num_contrato || '—'}</td>
-      <td>${r.institucion || '—'}</td>
-      <td>${r.proveedor || '—'}</td>
-      <td class="mono muted">${r.cve_cucop || '—'}</td>
-      <td>${r.producto || ''}</td>
-      <td class="muted">${(r.grupo_terapeutico || []).join(', ') || '—'}</td>
-      <td><button type="button" class="detalle-btn" data-idx="${start + i}">Ver detalle</button></td>
+      <td class="mono" translate="no">${esc(r.codigo_contrato) || '—'}</td>
+      <td class="mono" translate="no">${esc(r.num_contrato) || '—'}</td>
+      <td>${esc(r.institucion) || '—'}</td>
+      <td>${esc(r.proveedor) || '—'}</td>
+      <td class="mono muted" translate="no">${esc(r.cve_cucop) || '—'}</td>
+      <td>${esc(r.producto)}</td>
+      <td class="muted">${esc((r.grupo_terapeutico || []).join(', ')) || '—'}</td>
+      <td><button type="button" class="detalle-btn" data-idx="${start + i}" aria-label="Ver detalle de ${esc(r.producto) || 'este registro'}">Ver detalle</button></td>
     </tr>`).join('') + '</tbody>';
 
     document.getElementById('tableWrap').innerHTML = `<table>${thead}${tbody}</table>`;
 
-    document.querySelectorAll('.sort-btn').forEach(btn => {
+    document.querySelectorAll('button.th-hoverable').forEach(btn => {
       btn.addEventListener('click', () => {
         const key = btn.dataset.key;
         if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
@@ -467,9 +568,14 @@ function handlePagerClick(e, delta) {
 function openDetalle(r) {
   if (!r) return;
   lastFocusedEl = document.activeElement;
-  document.getElementById('modalTitle').textContent = r.producto || 'Detalle';
+  const modalTitleEl = document.getElementById('modalTitle');
+  modalTitleEl.textContent = r.producto || 'Detalle';
+  modalTitleEl.title = r.producto || '';
   document.getElementById('modalBody').innerHTML = detalleCampos(r)
-    .map(([label, get, mono]) => `<dt>${label}</dt><dd${mono ? ' class="mono"' : ''}>${get(r)}</dd>`).join('');
+    .map(([label, get, mono, info, noTranslate]) => {
+      const icon = info ? infoIconStandalone(info) : null;
+      return `<dt>${icon ? icon.html : ''}${label}</dt><dd${mono ? ' class="mono"' : ''}${noTranslate ? ' translate="no"' : ''}>${esc(get(r))}</dd>`;
+    }).join('');
   document.getElementById('modalBackdrop').hidden = false;
   document.getElementById('modalClose').focus();
   document.addEventListener('keydown', onModalKeydown);

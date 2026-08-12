@@ -20,6 +20,7 @@ const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
 // cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
 // guardarExcel).
 const DICCIONARIO = [
+  ['origen', 'Año del CSV de "Contratos de la Plataforma Integral" del que se extrajo el registro (ej. "2026") -- no confundir con el prefijo de codigo_contrato, que es el año en que el gobierno numeró el contrato y puede no coincidir con el CSV de origen.'],
   ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
   ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
   ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
@@ -62,6 +63,7 @@ const DICCIONARIO = [
 // disponible).
 function guardarExcel(outPath, resultados) {
   const filas = resultados.map(r => ({
+    origen: r.origen,
     codigo_contrato: r.codigo_contrato,
     num_contrato: r.num_contrato,
     clave: r.clave,

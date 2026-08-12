@@ -77,6 +77,7 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 
 | Campo | Fuente | Notas |
 |---|---|---|
+| `origen` | Interno | Año del CSV de "Contratos de la Plataforma Integral" del que se extrajo el registro (ej. `"2026"`), derivado del nombre del archivo de entrada — no confundir con el prefijo de `codigo_contrato`, que es el año en que el gobierno numeró el contrato y puede no coincidir con el CSV de origen |
 | `codigo_contrato` | Compras MX | Identificador único a nivel contrato |
 | `num_contrato` | Compras MX ("Núm. del contrato") | Número de contrato asignado por la institución compradora — formato libre, distinto de `codigo_contrato` |
 | `clave` | Ver §5.2 (asignación y validación de clave) | Formato CSG `NNN.NNN.NNNN.NN`, o `null` si no se pudo determinar |
@@ -118,9 +119,11 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 
 **Después de la extracción** (`scripts/validar-claves.js`), corre un sanity check sobre el dataset completo: agrupa todos los registros por producto canónico (nombre + huella numérica de dosis/envase, no texto exacto) y determina una única clave "ganadora" por grupo, en orden de confianza:
 1. Cualquier miembro con clave extraída directo de la descripción del contrato (la fuente más confiable).
-2. Cualquier miembro con clave vía CUCoP que **autoverifica**: la dosis/presentación que ese código declara en el catálogo CUCoP+ debe coincidir (≥2 números) con lo que el contrato realmente describe.
+2. Cualquier miembro con clave vía CUCoP que **autoverifica**: la dosis/presentación que ese código declara en el catálogo CUCoP+ debe coincidir (≥2 números) con lo que el contrato realmente describe — salvo que uno de los dos lados (contrato o la propia ficha CUCoP) no traiga ningún número que comparar, en cuyo caso se confía por defecto (no hay evidencia de que esté mal; ~4.5% de las fichas CUCoP+ de la partida 25301 no traen dosis en su descripción, ej. `TOCILIZUMAB`, `IVERMECTINA`, vacunas — sin este caso simétrico, esas fichas nunca podrían autoverificar aunque el código citado fuera correcto).
 3. Búsqueda por nombre contra el Compendio Nacional local.
 4. Si nada de lo anterior aplica, cualquier clave vía CUCoP que no haya autoverificado se **vacía explícitamente** — no se deja un valor que ya se sabe incorrecto solo por falta de reemplazo.
+
+Un registro que quedó vaciado (`null`/`null`) en una corrida anterior no se da por perdido en las siguientes: `validar-claves.js` vuelve a mirar su `cve_cucop` contra el catálogo en cada corrida, no confía en el `clave` ya guardado (que para un registro vaciado es `null`) — así una mejora en la lógica de verificación (como la de este párrafo) se propaga sola a registros de corridas anteriores sin tener que reextraerlos.
 
 La clave ganadora de cada grupo se propaga a todas sus instancias, así el mismo producto no puede terminar con dos claves distintas según qué contrato lo haya traído. Todo lo que no se resuelve queda documentado en `docs/data.correcciones.json`, sin inventar una clave sin evidencia. Ver `Limitaciones.md` para la cobertura resultante y las alternativas para lo no resuelto (incluye búsqueda externa contra `vademecum.es/cnis`, evaluada pero no automatizada).
 

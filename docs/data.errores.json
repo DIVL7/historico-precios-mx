@@ -2,21 +2,25 @@
   {
     "hash": "89524d09d6b04cabafe5a696e4418324",
     "codigoContrato": "C-2026-00038836",
-    "error": "timeout_esperando_respuesta"
+    "error": "timeout_esperando_respuesta",
+    "origen": "2026"
   },
   {
     "hash": "26605aecb60c44f6800535a8a6a04c69",
     "codigoContrato": "C-2026-00000266",
-    "error": "timeout_esperando_respuesta"
+    "error": "timeout_esperando_respuesta",
+    "origen": "2026"
   },
   {
     "hash": "b8bc913d79074c2ea4225cb952e5fb3b",
     "codigoContrato": "C-2026-00003678",
-    "error": "timeout_esperando_respuesta"
+    "error": "timeout_esperando_respuesta",
+    "origen": "2026"
   },
   {
     "hash": "61ee8c50c6d54c2f915f47e592110cb2",
     "codigoContrato": "C-2026-00023079",
-    "error": "timeout_esperando_respuesta"
+    "error": "timeout_esperando_respuesta",
+    "origen": "2026"
   }
 ]
