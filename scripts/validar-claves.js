@@ -1,25 +1,28 @@
 // Sanity check post-corrida: TODA la lógica de confiabilidad de `clave` vive
 // aquí (no en extract.js, que solo agarra una clave rápido por el medio que
-// se pueda). Agrupa TODOS los registros de docs/data.json por producto
-// canónico (nombre + dosis normalizados -- no texto exacto, para que
-// pequeñas diferencias de redacción entre instituciones no separen lo que es
-// el mismo producto) y, por grupo, decide una única clave "ganadora" que se
-// propaga a todas las instancias -- así un mismo producto no puede terminar
-// con dos claves distintas según qué contrato lo haya traído.
+// se pueda). Evalúa CADA registro de docs/data.json de forma AISLADA -- nunca
+// le presta evidencia de otro registro, ni siquiera de uno con el mismo
+// nombre+dosis. Decisión tomada el 2026-08-17 (ver Metodologia.md): la
+// versión anterior agrupaba por "producto canónico" y propagaba una clave
+// ganadora a todos los miembros del grupo, pero eso no garantiza que la
+// clave prestada sea correcta para CADA instancia -- se prefiere dejar un
+// registro sin resolver antes que asignarle un dato que no está verificado
+// para su propio contrato.
 //
-// Prioridad por grupo (se detiene en el primer paso que encuentre algo):
-//   1. Algún miembro con clave extraída directo de la descripción del
-//      contrato -- la fuente más confiable que existe, se usa tal cual.
-//   2. Algún miembro con clave vía CUCoP que además AUTOVERIFICA: la dosis/
-//      presentación que ese código declara en el propio catálogo CUCoP
-//      coincide (>=2 números) con lo que el contrato describe -- o, si
-//      cualquiera de los dos lados no trae ningún número que comparar, se
-//      confía por defecto (no hay evidencia de que esté mal, ver
-//      cucopEsValido). Se comprobó que las instituciones a veces usan un
-//      cve_cucop que no corresponde a lo que compraron -- sin el chequeo
-//      cuando SÍ hay números que comparar, se arrastraría la clave equivocada.
+// Prioridad por registro (se detiene en el primer paso que encuentre algo):
+//   1. Ya tiene una fuente confiable asentada (`clave_fuente` distinto de
+//      `null`/`'cucop'` -- típicamente `descripcion`, extraída directo del
+//      propio contrato, o el resultado de una corrida anterior de este mismo
+//      script) -- no se toca, ya fue validado en algún punto.
+//   2. Clave vía CUCoP que además AUTOVERIFICA: la dosis/presentación que ese
+//      código declara en el propio catálogo CUCoP coincide (>=2 números) con
+//      lo que EL PROPIO contrato describe -- o, si cualquiera de los dos
+//      lados no trae ningún número que comparar, se confía por defecto (no
+//      hay evidencia de que esté mal, ver cucopEsValido). Se comprobó que las
+//      instituciones a veces usan un cve_cucop que no corresponde a lo que
+//      compraron -- sin este chequeo, se arrastraría la clave equivocada.
 //   3. Compendio Nacional local (data/compendio_medicamentos.json), buscando
-//      por nombre -- gratis, sin red.
+//      con el texto del PROPIO registro -- gratis, sin red.
 //   4. Si nada de lo anterior aplica: cualquier clave vía CUCoP que NO haya
 //      pasado la autoverificación se VACÍA explícitamente (no se deja un
 //      valor que ya se sabe incorrecto solo porque no hay reemplazo mejor).
@@ -32,8 +35,12 @@
 // Limitaciones.md, no como parte de este pipeline.
 //
 // Solo se aplican correcciones de ALTA CONFIANZA (nombre coincide Y al menos
-// 2 números coinciden -- típicamente dosis + tamaño de envase). Todo lo
-// demás queda documentado en el reporte, nunca se sobreescribe a ciegas.
+// 2 números coinciden -- típicamente dosis + tamaño de envase). El umbral se
+// evaluó bajar a 1 ahora que cada registro se evalúa con su propio texto (en
+// vez del texto más largo de un grupo entero) y se descartó a propósito:
+// prioriza que el dato sea correcto antes que estar completo. Todo lo que no
+// alcanza el umbral queda documentado en el reporte, nunca se sobreescribe a
+// ciegas.
 //
 // Uso:
 //   node scripts/validar-claves.js
@@ -62,18 +69,6 @@ function extraerNumeros(s) {
   return [...new Set(matches.map(Number))].sort((a, b) => a - b);
 }
 
-function primeraPalabraClave(s) {
-  const norm = normalizarTexto(s);
-  const palabras = norm.split(' ').filter(w => w.length > 3 && !/^\d+$/.test(w));
-  return palabras[0] || norm.split(' ')[0] || '';
-}
-
-// Clave canónica de "producto" = nombre (primera palabra significativa) +
-// huella numérica completa (todas las dosis/envases mencionados, ordenados).
-function claveCanonica(producto) {
-  return primeraPalabraClave(producto) + '|' + extraerNumeros(producto).join(',');
-}
-
 function contarCoincidenciasNumericas(numsA, numsB) {
   const setB = new Set(numsB);
   let n = 0;
@@ -92,8 +87,8 @@ function loadCucopMap() {
 // Solo infiere para registros generados antes de que clave_fuente existiera
 // como campo (corridas previas a 2026-08-08). Si el campo ya existe, se
 // respeta tal cual -- incluye valores de corridas anteriores de este mismo
-// script (validacion_nombre_local, propagacion_confiable, etc.), que ya
-// pasaron por esta verificación y no hay que volver a derivar.
+// script (validacion_nombre_local, etc.), que ya pasaron por esta
+// verificación y no hay que volver a derivar.
 function inferirFuente(registro, cucopMap) {
   if (registro.clave_fuente !== undefined) return registro.clave_fuente;
   if (!registro.clave) return null;
@@ -126,7 +121,20 @@ function cucopEsValido(producto, cveCucop, cucopMap) {
   return contarCoincidenciasNumericas(numsProducto, numsEntry) >= 2;
 }
 
+// Busca en el compendio local con el texto del PROPIO registro (ya no con el
+// texto más largo de un grupo de productos "iguales") -- mismo umbral de alta
+// confianza que el resto del script.
+//
+// Memoizado por el texto EXACTO de `producto`: al evaluar por registro en vez
+// de por grupo canónico, este escaneo O(tamaño del compendio) pasa de
+// correr una vez por producto único a una vez por registro sin resolver --
+// muchas instituciones citan la MISMA descripción palabra por palabra, así
+// que cachear por string exacto recupera casi todo el ahorro que daba el
+// agrupamiento viejo, sin prestarle nada a un registro con texto distinto
+// (es memoización de una función pura, no propagación entre registros).
+const cacheCompendioLocal = new Map();
 function buscarEnCompendioLocal(producto, compendio) {
+  if (cacheCompendioLocal.has(producto)) return cacheCompendioLocal.get(producto);
   const numsProducto = extraerNumeros(producto);
   const nombreProducto = normalizarTexto(producto);
   let mejorClave = null;
@@ -139,13 +147,15 @@ function buscarEnCompendioLocal(producto, compendio) {
     const score = contarCoincidenciasNumericas(numsProducto, numsEntry);
     if (score > mejorScore) { mejorScore = score; mejorClave = clave; }
   }
-  return mejorScore >= 2 ? { clave: mejorClave, score: mejorScore } : null;
+  const resultado = mejorScore >= 2 ? { clave: mejorClave, score: mejorScore } : null;
+  cacheCompendioLocal.set(producto, resultado);
+  return resultado;
 }
 
-function asignar(data, i, clave, compendio, fuente, corregidos, representante) {
+function asignar(data, i, clave, compendio, fuente, corregidos) {
   if (data[i].clave === clave && data[i].clave_fuente === fuente) return;
   corregidos.push({
-    producto: representante.slice(0, 100),
+    producto: data[i].producto.slice(0, 100),
     codigo_contrato: data[i].codigo_contrato,
     clave_anterior: data[i].clave,
     clave_nueva: clave,
@@ -161,97 +171,62 @@ function main() {
   const compendio = JSON.parse(fs.readFileSync(COMPENDIO_PATH, 'utf8'));
   const cucopMap = loadCucopMap();
 
-  console.log('Agrupando TODOS los registros por producto canónico (nombre + dosis normalizados)...');
-  const grupos = new Map(); // claveCanonica -> [indices en data]
-  for (let i = 0; i < data.length; i++) {
-    const key = claveCanonica(data[i].producto);
-    if (!grupos.has(key)) grupos.set(key, []);
-    grupos.get(key).push(i);
-  }
-  console.log(`${grupos.size} productos canónicos únicos (${data.length} registros).`);
+  console.log(`Evaluando ${data.length} registros de forma individual (sin agrupar por producto)...`);
 
   const corregidos = [];
   const sinResolver = [];
-  const contadores = { por_descripcion: 0, por_cucop_valido: 0, por_local: 0, vaciados_cucop_invalido: 0, sin_resolver: 0 };
+  const contadores = { ya_confiables: 0, por_cucop_valido: 0, por_local: 0, vaciados_cucop_invalido: 0, sin_resolver: 0 };
 
-  for (const [, indices] of grupos.entries()) {
-    const representante = indices.map(i => data[i].producto).sort((a, b) => b.length - a.length)[0];
+  for (let i = 0; i < data.length; i++) {
+    const registro = data[i];
+    const fuente = inferirFuente(registro, cucopMap);
 
-    // Un registro sin fuente confiable asentada (fuente null, o 'cucop' que no
-    // autoverificó en una corrida anterior) puede haber quedado vaciado a
-    // null/null en el pasado -- eso borra el candidato guardado en `clave`,
-    // así que reintentar necesita volver a mirar el catálogo CUCoP en fresco
-    // por `cve_cucop`, no confiar en `data[i].clave` (que ya está en null).
-    const miembros = indices.map(i => {
-      const registro = data[i];
-      const fuente = inferirFuente(registro, cucopMap);
-      if (esFuenteConfiable(fuente)) return { i, clave: registro.clave, fuente, valido: true };
-      const cucopEntry = registro.cve_cucop && cucopMap[registro.cve_cucop];
-      const claveCucop = cucopEntry && cucopEntry.clave;
-      if (claveCucop && cucopEsValido(registro.producto, registro.cve_cucop, cucopMap)) {
-        return { i, clave: claveCucop, fuente: 'cucop', valido: true };
-      }
-      return { i, clave: null, fuente, valido: false };
-    });
+    if (esFuenteConfiable(fuente)) {
+      contadores.ya_confiables++;
+      continue;
+    }
 
-    // Prioridad 1: miembro con clave de la descripción del contrato -- la
-    // fuente más confiable que existe, gana siempre que esté presente.
-    const conDescripcion = miembros.find(m => m.fuente === 'descripcion');
-    // Prioridad 2: cualquier otra fuente ya confiable (validada en esta
-    // corrida o en una anterior) o CUCoP que autoverifica en esta pasada.
-    const conConfiable = miembros.find(m => m.valido);
-
-    let claveGanadora = null, fuenteGanadora = null;
-    if (conDescripcion) {
-      claveGanadora = conDescripcion.clave;
-      fuenteGanadora = 'descripcion';
-      contadores.por_descripcion++;
-    } else if (conConfiable) {
-      claveGanadora = conConfiable.clave;
-      fuenteGanadora = conConfiable.fuente;
+    const cucopEntry = registro.cve_cucop && cucopMap[registro.cve_cucop];
+    const claveCucop = cucopEntry && cucopEntry.clave;
+    if (claveCucop && cucopEsValido(registro.producto, registro.cve_cucop, cucopMap)) {
+      asignar(data, i, claveCucop, compendio, 'cucop', corregidos);
       contadores.por_cucop_valido++;
-    } else {
-      const local = buscarEnCompendioLocal(representante, compendio);
-      if (local) {
-        claveGanadora = local.clave;
-        fuenteGanadora = 'validacion_nombre_local';
-        contadores.por_local++;
-      }
+      continue;
     }
 
-    if (claveGanadora) {
-      for (const i of indices) asignar(data, i, claveGanadora, compendio, fuenteGanadora, corregidos, representante);
-    } else {
-      // Nada encontrado: vaciar explícitamente cualquier clave vía CUCoP que
-      // no haya autoverificado -- no dejar un valor que ya se sabe mal.
-      let huboVaciado = false;
-      for (const m of miembros) {
-        if (m.fuente === 'cucop' && !m.valido) {
-          asignar(data, m.i, null, compendio, null, corregidos, representante);
-          huboVaciado = true;
-        }
-      }
-      if (huboVaciado) contadores.vaciados_cucop_invalido++;
-      contadores.sin_resolver++;
-      sinResolver.push({ producto: representante.slice(0, 100), registros_afectados: indices.length });
+    const local = buscarEnCompendioLocal(registro.producto, compendio);
+    if (local) {
+      asignar(data, i, local.clave, compendio, 'validacion_nombre_local', corregidos);
+      contadores.por_local++;
+      continue;
     }
+
+    // Nada encontrado: si el registro tenía una clave vía CUCoP que no
+    // autoverificó, se vacía explícitamente -- no dejar un valor que ya se
+    // sabe sin evidencia solo porque no hay reemplazo mejor.
+    if (fuente === 'cucop') {
+      asignar(data, i, null, compendio, null, corregidos);
+      contadores.vaciados_cucop_invalido++;
+    }
+    contadores.sin_resolver++;
+    sinResolver.push({ producto: registro.producto.slice(0, 100), codigo_contrato: registro.codigo_contrato });
   }
 
   fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
   guardarExcel(EXCEL_PATH, data);
   fs.writeFileSync(REPORTE_PATH, JSON.stringify({
     generado: new Date().toISOString(),
-    resumen: { productos_canonicos: grupos.size, registros: data.length, registros_corregidos: corregidos.length, ...contadores },
+    resumen: { registros: data.length, registros_corregidos: corregidos.length, ...contadores },
     corregidos,
     sin_resolver: sinResolver,
   }, null, 2), 'utf8');
 
   console.log('\n--- Resumen ---');
-  console.log(`Productos canónicos evaluados: ${grupos.size}`);
-  console.log(`Grupos resueltos por descripción del contrato: ${contadores.por_descripcion}`);
-  console.log(`Grupos resueltos por CUCoP autoverificado: ${contadores.por_cucop_valido}`);
-  console.log(`Grupos resueltos por compendio local: ${contadores.por_local}`);
-  console.log(`Grupos sin resolver: ${contadores.sin_resolver} (de esos, ${contadores.vaciados_cucop_invalido} tenían clave vía CUCoP inválida que se vació)`);
+  console.log(`Registros evaluados: ${data.length}`);
+  console.log(`Ya confiables, sin tocar: ${contadores.ya_confiables}`);
+  console.log(`Resueltos por CUCoP autoverificado (propio): ${contadores.por_cucop_valido}`);
+  console.log(`Resueltos por compendio local (propio): ${contadores.por_local}`);
+  console.log(`Sin resolver: ${contadores.sin_resolver} (de esos, ${contadores.vaciados_cucop_invalido} tenían clave vía CUCoP inválida que se vació)`);
   console.log(`Registros corregidos/actualizados en total: ${corregidos.length}`);
   console.log(`Reporte: ${REPORTE_PATH}`);
 }

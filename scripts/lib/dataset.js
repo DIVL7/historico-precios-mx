@@ -13,88 +13,124 @@ const XLSX = require('xlsx');
 // precomputado una sola vez por scripts/build-cucop.js -- ver ahí).
 const CLAVE_RE = /^\s*(\d{3})\.?(\d{3})\.?(\d{4})\.?(\d{2})\s*\.?\s*(.*)$/s;
 
-// Descripción de cada columna de la hoja "Precios" del Excel (Metodologia.md
-// §4) -- quien reciba data.xlsx suelto, sin este repo a la mano, necesita
-// saber qué significa cada campo. Los nombres coinciden con docs/data.json
-// salvo cantidad_min/cantidad_max, que en el Excel reemplazan a
-// cantidad_minima/cantidad_maxima (mismo campo, nombre abreviado -- ver
-// guardarExcel).
+// Casos puntuales confirmados a mano donde `producto` en realidad lista
+// varios ingredientes activos separados por " - " y cada uno debería quedar
+// como su propio registro (mismos datos -- clave, precio, cantidad, fechas
+// -- solo cambia el texto de `producto`). NO es una regla general: la
+// mayoría de los " - " en este dataset son parte de rangos numéricos
+// ("LONGITUD: 17 - 24 MM"), tablas de ingredientes, o nombres de
+// combinación con la dosis pegada solo al último segmento ("TELMISARTAN -
+// HIDROCLOROTIAZIDA TABLETA 80.0 MG/12.5 MG 14 TABLETAS" -- splitear ahí
+// deja "TELMISARTAN" sin dosis ni presentación). Se probó una heurística
+// automática (segmentos cortos, sin números) y de 445 productos únicos con
+// "-" en el dataset real, apenas 16 calificaban -- y ni esos 16 eran
+// confiables (ej. "CLORANFENICOL - TUBO APLICADOR" no son dos medicamentos).
+// Verificado el 2026-08-17: se agregan acá uno por uno, a mano, solo cuando
+// se confirma contra el texto real del contrato que de verdad son
+// ingredientes independientes sin nada más pegado.
+const PRODUCTOS_A_DIVIDIR = new Set([
+  'BECLOMETASONA - FORMOTEROL - GLICOPIRRONIO',
+]);
+
+// Devuelve un array de nombres de producto: [producto] sin cambios si no es
+// uno de los casos confirmados en PRODUCTOS_A_DIVIDIR, o los segmentos
+// divididos si sí lo es.
+function dividirProductoSiAplica(producto) {
+  if (!PRODUCTOS_A_DIVIDIR.has(producto)) return [producto];
+  return producto.split(/\s*-\s*/).map(p => p.trim()).filter(Boolean);
+}
+
+// Descripción de cada columna de las hojas "Cerrado"/"Abierto" del Excel
+// (Metodologia.md §4) -- quien reciba data.xlsx suelto, sin este repo a la
+// mano, necesita saber qué significa cada campo.
 const DICCIONARIO = [
-  ['origen', 'Año del CSV de "Contratos de la Plataforma Integral" del que se extrajo el registro (ej. "2026") -- no confundir con el prefijo de codigo_contrato, que es el año en que el gobierno numeró el contrato y puede no coincidir con el CSV de origen.'],
-  ['codigo_contrato', 'Identificador único del contrato en Compras MX (ej. C-2026-000123).'],
-  ['num_contrato', 'Número de contrato asignado por la institución compradora (formato varía por institución).'],
-  ['clave', 'Clave del Compendio Nacional de Medicamentos (CSG), formato NNN.NNN.NNNN.NN. Vacía si no se pudo determinar.'],
-  ['clave_fuente', 'De dónde salió "clave": descripcion, cucop, validacion_nombre_local, propagacion_confiable, o vacío si no se pudo determinar.'],
-  ['cve_cucop', 'Clave del catálogo CUCoP+ reportada por la institución compradora.'],
-  ['producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2. Prefijos de numeración/viñetas al inicio se recortan -- ver §5.3.3. Coletilla administrativa al final ("CONFORME A PARTIDA...") se recorta -- ver §5.3.4.'],
-  ['tipo_insumo', 'Siempre MEDICAMENTO -- es el alcance de esta base.'],
-  ['grupo_terapeutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
-  ['procedimiento', 'Número de procedimiento de contratación.'],
-  ['tipo_procedimiento', 'CONSOLIDADA (varias instituciones agrupadas en un solo procedimiento) o NO CONSOLIDADA (una sola institución).'],
-  ['tipo_contrato', 'Abierto (rango mín-máx) o Cerrado (cantidad fija), valor oficial de la fuente.'],
-  ['proveedor', 'Nombre del proveedor o contratista.'],
-  ['institucion', 'Siglas de la institución compradora. En compras consolidadas puede no ser la institución que realmente contrató (ver Limitaciones.md).'],
-  ['unidad_medida', 'Unidad de medida de la cantidad (pieza, kilogramo, etc.).'],
-  ['precio_unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
-  ['cantidad_min', 'Cantidad mínima comprometida en el contrato (no lo entregado realmente). Igual a cantidad_max cuando el contrato no tiene rango genuino -- Cerrado, o "por monto" derivado de subtotal/precio_unitario -- y solo difiere de cantidad_max en contratos Abierto con rango real.'],
-  ['cantidad_max', 'Cantidad máxima comprometida en el contrato. Igual a cantidad_min cuando no hay rango genuino (ver cantidad_min).'],
-  ['valor_minimo', 'Piso de exposición contractual garantizado (precio_unitario × cantidad_min, o subtotal directo). Igual a valor_maximo cuando no hay rango genuino.'],
-  ['valor_maximo', 'Techo de exposición contractual posible (precio_unitario × cantidad_max, o subtotal directo). Igual a valor_minimo cuando no hay rango genuino -- usar cualquiera de los dos (nunca sumar ambos) para sumas/promedios agregados (Metodologia.md §5.5).'],
-  ['fecha_firma_contrato', 'Cuándo se formalizó el contrato.'],
-  ['fecha_fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
-  ['fecha_inicio_contrato', 'Inicio de la ventana de vigencia del contrato.'],
-  ['fecha_fin_contrato', 'Fin de la ventana de vigencia del contrato.'],
+  ['Producto', 'Descripción del medicamento, según el detalle del contrato. Cuando esa descripción viene degenerada (vacía de contenido o sin espacios) se reemplaza por la ficha del catálogo CUCoP+ -- ver Metodologia.md §5.3.2.'],
+  ['Compañía', 'Nombre del proveedor o contratista.'],
+  ['Fecha de firma', 'Cuándo se formalizó el contrato.'],
+  ['Fecha de fallo', 'Cuándo se determinó el precio ganador (adjudicación); normalmente antes de la firma. Vacía en algunas compras consolidadas (ver Limitaciones.md #14).'],
+  ['Fecha de inicio', 'Inicio de la ventana de vigencia del contrato.'],
+  ['Fecha de fin', 'Fin de la ventana de vigencia del contrato.'],
+  ['Precio unitario', 'Precio unitario sin impuestos, validado/recalculado contra el subtotal cuando difieren más de 1% (Metodologia.md §5.3).'],
+  ['Precio total (hoja Cerrado)', 'Monto total del contrato (precio unitario × volumen).'],
+  ['Precio total mínimo / máximo (hoja Abierto)', 'Piso/techo de exposición contractual (precio unitario × volumen mínimo/máximo).'],
+  ['Volumen (hoja Cerrado)', 'Cantidad comprometida en el contrato (no lo entregado realmente).'],
+  ['Volumen mínimo / máximo (hoja Abierto)', 'Piso/techo de cantidad comprometida cuando el contrato tiene un rango genuino.'],
+  ['Grupo terapéutico', 'Grupo(s) terapéutico(s) asignado(s) vía el Compendio CSG (puede tener más de uno). Vacío si la clave no está en el Compendio.'],
 ];
 
-// Copia del dataset final en Excel, para quien prefiera trabajarlo ahí en vez
-// del JSON que consume el dashboard. grupo_terapeutico es un arreglo en el
-// JSON (un medicamento puede pertenecer a más de un grupo) -- en Excel se
-// aplana a texto separado por coma, porque una celda no puede guardar un
-// arreglo.
+// Un contrato va a la hoja "Abierto" cuando su volumen Y su precio total
+// (las dos, no basta con una sola) tienen un rango real (mín != máx) -- NO
+// se usa la etiqueta `tipo_contrato` (viene tal cual del CSV oficial,
+// columna "Tipo de contrato", y ~29% del dataset la trae vacía porque la
+// fuente la dejó en blanco; además no siempre coincide con si el rango
+// numérico es genuino). Se decidió así el 2026-08-17: la regla se basa en
+// los números reales de cada registro, no en una etiqueta ajena que puede
+// faltar o no reflejar el dato. AND, no OR (corregido el mismo día): si solo
+// una de las dos varía, no alcanza para considerarlo un rango genuino.
 //
-// cantidad_minima/cantidad_maxima y valor_minimo/valor_maximo ya vienen
-// siempre poblados en docs/data.json (iguales entre sí cuando el contrato no
-// tiene rango genuino, ver extract.js buildRegistro) -- no hace falta
-// colapsarlos a una sola columna aquí. Solo se renombran cantidad_minima/
-// cantidad_maxima a cantidad_min/cantidad_max (más cortos) para las columnas
-// del Excel; no hay columna `valor` suelta porque sería idéntica a
-// valor_maximo en el 100% de los casos (verificado contra el dataset
-// completo -- `cantidad` siempre usaba cantidad_maxima cuando había una
-// disponible).
+// Excepción: precio_unitario === 0 hace que valor_minimo/valor_maximo den 0
+// en los dos extremos sin importar la cantidad real (0 × lo que sea = 0) --
+// ahí el valor no aporta ninguna señal, así que se evalúa solo la cantidad.
+// Verificado el 2026-08-17 contra el dataset real: sin esta excepción, 3
+// registros con precio_unitario=0 y rango de cantidad genuino perdían
+// silenciosamente el mínimo en la hoja "Cerrado" (solo se veía el máximo).
+function esRangoGenuino(r) {
+  if (r.precio_unitario === 0) return r.cantidad_minima !== r.cantidad_maxima;
+  return r.cantidad_minima !== r.cantidad_maxima && r.valor_minimo !== r.valor_maximo;
+}
+
+function grupoTerapeuticoTexto(r) {
+  return Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico;
+}
+
+// Copia del dataset final en Excel, para quien prefiera trabajarlo ahí en vez
+// del JSON que consume el dashboard. Reducido a las columnas de negocio (no
+// las de trazabilidad/auditoría del pipeline -- esas quedan en docs/data.json
+// para quien las necesite) y partido en dos hojas porque un contrato con
+// rango genuino (Abierto) necesita mín/máx por separado, mientras que uno sin
+// rango (Cerrado) solo tiene un número real -- mezclarlos en una sola tabla
+// dejaría columnas vacías o forzaría a repetir el mismo valor en mín y máx.
 function guardarExcel(outPath, resultados) {
-  const filas = resultados.map(r => ({
-    origen: r.origen,
-    codigo_contrato: r.codigo_contrato,
-    num_contrato: r.num_contrato,
-    clave: r.clave,
-    clave_fuente: r.clave_fuente,
-    cve_cucop: r.cve_cucop,
-    producto: r.producto,
-    tipo_insumo: r.tipo_insumo,
-    grupo_terapeutico: Array.isArray(r.grupo_terapeutico) ? r.grupo_terapeutico.join(', ') : r.grupo_terapeutico,
-    procedimiento: r.procedimiento,
-    tipo_procedimiento: r.tipo_procedimiento,
-    tipo_contrato: r.tipo_contrato,
-    proveedor: r.proveedor,
-    institucion: r.institucion,
-    unidad_medida: r.unidad_medida,
-    precio_unitario: r.precio_unitario,
-    cantidad_min: r.cantidad_minima,
-    cantidad_max: r.cantidad_maxima,
-    valor_minimo: r.valor_minimo,
-    valor_maximo: r.valor_maximo,
-    fecha_firma_contrato: r.fecha_firma_contrato,
-    fecha_fallo: r.fecha_fallo,
-    fecha_inicio_contrato: r.fecha_inicio_contrato,
-    fecha_fin_contrato: r.fecha_fin_contrato,
-  }));
-  const ws = XLSX.utils.json_to_sheet(filas);
+  const filasCerrado = [];
+  const filasAbierto = [];
+  for (const r of resultados) {
+    const base = {
+      Producto: r.producto,
+      'Compañía': r.proveedor,
+      'Fecha de firma': r.fecha_firma_contrato,
+      'Fecha de fallo': r.fecha_fallo,
+      'Fecha de inicio': r.fecha_inicio_contrato,
+      'Fecha de fin': r.fecha_fin_contrato,
+      'Precio unitario': r.precio_unitario,
+    };
+    if (esRangoGenuino(r)) {
+      filasAbierto.push({
+        ...base,
+        'Precio total mínimo': r.valor_minimo,
+        'Precio total máximo': r.valor_maximo,
+        'Volumen mínimo': r.cantidad_minima,
+        'Volumen máximo': r.cantidad_maxima,
+        'Grupo terapéutico': grupoTerapeuticoTexto(r),
+      });
+    } else {
+      filasCerrado.push({
+        ...base,
+        'Precio total': r.valor_maximo,
+        Volumen: r.cantidad_maxima,
+        'Grupo terapéutico': grupoTerapeuticoTexto(r),
+      });
+    }
+  }
+
+  const wsCerrado = XLSX.utils.json_to_sheet(filasCerrado);
+  const wsAbierto = XLSX.utils.json_to_sheet(filasAbierto);
   const wsDiccionario = XLSX.utils.aoa_to_sheet([['Campo', 'Descripción'], ...DICCIONARIO]);
-  wsDiccionario['!cols'] = [{ wch: 22 }, { wch: 100 }];
+  wsDiccionario['!cols'] = [{ wch: 32 }, { wch: 100 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, wsDiccionario, 'Diccionario');
-  XLSX.utils.book_append_sheet(wb, ws, 'Precios');
+  XLSX.utils.book_append_sheet(wb, wsCerrado, 'Cerrado');
+  XLSX.utils.book_append_sheet(wb, wsAbierto, 'Abierto');
   XLSX.writeFile(wb, outPath);
 }
 
-module.exports = { CLAVE_RE, DICCIONARIO, guardarExcel };
+module.exports = { CLAVE_RE, DICCIONARIO, guardarExcel, dividirProductoSiAplica };
