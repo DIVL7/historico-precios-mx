@@ -47,7 +47,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { guardarExcel } = require('./lib/dataset');
+const { guardarExcel, quitarPrefijoClave } = require('./lib/dataset');
 
 const DATA_PATH = path.join(__dirname, '..', 'docs', 'data.json');
 const REPORTE_PATH = path.join(__dirname, '..', 'docs', 'data.correcciones.json');
@@ -67,6 +67,19 @@ function normalizarTexto(s) {
 function extraerNumeros(s) {
   const matches = normalizarTexto(s).match(/\d+(\.\d+)?/g) || [];
   return [...new Set(matches.map(Number))].sort((a, b) => a - b);
+}
+
+// `producto` se guarda 100% crudo desde extract.js (decisión 2026-08-21, ver
+// Metodologia.md §5.3.2) -- puede traer un prefijo de clave CSG pegado al
+// inicio ("010.000.6153.00 PARACETAMOL..."). Esos dígitos son la CLAVE, no
+// dosis/cantidad del medicamento, y ensuciarían el matching por conteo de
+// números de abajo (falsos positivos por coincidencia numérica accidental
+// contra la clave de OTRO producto en el catálogo/compendio). Se recortan
+// con quitarPrefijoClave() (scripts/lib/dataset.js, mismo CLAVE_RE que usa
+// extract.js) solo para esta comparación -- `producto` en sí se guarda crudo
+// en el dataset, esto no lo toca.
+function extraerNumerosProducto(producto) {
+  return extraerNumeros(quitarPrefijoClave(producto));
 }
 
 function contarCoincidenciasNumericas(numsA, numsB) {
@@ -112,10 +125,14 @@ function esFuenteConfiable(fuente) {
 // vez de tratarlo como 0 coincidencias (que penalizaría fichas CUCoP sin
 // dosis en su descripción, ej. "EMICIZUMAB" a secas, sin ser evidencia real
 // de que el código esté mal citado).
-function cucopEsValido(producto, cveCucop, cucopMap) {
+//
+// Recibe `numsProducto` ya calculado (ver main()) en vez de `producto` crudo
+// -- si esto falla, buscarEnCompendioLocal() necesita el mismo cálculo para
+// el MISMO registro; resolverlo una sola vez (memoizado en main(), no aquí)
+// evita repetir quitarPrefijoClave()/normalizarTexto() dos veces.
+function cucopEsValido(numsProducto, cveCucop, cucopMap) {
   const entry = cucopMap[cveCucop];
   if (!entry) return false;
-  const numsProducto = extraerNumeros(producto);
   const numsEntry = extraerNumeros(entry.descripcion);
   if (numsProducto.length === 0 || numsEntry.length === 0) return true;
   return contarCoincidenciasNumericas(numsProducto, numsEntry) >= 2;
@@ -132,10 +149,14 @@ function cucopEsValido(producto, cveCucop, cucopMap) {
 // que cachear por string exacto recupera casi todo el ahorro que daba el
 // agrupamiento viejo, sin prestarle nada a un registro con texto distinto
 // (es memoización de una función pura, no propagación entre registros).
+// `obtenerNumsProducto` es un getter perezoso (no el valor ya calculado): en
+// un cache hit no hace falta tocarlo, así que el chequeo de cache de arriba
+// sigue evitando también el costo de extraerNumerosProducto(), no solo el
+// del escaneo del compendio.
 const cacheCompendioLocal = new Map();
-function buscarEnCompendioLocal(producto, compendio) {
+function buscarEnCompendioLocal(producto, obtenerNumsProducto, compendio) {
   if (cacheCompendioLocal.has(producto)) return cacheCompendioLocal.get(producto);
-  const numsProducto = extraerNumeros(producto);
+  const numsProducto = obtenerNumsProducto();
   const nombreProducto = normalizarTexto(producto);
   let mejorClave = null;
   let mejorScore = 0;
@@ -166,7 +187,7 @@ function asignar(data, i, clave, compendio, fuente, corregidos) {
   data[i].clave_fuente = fuente;
 }
 
-function main() {
+async function main() {
   const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
   const compendio = JSON.parse(fs.readFileSync(COMPENDIO_PATH, 'utf8'));
   const cucopMap = loadCucopMap();
@@ -188,13 +209,19 @@ function main() {
 
     const cucopEntry = registro.cve_cucop && cucopMap[registro.cve_cucop];
     const claveCucop = cucopEntry && cucopEntry.clave;
-    if (claveCucop && cucopEsValido(registro.producto, registro.cve_cucop, cucopMap)) {
+    // Getter perezoso y memoizado: cucopEsValido y buscarEnCompendioLocal
+    // pueden necesitar el mismo cálculo para el MISMO `producto` (clave vía
+    // CUCoP presente pero no autoverifica) -- se resuelve como máximo una
+    // vez por registro, y nunca si buscarEnCompendioLocal tiene cache hit.
+    let numsProducto;
+    const obtenerNumsProducto = () => numsProducto ?? (numsProducto = extraerNumerosProducto(registro.producto));
+    if (claveCucop && cucopEsValido(obtenerNumsProducto(), registro.cve_cucop, cucopMap)) {
       asignar(data, i, claveCucop, compendio, 'cucop', corregidos);
       contadores.por_cucop_valido++;
       continue;
     }
 
-    const local = buscarEnCompendioLocal(registro.producto, compendio);
+    const local = buscarEnCompendioLocal(registro.producto, obtenerNumsProducto, compendio);
     if (local) {
       asignar(data, i, local.clave, compendio, 'validacion_nombre_local', corregidos);
       contadores.por_local++;
@@ -213,7 +240,7 @@ function main() {
   }
 
   fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
-  guardarExcel(EXCEL_PATH, data);
+  await guardarExcel(EXCEL_PATH, data);
   fs.writeFileSync(REPORTE_PATH, JSON.stringify({
     generado: new Date().toISOString(),
     resumen: { registros: data.length, registros_corregidos: corregidos.length, ...contadores },
@@ -231,4 +258,7 @@ function main() {
   console.log(`Reporte: ${REPORTE_PATH}`);
 }
 
-main();
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

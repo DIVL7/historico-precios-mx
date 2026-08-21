@@ -12,41 +12,15 @@ const { parse } = require('csv-parse/sync');
 const { chromium } = require('playwright');
 const { CLAVE_RE, guardarExcel, dividirProductoSiAplica } = require('./lib/dataset');
 
-// La institución a veces captura "Descripción detallada" del requerimiento de
-// forma degenerada: como mera referencia a su propia partida, sin texto de
-// producto ("CONFORME A PARTIDA 3 DE LA CONVOCATORIA"). Verificado en vivo
-// contra el sitio (contrato C-2026-00073692): el desglose real del producto
-// no está en ningún otro campo de ese contrato, solo en la ficha CUCoP+ de
-// la convocatoria (ver PRODUCTO_SIN_ESPACIOS_RE abajo y buildRegistro).
-const CONFORME_PARTIDA_RE = /^CONFORME\s+A\s+PARTIDA\s+\d+\s+DE\s+LA\s+CONVOCATORIA$/i;
-// Otras veces sí trae el producto, pero sin ningún espacio entre palabras --
-// visto en vivo en procedimiento IA-13-312-013000999-T-327-2026: los 174
-// ítems de "Descripción detallada" vienen así, de origen, mientras que
-// "Descripción CUCoP+" (misma página) sí viene bien formada. Umbral de 25
-// caracteres para evitar falsos positivos en descripciones cortas
-// legítimamente compactas.
-const PRODUCTO_SIN_ESPACIOS_RE = (s) => s.length > 25 && !s.includes(' ');
-// Variante del caso de arriba: la institución SÍ describe el producto
-// completo y bien formado, pero le pega la misma coletilla administrativa al
-// final ("...ENVASE CON 10 TABLETAS.CONFORME A PARTIDA 204 DE LA
-// CONVOCATORIA"), con o sin punto/espacio de separación, a veces sin el
-// número de partida. A diferencia de CONFORME_PARTIDA_RE (arriba), aquí NO
-// se reemplaza todo el producto por la ficha CUCoP+ -- la descripción propia
-// ya es buena, solo se recorta la coletilla. Verificado 2026-08-10: 612 casos
-// reales, ninguno coincide también con CONFORME_PARTIDA_RE (poblaciones
-// disjuntas -- ver Limitaciones.md §7).
-const CONFORME_PARTIDA_SUFIJO_RE = /\s*[.\-•]?\s*CONFORME\s+A\s+PARTIDA\s*\d*\s*DE\s+LA\s+CONVOCATORIA\.?\s*$/i;
-// Numeración de partida, viñetas o claves con separador distinto al esperado
-// que algunas instituciones anteponen a "Descripción detallada", ajenas al
-// nombre del medicamento -- ej. "13040096 UPADACITINIB...", "2. 1
-// TEOFILINA...", "-OLANZAPINA...", "•\tASPIRINA...", "10.   010.000.2739.00
-// - DIETA...". Exigir que el prefijo termine justo antes de una letra evita
-// comerse dígitos que sí son parte del texto (ej. "5% DIOXIDO DE
-// CARBONO..." -- el "5" no se toca porque le sigue "%", no una letra). La
-// guarda negativa evita truncar a la mitad un sufijo de clave alfanumérico
-// (ej. "...1757.P0 MELFALAN..." se deja intacto en vez de dejar "P0
-// MELFALAN...").
-const LEADING_JUNK_RE = /^[\d\s.\-•"“]+(?=[A-Za-zÀ-ÿ])(?![A-Za-zÀ-ÿ]\d\s)/;
+// Las transformaciones que este pipeline le hacía a `producto` (sustituir por
+// ficha CUCoP+ cuando venía degenerado, recortar coletilla administrativa,
+// recortar prefijos/viñetas, quitarle el prefijo de clave) se desactivaron a
+// propósito el 2026-08-21 -- ver Metodologia.md §5.3.2/§5.3.3/§5.3.4 para el
+// detalle completo (regex, casos reales, cifras) que queda documentado ahí
+// como referencia para cuando se retomen. `producto` ahora es el texto crudo
+// de la fuente, sin ningún recorte ni sustitución, para poder identificar
+// todos los casos reales antes de diseñar cómo separar molécula/dosis/
+// presentación (ver brainstorming pendiente).
 const HASH_RE = /detalle\/([a-f0-9]+)\/procedimiento/i;
 const NAV_TIMEOUT = 30000;
 const CLICK_TIMEOUT = 15000;
@@ -171,6 +145,13 @@ function loadFilteredRows(csvPath, limit) {
     fechaInicioContrato: idx('Fecha de inicio del contrato'),
     fechaFinContrato: idx('Fecha de fin del contrato'),
     tipoContrato: idx('Tipo de contrato'),
+    // Hay dos columnas "Moneda" en el CSV (una junto a "Importe DRC", otra
+    // junto a los montos mín/máx del bloque "Estatus Contrato" que no se usa
+    // en este pipeline) -- idx() con header.indexOf toma la primera, la del
+    // bloque DRC, que es la que viene siempre poblada (verificado: 0% vacía
+    // en los 4 CSV, contra ~15-95% vacía en la segunda) y comparte bloque con
+    // fechaInicioContrato/fechaFinContrato de abajo.
+    moneda: idx('Moneda'),
     proveedor: idx('Proveedor o contratista'),
     numeroProcedimiento: header.indexOf('Número de procedimiento') !== -1 ? idx('Número de procedimiento') : idx('Número del procedimiento'),
     direccionAnuncio: idx('Dirección del anuncio'),
@@ -200,6 +181,7 @@ function loadFilteredRows(csvPath, limit) {
       fechaFallo: r[col.fechaFallo] || '',
       fechaInicioContrato: r[col.fechaInicioContrato] || '',
       fechaFinContrato: r[col.fechaFinContrato] || '',
+      moneda: r[col.moneda] || '',
       // Valor oficial de la fuente ("Abierto"/"Cerrado") -- se captura tal
       // cual, no se infiere de si cantidad_maxima viene poblada, para que
       // quede una sola fuente de verdad sin margen de inconsistencia entre
@@ -333,29 +315,12 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats, origen) {
   // la citan; el resto no. Cuando SÍ hay clave y existe en el compendio, se
   // enriquece con grupo_terapéutico; si no, quedan en null (baja confianza pero
   // se conserva la fila).
+  // `producto` es el texto crudo de la fuente, tal cual -- ver nota arriba de
+  // HASH_RE sobre por qué se desactivaron las transformaciones que antes lo
+  // recortaban/sustituían. `m` se sigue usando abajo solo para `clave`, no
+  // para tocar `producto`.
   const m = String(item.descripcion || '').match(CLAVE_RE);
-  let producto = m ? m[5].trim() : String(item.descripcion || '').trim();
-
-  // Cuando la descripción de la institución es degenerada (ver
-  // CONFORME_PARTIDA_RE / PRODUCTO_SIN_ESPACIOS_RE arriba), se reemplaza por
-  // la ficha oficial del catálogo CUCoP+ -- ya cargada en cucopMap para
-  // resolver `clave`, siempre bien formada. No todos los cve_cucop están en
-  // el catálogo local (puede ser más nuevo que el snapshot descargado); en
-  // esos casos queda el texto degenerado tal cual, no hay mejor fuente.
-  if (CONFORME_PARTIDA_RE.test(producto) || PRODUCTO_SIN_ESPACIOS_RE(producto)) {
-    const viaCucop = cucopMap[item.cve_cucop];
-    if (viaCucop) producto = viaCucop.descripcion;
-  }
-
-  // Coletilla administrativa pegada al final de una descripción por lo demás
-  // buena (ver CONFORME_PARTIDA_SUFIJO_RE arriba) -- se recorta, no se
-  // reemplaza todo el producto como en el caso de arriba. Corre después del
-  // bloque anterior: los casos puros (producto == solo la frase) ya quedaron
-  // reemplazados por su ficha CUCoP+, que nunca contiene esta frase, así que
-  // este paso no les afecta.
-  producto = producto.replace(CONFORME_PARTIDA_SUFIJO_RE, '').trim();
-
-  producto = producto.replace(LEADING_JUNK_RE, '').trim();
+  const producto = String(item.descripcion || '').trim();
 
   // Prioridad para asignar clave: 1) extraerla directamente de la descripción
   // de la institución (más confiable); 2) si no vino, recuperarla vía el
@@ -485,6 +450,7 @@ function buildRegistro(contrato, item, compendio, cucopMap, stats, origen) {
     tipo_contrato: contrato.tipoContrato || null,
     proveedor: contrato.proveedor,
     institucion: contrato.institucion,
+    moneda: contrato.moneda || null,
     unidad_medida: item.um || null,
     precio_unitario: precioUnitario,
     cantidad_minima: cantidadMinimaEfectiva,
@@ -1195,7 +1161,7 @@ async function main() {
   fs.writeFileSync(reportePath, JSON.stringify(reporte, null, 2), 'utf8');
 
   const excelPath = args.out.replace(/\.json$/, '.xlsx');
-  guardarExcel(excelPath, resultados);
+  await guardarExcel(excelPath, resultados);
 
   console.log('--- Resumen ---');
   console.log(`Expedientes procesados en esta corrida: ${ctx.total}`);

@@ -89,6 +89,7 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 | `tipo_procedimiento` | "Compra consolidada" SI/NO → CONSOLIDADA / NO CONSOLIDADA | Consolidada: varias instituciones agrupan sus necesidades en un solo procedimiento (coordinado por una entidad líder) en vez de licitar cada una por separado. No consolidada: una institución licita y contrata por su cuenta |
 | `proveedor` | "Proveedor o contratista" | |
 | `institución` | "Siglas de la Institución" (CSV) | En compras consolidadas puede no corresponder a la institución que realmente contrató cada renglón — ver `Limitaciones.md` |
+| `moneda` | "Moneda" (CSV, columna del bloque "Importe DRC") | Código ISO (`MXN`, `USD`, etc.); el CSV trae una segunda columna "Moneda" en el bloque de montos mín/máx que no se usa aquí, por venir vacía en buena parte de los registros |
 | `precio_unitario` | "Precio unitario sin impuestos" (`detallepartidas`), recalculado si es inconsistente con el subtotal — ver §5.3 | |
 | `cantidad_minima` / `cantidad_maxima` | "Cantidad mínima" / "Cantidad máxima" (`detallepartidas`) cuando hay rango genuino; si no, ambas colapsan al mismo valor único (`cantidad_maxima ?? cantidad ?? cantidad_minima` de la fuente, o derivado de `subtotal / precio_unitario` — ver §5.3.1) | Siempre pobladas con el mismo valor entre sí, salvo en contratos "Abierto" con rango real (divergen) o servicios/medicina magistral sin ninguna cantidad reportada (`null` en ambas — ver `Limitaciones.md`) |
 | `tipo_contrato` | "Tipo de contrato" (CSV) | `Abierto` / `Cerrado`, valor oficial de la fuente — no se infiere de si `cantidad_maxima` difiere de `cantidad_minima`, para tener una sola fuente de verdad sin ambigüedad al integrar ambos esquemas de cantidad en la misma tabla |
@@ -108,7 +109,7 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 3. Agrupar filas por expediente (hash extraído de `Dirección del anuncio`).
 4. Por cada expediente, navegar al detalle y localizar cada contrato dentro de la tabla paginada de resultados.
 5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`). Un contrato que pasó el filtro del paso 2 puede traer aquí líneas de **otras partidas** (compra mixta: radiofármacos, material de curación, papelería, etc.) — se descarta cualquier ítem cuyo `cve_cucop` no empiece con `25301`, para no marcarlo como medicamento solo por venir en el mismo contrato. (Detectado el 2026-08-09: sin este segundo filtro, ~32% del dataset — 7,989 de 24,909 registros — eran contaminación de otras partidas; se limpió retroactivamente y se corrigió el pipeline.)
-6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), sanear `producto` si viene degenerado (§5.3.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final.
+6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final. `producto` se guarda tal cual viene de la fuente, sin sanear -- ver §5.3.2/§5.3.3/§5.3.4 (desactivadas).
 7. Escribir a `docs/data.json` con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
 
 ### 5.2 Asignación y validación de clave
@@ -138,7 +139,9 @@ Un subconjunto de ítems trae `tipo_contrato_abierto: "MONTO"` en la respuesta d
 - **`cantidad_minima`/`cantidad_maxima`** (informativa, ambas colapsan al mismo valor): `subtotal / precio_unitario`, redondeada al entero más cercano, solo cuando las vías directas fallan. Cada caso queda registrado en `docs/data.calidad.json` (`cantidades_derivadas_de_subtotal_entre_precio_unitario`).
 - **`valor_minimo`/`valor_maximo`**: se toman de `subtotal` directo, no de `precio_unitario × cantidad_derivada` — multiplicar de vuelta sería un viaje de ida y vuelta innecesario que puede perder precisión por el redondeo intermedio de la cantidad derivada. Este respaldo directo aplica siempre que no haya un rango `cantidad_minima`/`cantidad_maxima` genuino que preservar (ver §5.5), incluyendo el caso donde `precio_unitario` viene en `0` desde el origen (visto en servicios y medicina magistral): ahí no se puede derivar ninguna cantidad tampoco (`cantidad_minima`/`cantidad_maxima` quedan en `null`, único caso donde eso ocurre — ver `Limitaciones.md`), pero `valor_minimo`/`valor_maximo` sí se rescatan de `subtotal`.
 
-### 5.3.2 Reemplazo de `producto` degenerado con la ficha CUCoP+
+### 5.3.2 Reemplazo de `producto` degenerado con la ficha CUCoP+ (DESACTIVADO 2026-08-21)
+
+**Desactivado a propósito** para poder ver `producto` tal cual viene de la fuente, sin ninguna sustitución/recorte -- necesario para identificar todos los casos reales antes de diseñar cómo separar molécula/dosis/presentación/nombre comercial (brainstorming en curso). El código (regex `CONFORME_PARTIDA_RE`/`PRODUCTO_SIN_ESPACIOS_RE`, antes en `scripts/extract.js`) se quitó del pipeline, no solo se comentó -- recuperarlo del historial de git (commit anterior a 2026-08-21) si se decide reactivar esta lógica, en vez de reescribirla desde cero. Queda documentado abajo tal cual funcionaba.
 
 La institución compradora a veces captura "Descripción detallada" (el campo que alimenta `producto`) de forma degenerada, verificado en vivo contra el sitio en dos formas distintas:
 
@@ -147,7 +150,9 @@ La institución compradora a veces captura "Descripción detallada" (el campo qu
 
 En ambos casos, la página del expediente muestra una columna separada, "Descripción CUCoP+", que siempre viene bien formada — es la ficha oficial del catálogo, no depende de cómo la institución tecleó su propia descripción. El pipeline detecta ambos patrones (regex para el primero, longitud + ausencia de espacios para el segundo) y sustituye `producto` por `cucopMap[cve_cucop].descripcion` — el mismo catálogo CUCoP+ (§3.4) ya cargado en memoria para resolver `clave` (§5.2), reutilizado aquí. Cuando el `cve_cucop` del ítem no está en el catálogo local (puede ser más nuevo que el snapshot descargado), no hay mejor fuente disponible y el texto degenerado queda tal cual.
 
-### 5.3.3 Limpieza de numeración/viñetas al inicio de `producto`
+### 5.3.3 Limpieza de numeración/viñetas al inicio de `producto` (DESACTIVADO 2026-08-21)
+
+**Desactivado a propósito**, mismo motivo y mismo tratamiento que §5.3.2 -- código (`LEADING_JUNK_RE`) quitado del pipeline, recuperar del historial de git si se reactiva.
 
 Algunas instituciones anteponen a "Descripción detallada" numeración de partida, viñetas o una clave CSG con separador distinto al esperado (espacios en vez de puntos, o sin el cero inicial) — texto ajeno al nombre del medicamento. Ejemplos reales vistos en el dataset: `"13040096 UPADACITINIB..."`, `"2. 1 TEOFILINA..."`, `"-OLANZAPINA..."`, `"•\tASPIRINA..."`, `"10.   010.000.2739.00 - DIETA..."`.
 
@@ -155,7 +160,9 @@ Algunas instituciones anteponen a "Descripción detallada" numeración de partid
 
 Corrida del 2026-08-10: 965 de 16,911 registros tenían este prefijo; los 3 casos protegidos por las guardas de arriba quedaron sin tocar (2 con `%` pegado al dígito inicial, 1 con sufijo de clave alfanumérico). Como efecto colateral, el agrupamiento canónico de `scripts/validar-claves.js` (agrupa por nombre+dosis extraídos de `producto`) mejoró para estos registros — cobertura de `clave` subió de 72.5% a 74.9%.
 
-### 5.3.4 Recorte de coletilla administrativa al final de `producto`
+### 5.3.4 Recorte de coletilla administrativa al final de `producto` (DESACTIVADO 2026-08-21)
+
+**Desactivado a propósito**, mismo motivo y mismo tratamiento que §5.3.2 -- código (`CONFORME_PARTIDA_SUFIJO_RE`) quitado del pipeline, recuperar del historial de git si se reactiva.
 
 Variante del caso de §5.3.2: la institución sí describe el producto completo y bien formado, pero le pega al final la misma frase `"CONFORME A PARTIDA N DE LA CONVOCATORIA"` — remite al número de partida de la convocatoria, no al medicamento. A diferencia de §5.3.2 (donde el string completo ES solo esa frase, sin describir nada), aquí la descripción real ya es buena; solo hay que recortar la coletilla, no reemplazar todo el producto. Ejemplos reales: `"PARACETAMOL 500 MG ENVASE CON 10 TABLETAS.CONFORME A PARTIDA 204 DE LA CONVOCATORIA"`, `"...FRASCO ÁMPULA CON 100 ML.CONFORME A PARTIDA 434 DE LA CONVOCATORIA"`, a veces sin separador (`"...1.0 MLCONFORME A PARTIDA 7 DE LA CONVOCATORIA"`) o sin número de partida.
 

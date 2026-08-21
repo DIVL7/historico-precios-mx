@@ -80,7 +80,9 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ---
 
-## 7. Texto de producto: cuatro patrones degenerados corregidos automáticamente; typos sueltos no
+## 7. Texto de producto: cuatro patrones degenerados, corrección DESACTIVADA desde 2026-08-21
+
+**Estado actual:** las correcciones automáticas descritas abajo están desactivadas a propósito desde el 2026-08-21 -- `producto` hoy es el texto crudo de la fuente tal cual, sin sanear, para poder identificar todos los casos reales antes de diseñar cómo separar molécula/dosis/presentación/nombre comercial (brainstorming en curso, ver Metodologia.md §5.3.2/§5.3.3/§5.3.4). El resto de esta sección describe la lógica tal como funcionaba antes de desactivarse, útil como referencia si se reactiva.
 
 **Qué se detectó, verificado en vivo contra el sitio:** la institución compradora a veces captura la "Descripción detallada" del ítem de forma degenerada, en cuatro patrones estructurales recurrentes:
 - Referencia vacía de contenido: el texto es literalmente `CONFORME A PARTIDA N DE LA CONVOCATORIA` — remite a su propia partida sin describir el producto (128 registros en la corrida donde se detectó).
@@ -125,10 +127,9 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ## 11. Supuestos no verificados activamente
 
-- **Moneda:** el pipeline asume MXN sin verificar contra la columna "Moneda" del CSV. Hoy da 100% MXN en los datos filtrados, pero no hay alerta si eso cambiara.
 - **Filas descartadas por campos faltantes** (sin "Dirección del anuncio" o "Código del contrato"): no se cuentan ni se loguean. Hoy da cero filas afectadas, pero no hay visibilidad si eso cambiara.
 
-**Alternativas:** agregar validación explícita y logging para ambos casos — no implementado.
+**Alternativas:** agregar validación explícita y logging — no implementado.
 
 ---
 
