@@ -1,10 +1,13 @@
-// Auditoría rápida de docs/data.json + docs/data.errores.json, para
+// Auditoría rápida de docs/data.<año>.json + docs/data.errores.json, para
 // verificar el estado del dataset sin tener que confiar ciegamente en el
 // resumen que imprime una corrida de extract.js. Pensado para correrse a
 // mano en cualquier momento, y para que el agente lo corra antes/después de
 // cualquier operación que filtre o borre registros.
 //
-// Uso: node scripts/audit-dataset.js [--out docs/data.json]
+// Uso: node scripts/audit-dataset.js [--out archivo.json]
+// Sin --out audita TODOS los docs/data.<año>.json juntos (ver
+// scripts/lib/dataset.js); con --out audita solo ese archivo puntual (p. ej.
+// para revisar una salida de prueba fuera de docs/).
 //
 // Nace de la sesión 2026-08-10: un "reset" de 2025 mal hecho (filtrando por
 // prefijo de codigo_contrato, que NO indica el CSV de origen) borró 1,525
@@ -15,11 +18,14 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { listarArchivosDataset, cargarDatasetCompleto } = require('./lib/dataset');
+
+const DOCS_DIR = path.join(__dirname, '..', 'docs');
 
 function parseArgs(argv) {
   const rest = argv.slice(2);
   const outIdx = rest.indexOf('--out');
-  return { out: outIdx !== -1 ? rest[outIdx + 1] : path.join(__dirname, '..', 'docs', 'data.json') };
+  return { out: outIdx !== -1 ? rest[outIdx + 1] : null };
 }
 
 function contarPorOrigen(registros) {
@@ -31,14 +37,39 @@ function contarPorOrigen(registros) {
   return conteo;
 }
 
+// Compara `data` (ya cargado) contra la versión de `filePath` en HEAD --
+// cualquier origen que BAJE de conteo respecto a HEAD es sospechoso (salvo
+// que se haya pedido explícitamente reiniciar ese origen). Un solo lugar
+// para esta lógica porque se usa tanto en modo multi-archivo (una vez por
+// año) como en modo --out (una vez, sobre el archivo puntual).
+function compararContraHead(filePath, data) {
+  const porOrigen = contarPorOrigen(data);
+  try {
+    const headRaw = execSync(`git show HEAD:${path.relative(path.join(__dirname, '..'), filePath).replace(/\\/g, '/')}`, { cwd: path.join(__dirname, '..'), maxBuffer: 1024 * 1024 * 200 }).toString('utf8');
+    const headData = JSON.parse(headRaw);
+    const headPorOrigen = contarPorOrigen(headData);
+    console.log(`HEAD: ${headData.length} registros`);
+    const todosOrigenes = new Set([...Object.keys(porOrigen), ...Object.keys(headPorOrigen)]);
+    for (const origen of [...todosOrigenes].sort()) {
+      const antes = headPorOrigen[origen] || 0;
+      const ahora = porOrigen[origen] || 0;
+      const delta = ahora - antes;
+      const marca = delta < 0 ? ' ⚠ BAJÓ' : delta > 0 ? ' (creció)' : '';
+      console.log(`  origen "${origen}": HEAD=${antes} -> ahora=${ahora} (${delta >= 0 ? '+' : ''}${delta})${marca}`);
+    }
+  } catch (e) {
+    console.log(`(No se pudo comparar contra HEAD: ${e.message.split('\n')[0]})`);
+  }
+}
+
 function main() {
   const args = parseArgs(process.argv);
-  const errPath = args.out.replace(/\.json$/, '.errores.json');
+  const errPath = path.join(DOCS_DIR, 'data.errores.json');
 
-  const data = JSON.parse(fs.readFileSync(args.out, 'utf8'));
+  const data = args.out ? JSON.parse(fs.readFileSync(args.out, 'utf8')) : cargarDatasetCompleto(DOCS_DIR);
   const errores = fs.existsSync(errPath) ? JSON.parse(fs.readFileSync(errPath, 'utf8')) : [];
 
-  console.log(`=== Auditoría de ${args.out} ===\n`);
+  console.log(args.out ? `=== Auditoría de ${args.out} ===\n` : `=== Auditoría de docs/data.<año>.json (todos los orígenes) ===\n`);
 
   // 1. Conteo por origen -- lo primero que hay que mirar tras cualquier
   // reset/filtro/merge.
@@ -55,26 +86,19 @@ function main() {
     console.log(`\n⚠ ${sinOrigen} registros SIN origen (dato legado o bug de extracción).`);
   }
 
-  // 3. Comparación contra el último commit -- la que habría atrapado el
-  // incidente de esta sesión al instante: cualquier origen que BAJE de
-  // conteo respecto a HEAD es sospechoso (salvo que se haya pedido
-  // explícitamente reiniciar ese origen).
-  try {
-    const headRaw = execSync(`git show HEAD:${path.relative(path.join(__dirname, '..'), args.out).replace(/\\/g, '/')}`, { cwd: path.join(__dirname, '..'), maxBuffer: 1024 * 1024 * 200 }).toString('utf8');
-    const headData = JSON.parse(headRaw);
-    const headPorOrigen = contarPorOrigen(headData);
-    console.log(`\n=== Comparación contra HEAD (último commit) ===`);
-    console.log(`HEAD: ${headData.length} registros`);
-    const todosOrigenes = new Set([...Object.keys(porOrigen), ...Object.keys(headPorOrigen)]);
-    for (const origen of [...todosOrigenes].sort()) {
-      const antes = headPorOrigen[origen] || 0;
-      const ahora = porOrigen[origen] || 0;
-      const delta = ahora - antes;
-      const marca = delta < 0 ? ' ⚠ BAJÓ' : delta > 0 ? ' (creció)' : '';
-      console.log(`  origen "${origen}": HEAD=${antes} -> ahora=${ahora} (${delta >= 0 ? '+' : ''}${delta})${marca}`);
+  // 3. Comparación contra el último commit. En modo --out es un solo
+  // archivo puntual; sin --out se compara CADA docs/data.<año>.json por
+  // separado contra su propia versión en HEAD -- más preciso que comparar
+  // el total combinado, que podría esconder que un año bajó mientras otro
+  // sube.
+  console.log(`\n=== Comparación contra HEAD (último commit) ===`);
+  if (args.out) {
+    compararContraHead(args.out, data);
+  } else {
+    for (const { origen, path: p } of listarArchivosDataset(DOCS_DIR)) {
+      console.log(`\n-- ${path.basename(p)} --`);
+      compararContraHead(p, data.filter(r => r.origen === origen));
     }
-  } catch (e) {
-    console.log(`\n(No se pudo comparar contra HEAD: ${e.message.split('\n')[0]})`);
   }
 
   // 4. Duplicados exactos por codigo_contrato + cve_cucop -- informativo, NO
@@ -96,12 +120,10 @@ function main() {
   for (const [origen, n] of Object.entries(erroresPorOrigen).sort()) {
     console.log(`  origen "${origen}": ${n}`);
   }
-  const intentosPorContrato = new Map();
-  for (const e of errores) {
-    const key = `${e.hash}|${e.codigoContrato}`;
-    intentosPorContrato.set(key, (intentosPorContrato.get(key) || 0) + 1);
-  }
-  const conTresOMas = [...intentosPorContrato.values()].filter(n => n >= 3).length;
+  // Cada contrato tiene UNA sola entrada en docs/data.errores.json con su
+  // propio contador `intentos` (ver agregarError en extract.js) -- no hay
+  // duplicados que contar acá, solo leer el campo.
+  const conTresOMas = errores.filter(e => (e.intentos || 1) >= 3).length;
   console.log(`Contratos con >= 3 intentos fallidos (fallo permanente, ya no se reintentan solos): ${conTresOMas}`);
 
   console.log('\n=== Fin auditoría ===');

@@ -4,6 +4,8 @@
 // evita que las dos copias diverjan.
 
 const ExcelJS = require('exceljs');
+const fs = require('fs');
+const path = require('path');
 
 // La clave CSG viene a veces con puntos ("010.000.6153.00") y a veces sin
 // ellos ("010000430400") al inicio de una descripción -- se capturan los 4
@@ -242,4 +244,63 @@ async function guardarExcel(outPath, resultados) {
   await wb.xlsx.writeFile(outPath);
 }
 
-module.exports = { CLAVE_RE, DICCIONARIO, guardarExcel, dividirProductoSiAplica, quitarPrefijoClave };
+// El dataset publicado se divide en un archivo por origen (docs/data.<año>.json)
+// en vez de un docs/data.json único -- GitHub rechaza archivos de más de
+// 100 MB, y el combinado los superó apenas se juntaron 2024+2025+2026
+// (2026-08-23). Estas tres funciones son el único lugar que sabe cómo
+// descubrir/leer/escribir esos archivos, para que extract.js,
+// validar-claves.js y audit-dataset.js no dupliquen la lógica de split ni
+// diverjan en el patrón de nombre.
+const DATA_FILE_RE = /^data\.(\d{4})\.json$/;
+
+function listarArchivosDataset(docsDir) {
+  return fs.readdirSync(docsDir)
+    .map(f => f.match(DATA_FILE_RE))
+    .filter(Boolean)
+    .map(m => ({ origen: m[1], path: path.join(docsDir, m[0]) }))
+    .sort((a, b) => a.origen.localeCompare(b.origen));
+}
+
+function cargarDatasetCompleto(docsDir) {
+  let registros = [];
+  for (const { path: p } of listarArchivosDataset(docsDir)) {
+    registros = registros.concat(JSON.parse(fs.readFileSync(p, 'utf8')));
+  }
+  return registros;
+}
+
+// Escribe cada grupo de `registros` (agrupados por su campo `origen`) en su
+// propio docs/data.<origen>.json -- no toca archivos de otros orígenes que no
+// aparezcan en `registros` (p. ej. si se llama con un solo año cargado).
+// Devuelve las rutas escritas, para que el caller pueda regenerar el
+// manifest o loguearlas.
+function guardarDatasetPorOrigen(docsDir, registros) {
+  const porOrigen = new Map();
+  for (const r of registros) {
+    const o = r.origen || 'sin_origen';
+    if (!porOrigen.has(o)) porOrigen.set(o, []);
+    porOrigen.get(o).push(r);
+  }
+  const rutas = [];
+  for (const [origen, grupo] of porOrigen) {
+    const p = path.join(docsDir, `data.${origen}.json`);
+    fs.writeFileSync(p, JSON.stringify(grupo), 'utf8');
+    rutas.push(p);
+  }
+  return rutas;
+}
+
+// docs/data.manifest.json le dice al dashboard estático (docs/index.html,
+// sin acceso a listar el directorio) qué archivos data.<año>.json existen --
+// se regenera cada vez que el pipeline termina, así que un año nuevo aparece
+// solo sin tener que tocar el HTML a mano.
+function guardarManifest(docsDir) {
+  const origenes = listarArchivosDataset(docsDir).map(a => a.origen);
+  fs.writeFileSync(path.join(docsDir, 'data.manifest.json'), JSON.stringify(origenes), 'utf8');
+  return origenes;
+}
+
+module.exports = {
+  CLAVE_RE, DICCIONARIO, guardarExcel, dividirProductoSiAplica, quitarPrefijoClave,
+  listarArchivosDataset, cargarDatasetCompleto, guardarDatasetPorOrigen, guardarManifest,
+};

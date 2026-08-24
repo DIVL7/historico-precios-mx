@@ -110,7 +110,7 @@ Igual que el Compendio (§3.3), el xlsx crudo no se versiona (`.gitignore`) y se
 4. Por cada expediente, navegar al detalle y localizar cada contrato dentro de la tabla paginada de resultados.
 5. Extraer `detallepartidas/{hash}/{codigo_contrato}` — la respuesta JSON trae los ítems ya estructurados (`cve_cucop`, `descripcion`, `precio_unitario`, `subtotal`, `cantidad`, `cantidad_minima`, `cantidad_maxima`, `um`). Un contrato que pasó el filtro del paso 2 puede traer aquí líneas de **otras partidas** (compra mixta: radiofármacos, material de curación, papelería, etc.) — se descarta cualquier ítem cuyo `cve_cucop` no empiece con `25301`, para no marcarlo como medicamento solo por venir en el mismo contrato. (Detectado el 2026-08-09: sin este segundo filtro, ~32% del dataset — 7,989 de 24,909 registros — eran contaminación de otras partidas; se limpió retroactivamente y se corrigió el pipeline.)
 6. Por cada ítem que pasa el filtro anterior, asignar clave (§5.2), calcular `precio_unitario` corregido (§5.3) y `valor_minimo`/`valor_maximo` (§5.5), y construir el registro final. `producto` se guarda tal cual viene de la fuente, sin sanear -- ver §5.3.2/§5.3.3/§5.3.4 (desactivadas).
-7. Escribir a `docs/data.json` con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
+7. Escribir a `docs/data.<año>.json` (un archivo por origen, ver §6) con checkpoint incremental (reanudable: si el proceso se corta, la siguiente corrida retoma desde el último punto guardado en vez de reprocesar todo).
 
 ### 5.2 Asignación y validación de clave
 
@@ -213,9 +213,9 @@ El modal muestra cantidad y valor de forma condicional: si el contrato tiene ran
 | `scripts/extract.js` | Pipeline principal — ver §5.1 |
 | `scripts/validar-claves.js` | Sanity check de claves post-corrida — ver §5.2 |
 | `docs/index.html` | Dashboard estático: búsqueda, filtros, orden por columna, paginación, modal de detalle por registro — ver §6 |
-| `docs/data.json` | Dataset consolidado, un registro por ítem de contrato |
+| `docs/data.<año>.json` | Dataset consolidado, un registro por ítem de contrato — un archivo por año de origen (GitHub rechaza archivos >100 MB; el combinado los superó al juntar 2024+2025+2026), descubiertos vía `docs/data.manifest.json` (`scripts/lib/dataset.js`) |
 | `docs/data.xlsx` | Copia del dataset en Excel, con hoja "Diccionario" (descripción de cada columna) además de la hoja "Precios" |
-| `docs/data.errores.json` | Contratos que fallaron la extracción (reintentables hasta 3 veces) |
+| `docs/data.errores.json` | Contratos que fallaron la extracción — una entrada por contrato (`hash`+`codigoContrato`), con un contador `intentos` que se acumula entre corridas; al llegar a `MAX_INTENTOS` (3) el contrato se marca "fallo permanente" y no se vuelve a reintentar solo |
 | `docs/data.calidad.json` | Reporte de anomalías — ver §5.4 |
 | `docs/data.correcciones.json` | Registro de correcciones de clave aplicadas y casos sin resolver — ver §5.2 |
 | `.github/workflows/scrape.yml` | Workflow de GitHub Actions |

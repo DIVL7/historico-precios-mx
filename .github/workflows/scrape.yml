@@ -39,21 +39,23 @@ jobs:
         run: |
           YEAR="${{ inputs.anio }}"
           if [ -z "$YEAR" ]; then YEAR=$(date +%Y); fi
-          node scripts/extract.js "data/raw/contratos_${YEAR}.csv" --out docs/data.json --concurrency 4
+          echo "YEAR=$YEAR" >> "$GITHUB_ENV"
+          node scripts/extract.js "data/raw/contratos_${YEAR}.csv" --concurrency 4
 
       - name: Validar claves (sanity check post-extracción)
         # Corre aunque el paso anterior se haya cortado por timeout -- sigue
         # habiendo valor en validar lo que sí se alcanzó a extraer. Si
-        # docs/data.json no existe todavía (primera corrida sin progreso),
-        # este paso falla solo -- no debe bloquear el commit de lo que sí haya.
+        # docs/data.<año>.json no existe todavía (primera corrida sin
+        # progreso), este paso falla solo -- no debe bloquear el commit de lo
+        # que sí haya.
         if: always()
         continue-on-error: true
         run: node scripts/validar-claves.js
 
       - name: Commitear resultado
         # Corre incluso si el paso de extracción se cortó por el timeout del
-        # job o falló a medio camino. El pipeline escribe docs/data.json de
-        # forma incremental (cada 10 expedientes), así que aunque no haya
+        # job o falló a medio camino. El pipeline escribe docs/data.<año>.json
+        # de forma incremental (cada 10 expedientes), así que aunque no haya
         # terminado, hay progreso real que vale la pena guardar -- y
         # docs/data.errores.json es necesario para que la siguiente corrida
         # sepa qué reintentar en vez de reprocesar todo desde cero.
@@ -61,10 +63,14 @@ jobs:
         run: |
           # Solo se versiona docs/ (los resultados). El CSV crudo descargado
           # (decenas de MB, se re-descarga fresco en cada corrida) no se commitea
-          # para no inflar el historial del repo.
+          # para no inflar el historial del repo. El dataset se publica un
+          # archivo por año (docs/data.<año>.json, ver scripts/lib/dataset.js)
+          # en vez de uno solo -- GitHub rechaza archivos de más de 100 MB, y
+          # el combinado los superó apenas se juntaron 2024+2025+2026
+          # (2026-08-23).
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          for f in docs/data.json docs/data.errores.json docs/data.calidad.json docs/data.correcciones.json docs/data.xlsx; do
+          for f in "docs/data.${YEAR}.json" docs/data.manifest.json docs/data.errores.json docs/data.calidad.json docs/data.correcciones.json docs/data.xlsx; do
             [ -f "$f" ] && git add "$f"
           done
           git diff --cached --quiet && echo "Sin cambios" || git commit -m "Actualización automática de precios ($(date +%Y-%m-%d))"

@@ -1,6 +1,7 @@
 // Sanity check post-corrida: TODA la lógica de confiabilidad de `clave` vive
 // aquí (no en extract.js, que solo agarra una clave rápido por el medio que
-// se pueda). Evalúa CADA registro de docs/data.json de forma AISLADA -- nunca
+// se pueda). Evalúa CADA registro de docs/data.<año>.json (todos los
+// orígenes juntos, ver scripts/lib/dataset.js) de forma AISLADA -- nunca
 // le presta evidencia de otro registro, ni siquiera de uno con el mismo
 // nombre+dosis. Decisión tomada el 2026-08-17 (ver Metodologia.md): la
 // versión anterior agrupaba por "producto canónico" y propagaba una clave
@@ -47,9 +48,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { guardarExcel, quitarPrefijoClave } = require('./lib/dataset');
+const { guardarExcel, quitarPrefijoClave, cargarDatasetCompleto, guardarDatasetPorOrigen, guardarManifest } = require('./lib/dataset');
 
-const DATA_PATH = path.join(__dirname, '..', 'docs', 'data.json');
+const DOCS_DIR = path.join(__dirname, '..', 'docs');
 const REPORTE_PATH = path.join(__dirname, '..', 'docs', 'data.correcciones.json');
 const EXCEL_PATH = path.join(__dirname, '..', 'docs', 'data.xlsx');
 const COMPENDIO_PATH = path.join(__dirname, '..', 'data', 'compendio_medicamentos.json');
@@ -188,7 +189,7 @@ function asignar(data, i, clave, compendio, fuente, corregidos) {
 }
 
 async function main() {
-  const data = JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+  const data = cargarDatasetCompleto(DOCS_DIR);
   const compendio = JSON.parse(fs.readFileSync(COMPENDIO_PATH, 'utf8'));
   const cucopMap = loadCucopMap();
 
@@ -239,7 +240,8 @@ async function main() {
     sinResolver.push({ producto: registro.producto.slice(0, 100), codigo_contrato: registro.codigo_contrato });
   }
 
-  fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
+  guardarDatasetPorOrigen(DOCS_DIR, data);
+  guardarManifest(DOCS_DIR);
   await guardarExcel(EXCEL_PATH, data);
   fs.writeFileSync(REPORTE_PATH, JSON.stringify({
     generado: new Date().toISOString(),

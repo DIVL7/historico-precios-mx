@@ -1,6 +1,6 @@
 # Limitaciones de los Datos
 
-**Aplica a:** dataset de 2026 (`docs/data.json`, 16,911 registros) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
+**Aplica a:** el dataset completo (`docs/data.<año>.json`, uno por año de origen — ver `Metodologia.md` §6) — las cifras citadas abajo son de la corrida más reciente y se actualizan con cada corrida completa; ver `docs/data.calidad.json` para los números vigentes.
 
 Este documento resume dónde puede haber datos erróneos, imprecisos o incompletos en esta base, y qué alternativas existen para cada caso. Cómo funciona la herramienta está en `Metodologia.md`; aquí solo se documenta qué puede estar mal y qué hacer al respecto.
 
@@ -34,7 +34,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Alternativas para lo sin resolver:**
 - Buscar por nombre en `vademecum.es/cnis` (espejo navegable del Compendio, con más claves que nuestro archivo — 2,600 vs. 1,895) — evaluado pero no automatizado, ver punto 3.
 - Descargar y parsear `https://www.csg.gob.mx/Comp26042025.pdf` (Compendio en PDF, +10MB) como fuente alterna si vademecum dejara de existir — no implementado.
-- **Corrección manual dirigida** (priorizar por `valor_maximo` del contrato en vez de cubrir el 100%): tomar el `producto` de `docs/data.correcciones.json` (`sin_resolver`), determinar la clave correcta a mano, y editar `docs/data.json` poniendo `clave`, `grupo_terapeutico` y **`clave_fuente: "manual"`** en todos los registros con ese `producto`. Cualquier `clave_fuente` distinto de `null`/`"cucop"` se trata como confiable, así que la corrección sobrevive a la siguiente corrida de `validar-claves.js` y se propaga sola a otros registros del mismo producto canónico. Correr `node scripts/validar-claves.js` una vez después de editar para regenerar la propagación y el Excel.
+- **Corrección manual dirigida** (priorizar por `valor_maximo` del contrato en vez de cubrir el 100%): tomar el `producto` de `docs/data.correcciones.json` (`sin_resolver`), determinar la clave correcta a mano, y editar el `docs/data.<año>.json` correspondiente (según el `origen` del registro) poniendo `clave`, `grupo_terapeutico` y **`clave_fuente: "manual"`** en todos los registros con ese `producto`. Cualquier `clave_fuente` distinto de `null`/`"cucop"` se trata como confiable, así que la corrección sobrevive a la siguiente corrida de `validar-claves.js` y se propaga sola a otros registros del mismo producto canónico. Correr `node scripts/validar-claves.js` una vez después de editar para regenerar la propagación y el Excel.
 
 ---
 
@@ -97,7 +97,7 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 **Alternativas:**
 - No hay forma automática de "arreglar" texto corrupto de origen sin arriesgar inventar datos.
 - Se podría ampliar la heurística a otros patrones estructurales si aparecen como recurrentes (ej. flag si el texto no contiene ningún nombre reconocible de principio activo). No implementado.
-- Para typos sueltos, la única vía es corrección manual dirigida editando `producto` directo en `docs/data.json` — a diferencia de `clave` (punto 2), no hay un campo `producto_fuente` que la marque como confiable, así que no sobrevive a la siguiente corrida completa a menos que también se corrija en el origen.
+- Para typos sueltos, la única vía es corrección manual dirigida editando `producto` directo en el `docs/data.<año>.json` correspondiente (según el `origen` del registro) — a diferencia de `clave` (punto 2), no hay un campo `producto_fuente` que la marque como confiable, así que no sobrevive a la siguiente corrida completa a menos que también se corrija en el origen.
 
 ---
 
@@ -135,9 +135,15 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 ## 12. Errores de extracción residuales
 
-**Estado actual:** un puñado de contratos con error de extracción por corrida (timeouts de red), dentro del presupuesto de 3 reintentos automáticos — se resuelven solos en la siguiente corrida. Ver `docs/data.errores.json` para el detalle actualizado.
+**Estado actual (verificado en vivo el 2026-08-23, tras el re-scrape completo de 2025/2026):** de 79,032 registros extraídos, 7,685 contratos quedan en `docs/data.errores.json` como "fallo permanente" (≥3 intentos). La inmensa mayoría (7,674, 99.9%) es `sin_items_partida_25301_validos` -- **no es un error real**: el filtro del CSV masivo opera a nivel de contrato completo, así que un contrato marcado con partida 25301 puede legítimamente no tener ningún ítem individual de esa partida (compra mixta con otras partidas). Confirmado contra el sitio real con una muestra representativa: 8/8 casos revisados, ningún ítem devuelto por la API era 25301.
 
-**Alternativas:** ninguna acción necesaria mientras el conteo se mantenga bajo — un salto grande en una corrida futura es señal de que algo cambió en el sitio fuente (ver punto 9). Si un contrato agota los 3 reintentos automáticos (queda como "fallo permanente", ya no se reintenta solo), se puede forzar manualmente: ubicarlo por `codigoContrato` en `data/raw/contratos_{año}.csv`, revisar el expediente directo en `https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento` para diagnosticar, y borrar sus entradas de `docs/data.errores.json` antes de correr `extract.js` de nuevo para que se reintente.
+Los otros 11 (0.014% del dataset) SÍ representan fallos genuinos de extracción, ya diagnosticados en vivo, con tres causas distintas:
+
+- **`numero_contrato_ambiguo_sin_resolver` (5 casos):** dos o más contratos reales de un mismo expediente comparten el mismo texto de "Núm. del contrato" en la tabla del sitio. Para expedientes grandes (>100 contratos, ver `UMBRAL_PASADA_UNICA`) esto se resuelve solo (`procesarPorPaginado` lee el `codigoContrato` real de la URL de cada respuesta). Para expedientes chicos se agregó el mismo mecanismo como fallback (`resolverAmbiguoPorPaginado`, `scripts/extract.js`, 2026-08-23) -- resolvió 11 de 18 casos vistos ese día. Los 5 que quedan: el fallback probó *todas* las filas con ese texto en las primeras 5 páginas y ninguna respondió con el `codigoContrato` buscado -- el contrato puede haber cambiado o desaparecido de la tabla del sitio desde que se generó el CSV.
+- **`contrato_no_encontrado_en_tabla` (3 casos):** el campo "Núm. del contrato" del CSV masivo a veces trae **varios números de contrato pegados en un solo campo** (ej. `"IB-HRAEI-AD-CC-773-2025,IB-HRAEI-AD-CC-778-2025"`, separados por coma o espacio) -- el sitio muestra un número limpio por fila, así que buscar por el texto completo del CSV nunca matchea nada. Es un problema de calidad del dato de origen (Compras MX), no del pipeline.
+- **`timeout_esperando_respuesta` (3 casos):** el click aterriza en la fila correcta pero la respuesta de `detallepartidas` nunca llega dentro del timeout. Verificado en vivo el 2026-08-23 que al menos uno de estos SÍ responde correctamente cuando se prueba aislado (sin el resto del pipeline corriendo) -- reintentado con `--concurrency 1` bajó el conteo de 7 a 3, pero no lo eliminó del todo, así que no es puramente contención por concurrencia.
+
+**Alternativas:** ninguna acción adicional planeada -- 24 casos genuinos sobre ~78,900 registros es marginal, y las dos primeras causas (ambigüedad no resuelta, CSV con múltiples números pegados) no tienen una solución general limpia sin arriesgar falsos positivos. Si un contrato puntual importa, el procedimiento manual sigue siendo: ubicarlo por `codigoContrato` en `data/raw/contratos_{año}.csv`, revisar el expediente directo en `https://comprasmx.buengobierno.gob.mx/sitiopublico/#/sitiopublico/detalle/{hash}/procedimiento`, y borrar su entrada de `docs/data.errores.json` antes de correr `extract.js` de nuevo para que se reintente.
 
 ---
 
@@ -165,4 +171,4 @@ Este documento resume dónde puede haber datos erróneos, imprecisos o incomplet
 
 **Por qué pasa:** viene así invertido desde la propia API de Compras MX (`C-2026-00068873`, contrato "Cerrado" con min=200 y max=20) — no es un bug del pipeline, que preserva el rango tal cual lo reporta la fuente cuando ambos valores vienen poblados y distintos.
 
-**Alternativas:** ninguna sin volver a la fuente original para confirmar cuál de los dos números es el correcto. Caso aislado (1 de 16,920 registros); revisar `docs/data.json` si se necesita excluirlo puntualmente.
+**Alternativas:** ninguna sin volver a la fuente original para confirmar cuál de los dos números es el correcto. Caso aislado (1 de 16,920 registros); revisar el `docs/data.<año>.json` correspondiente si se necesita excluirlo puntualmente.

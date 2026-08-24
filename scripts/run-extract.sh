@@ -27,7 +27,7 @@ for a in "$@"; do
     exit 1
   fi
   if [ "$a" = "--out" ]; then
-    echo "ERROR: --out no se acepta en run-extract.sh -- al terminar la corrida este wrapper siempre valida y audita docs/data.json (rutas fijas dentro de validar-claves.js y audit-dataset.js), así que un --out a otro archivo dejaría ese archivo sin sanity-check, auditoría ni Excel. Corré extract.js directo si necesitás una salida a medida."
+    echo "ERROR: --out no se acepta en run-extract.sh -- al terminar la corrida este wrapper siempre valida y audita docs/data.<año>.json (rutas estándar dentro de validar-claves.js y audit-dataset.js, ver scripts/lib/dataset.js), así que un --out a otro archivo dejaría ese archivo sin sanity-check, auditoría ni Excel. Corré extract.js directo si necesitás una salida a medida."
     exit 1
   fi
 done

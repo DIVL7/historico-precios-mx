@@ -594,9 +594,21 @@ function onModalKeydown(e) {
 async function init() {
   document.getElementById('tableWrap').innerHTML = '<div class="empty">Cargando datos…</div>';
 
-  const res = await fetch('./data.json');
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  allRows = await res.json();
+  // El dataset se publica un archivo por año (data.<año>.json) en vez de un
+  // data.json único -- GitHub rechaza archivos de más de 100 MB, y el
+  // combinado los superó apenas se juntaron 2024+2025+2026 (2026-08-23).
+  // data.manifest.json (regenerado por el pipeline en cada corrida) le dice
+  // a esta página estática qué años existen, sin tener que listar el
+  // directorio ni tocar este HTML cuando se agrega un año nuevo.
+  const manifestRes = await fetch('./data.manifest.json');
+  if (!manifestRes.ok) throw new Error(`HTTP ${manifestRes.status} cargando data.manifest.json`);
+  const anios = await manifestRes.json();
+  const porAnio = await Promise.all(anios.map(async (anio) => {
+    const res = await fetch(`./data.${anio}.json`);
+    if (!res.ok) throw new Error(`HTTP ${res.status} cargando data.${anio}.json`);
+    return res.json();
+  }));
+  allRows = porAnio.flat();
 
   fillSelect('fInstitucion', allRows.map(r => r.institucion));
   fillSelect('fGrupo', allRows.flatMap(r => r.grupo_terapeutico || []));

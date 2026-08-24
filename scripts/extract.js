@@ -10,7 +10,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { parse } = require('csv-parse/sync');
 const { chromium } = require('playwright');
-const { CLAVE_RE, guardarExcel, dividirProductoSiAplica } = require('./lib/dataset');
+const { CLAVE_RE, guardarExcel, dividirProductoSiAplica, cargarDatasetCompleto, guardarManifest } = require('./lib/dataset');
 
 // Las transformaciones que este pipeline le hacía a `producto` (sustituir por
 // ficha CUCoP+ cuando venía degenerado, recortar coletilla administrativa,
@@ -77,7 +77,7 @@ function withTimeout(promise, ms, label) {
 }
 
 function parseArgs(argv) {
-  const args = { input: null, limit: Infinity, out: path.join(__dirname, '..', 'docs', 'data.json'), concurrency: 1, reset: false };
+  const args = { input: null, limit: Infinity, out: null, concurrency: 1, reset: false };
   const rest = argv.slice(2);
   args.input = rest.find(a => !a.startsWith('--'));
   const limitIdx = rest.indexOf('--limit');
@@ -99,6 +99,12 @@ function parseArgs(argv) {
     const m = path.basename(args.input).match(/(\d{4})/);
     args.origen = m ? m[1] : path.basename(args.input, path.extname(args.input));
   }
+  // Un archivo por origen (docs/data.<año>.json), no un docs/data.json único
+  // -- GitHub rechaza archivos >100 MB, y el combinado los superó apenas se
+  // juntaron 2024+2025+2026 (2026-08-23). Ver scripts/lib/dataset.js para
+  // cómo se descubren/mergean estos archivos en validar-claves.js y
+  // audit-dataset.js.
+  if (!args.out) args.out = path.join(__dirname, '..', 'docs', `data.${args.origen}.json`);
   return args;
 }
 
@@ -282,10 +288,35 @@ async function closeModalIfOpen(page) {
   }
 }
 
+// `numContrato` (buscado por texto en findAndClickContrato) no es único --
+// dos contratos del mismo expediente pueden mostrar el mismo texto visible
+// (confirmado en vivo el 2026-08-22: "I-97-2025-1" en dos filas distintas,
+// codigoContrato C-2026-00000266 y C-2026-00000294). Antes esto se
+// diagnosticaba mal: el listener solo aceptaba la URL que coincidiera
+// EXACTO con `contrato.codigoContrato`, así que un click que aterrizaba en
+// el contrato equivocado nunca disparaba ese filtro -- `captured` quedaba
+// `null` para siempre y el contrato correcto salía como
+// 'timeout_esperando_respuesta' (parecía que el sitio no respondía, cuando
+// en realidad sí respondió, pero para otro contrato). Ahora se captura
+// CUALQUIER respuesta de detallepartidas para este `hash` y se lee el
+// codigoContrato real de la URL (mismo patrón que ya usa la pasada única en
+// procesarPorPaginado) -- si no coincide con el que se buscaba, se reporta
+// como 'numero_contrato_ambiguo', un diagnóstico preciso en vez de un
+// timeout genérico. No se intenta resolver la ambigüedad automáticamente
+// acá (a diferencia de la pasada única, que sí puede porque recorre TODAS
+// las filas): es un caso raro (2 de ~17,000 contratos en la corrida de
+// 2026-08-22) y `findAndClickContrato` solo sabe buscar por texto, no tiene
+// forma de distinguir cuál de las filas duplicadas es la correcta.
+const DETALLE_RE_CONTRATO = (hash) => new RegExp(`/whitney/sitiopublico/detallepartidas/${hash}/([^/?]+)`);
+
 async function extractContrato(page, hash, contrato) {
   let captured = null;
+  let codigoRecibido = null;
+  const detalleRe = DETALLE_RE_CONTRATO(hash);
   const onResponse = async (res) => {
-    if (res.url().includes(`/whitney/sitiopublico/detallepartidas/${hash}/${contrato.codigoContrato}`)) {
+    const m = res.url().match(detalleRe);
+    if (m) {
+      codigoRecibido = decodeURIComponent(m[1]);
       try { captured = JSON.parse(await res.text()); } catch (e) { /* ignore */ }
     }
   };
@@ -299,6 +330,9 @@ async function extractContrato(page, hash, contrato) {
       await page.waitForTimeout(200);
     }
     if (!captured) return { error: 'timeout_esperando_respuesta' };
+    if (codigoRecibido !== contrato.codigoContrato) {
+      return { error: 'numero_contrato_ambiguo', detalle: `se buscaba ${contrato.codigoContrato} (num "${contrato.numContrato}"), llegó respuesta de ${codigoRecibido}` };
+    }
     if (!captured.success) return { error: 'respuesta_sin_exito', detalle: captured };
 
     return { data: captured.data || [] };
@@ -306,6 +340,62 @@ async function extractContrato(page, hash, contrato) {
     page.off('response', onResponse);
     await closeModalIfOpen(page);
   }
+}
+
+// Fallback cuando extractContrato reporta 'numero_contrato_ambiguo' -- en vez
+// de darse por vencido, prueba TODAS las filas que compartan ese numContrato
+// (no solo la primera que encuentra Playwright), leyendo el codigoContrato
+// real de cada respuesta hasta dar con la que buscábamos. Mismo mecanismo que
+// procesarPorPaginado (más abajo), pero acotado a un solo contrato en vez de
+// recorrer todo el expediente -- solo tiene sentido llamarlo para expedientes
+// por debajo de UMBRAL_PASADA_UNICA (los grandes ya se resuelven bien con
+// procesarPorPaginado). Confirmado en vivo el 2026-08-23: de 18 casos
+// ambiguos vistos en expedientes chicos, el patrón es 100% determinista --
+// `findAndClickContrato` siempre aterriza en la misma fila física, así que 3
+// reintentos con el camino viejo nunca lo resolvían solos.
+async function resolverAmbiguoPorPaginado(page, hash, contrato) {
+  const detalleRe = DETALLE_RE_CONTRATO(hash);
+  const normalizarEspacios = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+  const numContratoBuscado = normalizarEspacios(contrato.numContrato);
+  const { firstBtn, nextBtn, filas } = localizadoresTablaContratos(page);
+
+  const abrirYCapturar = async (i) => {
+    let captured = null;
+    const onResponse = async (res) => {
+      const m = res.url().match(detalleRe);
+      if (m) {
+        try { captured = { codigo: decodeURIComponent(m[1]), json: JSON.parse(await res.text()) }; }
+        catch (e) { /* respuesta no-JSON, se ignora -- captured sigue null */ }
+      }
+    };
+    page.on('response', onResponse);
+    try {
+      await filas.nth(i).click({ timeout: CLICK_TIMEOUT }).catch(() => {});
+      const start = Date.now();
+      while (!captured && Date.now() - start < RESPONSE_TIMEOUT) await page.waitForTimeout(200);
+      return captured;
+    } finally {
+      page.off('response', onResponse);
+      await closeModalIfOpen(page);
+    }
+  };
+
+  await irAPrimeraPagina(page, firstBtn);
+  // Expedientes ≤ UMBRAL_PASADA_UNICA (100 contratos) caben en 1-2 páginas
+  // (100 filas/página confirmado en vivo) -- este tope es solo una cota de
+  // seguridad contra un paginador atascado, no un límite real esperado.
+  const maxPaginas = 5;
+  for (let paginasVisitadas = 0; paginasVisitadas < maxPaginas; paginasVisitadas++) {
+    const textos = (await filas.allInnerTexts().catch(() => [])).map(normalizarEspacios);
+    for (let i = 0; i < textos.length; i++) {
+      if (textos[i] !== numContratoBuscado) continue;
+      const captured = await abrirYCapturar(i);
+      if (!captured || captured.codigo !== contrato.codigoContrato) continue; // no era la fila que buscábamos, seguir probando
+      return captured.json.success ? { data: captured.json.data || [] } : { error: 'respuesta_sin_exito', detalle: captured.json };
+    }
+    if (!(await avanzarPagina(page, nextBtn))) break;
+  }
+  return { error: 'numero_contrato_ambiguo_sin_resolver', detalle: `ninguna fila con num "${contrato.numContrato}" respondió con ${contrato.codigoContrato}` };
 }
 
 function buildRegistro(contrato, item, compendio, cucopMap, stats, origen) {
@@ -521,16 +611,44 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
     resultados.push(r);
     ctx.allResultados.push(r);
   };
+  // `ctx.allErrores` (el acumulador compartido, persistido a
+  // docs/data.errores.json) guarda UNA sola entrada por contrato con un
+  // contador `intentos`, no una copia por cada vez que falla -- antes cada
+  // llamada empujaba una entrada nueva sin tocar las anteriores, así que un
+  // contrato que fallaba 3 veces (MAX_INTENTOS) terminaba con 3 copias casi
+  // idénticas en el archivo publicado, sin ninguna limpieza entre corridas
+  // (necesario desde 2026-08-21 para que intentosPorContrato pueda contar
+  // entre corridas -- ver comentario de más arriba sobre por qué se dejó de
+  // descartar errores de contratos pendientes). `errores` (el array LOCAL de
+  // este grupo, solo para el resumen impreso de ESTA corrida) sigue
+  // agregando una entrada por evento -- no se persiste tal cual, no hace
+  // falta consolidarlo.
   const agregarError = (e) => {
     if (e.error !== 'grupo_timeout') descartarTimeoutSintetico(e.codigoContrato);
     errores.push(e);
-    ctx.allErrores.push(e);
+    const existente = ctx.allErrores.find(x => x.hash === e.hash && x.codigoContrato === e.codigoContrato);
+    if (existente) {
+      Object.assign(existente, e, { intentos: (existente.intentos || 1) + 1 });
+    } else {
+      ctx.allErrores.push({ ...e, intentos: 1 });
+    }
   };
 
   // Compartido entre el camino de búsqueda por contrato y la pasada única
   // por página (ver UMBRAL_PASADA_UNICA) -- ambos terminan con la misma
   // respuesta cruda de detallepartidas, solo cambia CÓMO se llega a ella.
+  // Devuelve cuántos registros agregó -- un contrato cuyos ítems son TODOS de
+  // otra partida (filtro de abajo) legítimamente produce 0. Sin marcar eso de
+  // alguna forma, el contrato nunca entra a `codigosConResultado` NI a
+  // `errores` -- queda "pendiente" para siempre, y cada corrida futura lo
+  // vuelve a abrir sin que el conteo de pendientes baje nunca (confirmado en
+  // vivo el 2026-08-21: 137 expedientes de 2026 se reprocesaban en cada
+  // intento de run-extract.sh sin converger). El llamador usa este valor para
+  // registrar un error explícito cuando da 0, así el contrato entra al mismo
+  // conteo de MAX_INTENTOS que cualquier otro fallo y eventualmente se marca
+  // "fallo permanente" en vez de reprocesarse indefinidamente.
   const procesarItems = (contrato, data) => {
+    let agregados = 0;
     data.forEach((item, idx) => {
       // El filtro de la partida 25301 en loadFilteredRows() opera a nivel
       // de CONTRATO (una fila del CSV masivo), no de ítem: un contrato con
@@ -563,8 +681,10 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
       // lista) esto devuelve [producto] sin cambios, un solo registro.
       for (const producto of dividirProductoSiAplica(registro.producto)) {
         agregarResultado(producto === registro.producto ? registro : { ...registro, producto });
+        agregados++;
       }
     });
+    return agregados;
   };
 
   // Pestaña nueva por expediente: reutilizar una sola pestaña entre navegaciones
@@ -737,8 +857,8 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
 
           if (!captured.json.success) {
             agregarError({ hash, codigoContrato: contrato.codigoContrato, origen, error: 'respuesta_sin_exito', detalle: captured.json });
-          } else {
-            procesarItems(contrato, captured.json.data || []);
+          } else if (procesarItems(contrato, captured.json.data || []) === 0) {
+            agregarError({ hash, codigoContrato: contrato.codigoContrato, origen, error: 'sin_items_partida_25301_validos' });
           }
         }
         if (porCodigo.size === 0 || !page) break;
@@ -779,12 +899,19 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
         if (!page) break;
         const contrato = contratos[idx];
         await page.waitForTimeout(DELAY_BETWEEN_CONTRATOS_MS);
-        const res = await withTimeout(extractContrato(page, hash, contrato), CONTRATO_HARD_TIMEOUT_MS, contrato.codigoContrato)
+        let res = await withTimeout(extractContrato(page, hash, contrato), CONTRATO_HARD_TIMEOUT_MS, contrato.codigoContrato)
           .catch(e => ({ error: 'excepcion', detalle: String(e) }));
+        // Ver resolverAmbiguoPorPaginado: solo tiene sentido reintentar con la
+        // pasada dirigida si la page sigue viva (no si el grupo ya se
+        // abandonó por deadline, ver `if (!page) break` de más abajo).
+        if (res.error === 'numero_contrato_ambiguo' && page) {
+          res = await withTimeout(resolverAmbiguoPorPaginado(page, hash, contrato), CONTRATO_HARD_TIMEOUT_MS, contrato.codigoContrato)
+            .catch(e => ({ error: 'excepcion', detalle: String(e) }));
+        }
         if (res.error) {
           agregarError({ hash, codigoContrato: contrato.codigoContrato, origen, ...res });
-        } else {
-          procesarItems(contrato, res.data);
+        } else if (procesarItems(contrato, res.data) === 0) {
+          agregarError({ hash, codigoContrato: contrato.codigoContrato, origen, error: 'sin_items_partida_25301_validos' });
         }
 
         // Progreso cada 25 contratos -- en un grupo chico (la gran mayoría del
@@ -1009,10 +1136,12 @@ function cargarEstadoPrevio(outPath, errPath, rawPath) {
 // resultados previos de contratos resueltos dentro de un grupo pendiente).
 function calcularPendientes(groups, resultadosPrevios, erroresPrevios) {
   const codigosConResultado = new Set(resultadosPrevios.map(r => r.codigo_contrato));
+  // `erroresPrevios` trae UNA entrada por contrato (ver agregarError), con su
+  // propio contador `intentos` -- no hace falta contar duplicados acá, cada
+  // corrida ya consolidó lo suyo en esa única entrada.
   const intentosPorContrato = new Map();
   for (const e of erroresPrevios) {
-    const key = `${e.hash}|${e.codigoContrato}`;
-    intentosPorContrato.set(key, (intentosPorContrato.get(key) || 0) + 1);
+    intentosPorContrato.set(`${e.hash}|${e.codigoContrato}`, e.intentos || 1);
   }
 
   const pendientes = new Map();
@@ -1082,8 +1211,15 @@ async function main() {
   const groups = groupByHash(filtered);
   console.log(`Agrupadas en ${groups.size} expedientes.`);
 
-  const errPath = args.out.replace(/\.json$/, '.errores.json');
-  const rawPath = args.out.replace(/\.json$/, '.raw.json');
+  // Fijos (no derivados de args.out): a diferencia de los registros, que se
+  // publican un archivo por año (ver parseArgs), el historial de
+  // errores/items crudos sigue combinado en un solo archivo entre todos los
+  // orígenes -- son chicos (no se acercan al límite de 100 MB de GitHub) y
+  // calcularPendientes() necesita ver los intentos de TODOS los orígenes
+  // para contar bien MAX_INTENTOS entre corridas.
+  const docsDir = path.dirname(args.out);
+  const errPath = path.join(docsDir, 'data.errores.json');
+  const rawPath = path.join(docsDir, 'data.raw.json');
   let { resultados: resultadosPrevios, errores: erroresPrevios, rawItems: rawItemsPrevios } = cargarEstadoPrevio(args.out, errPath, rawPath);
   console.log(`Estado previo: ${resultadosPrevios.length} registros, ${erroresPrevios.length} errores acumulados, ${rawItemsPrevios.length} items crudos.`);
 
@@ -1104,16 +1240,29 @@ async function main() {
   const { pendientes, saltados, fallosPermanentes } = calcularPendientes(groups, resultadosPrevios, erroresPrevios);
   console.log(`${saltados} expedientes ya resueltos (se saltan), ${fallosPermanentes} con fallo permanente (>= ${MAX_INTENTOS} intentos, se saltan), ${pendientes.size} pendientes de procesar. Concurrencia: ${args.concurrency}`);
 
-  // Se descartan los resultados y errores previos SOLO de los contratos que
-  // se van a reprocesar esta corrida (pendientes.values() ya viene filtrado
-  // a ese subconjunto, ver calcularPendientes), no de todo el expediente al
-  // que pertenecen -- así un contrato ya resuelto dentro de un grupo que
-  // todavía tiene otros pendientes conserva su resultado en vez de perderlo
-  // y tener que ser re-scrapeado de nuevo esta corrida.
+  // Se descartan los RESULTADOS previos SOLO de los contratos que se van a
+  // reprocesar esta corrida (pendientes.values() ya viene filtrado a ese
+  // subconjunto, ver calcularPendientes), no de todo el expediente al que
+  // pertenecen -- así un contrato ya resuelto dentro de un grupo que todavía
+  // tiene otros pendientes conserva su resultado en vez de perderlo y tener
+  // que ser re-scrapeado de nuevo esta corrida.
   const codigosPendientes = new Set();
   for (const contratos of pendientes.values()) for (const c of contratos) codigosPendientes.add(c.codigoContrato);
   const resultados = resultadosPrevios.filter(r => !codigosPendientes.has(r.codigo_contrato));
-  const errores = erroresPrevios.filter(e => !codigosPendientes.has(e.codigoContrato));
+  // Los ERRORES previos, en cambio, NO se descartan aquí -- deben persistir
+  // completos entre corridas para que calcularPendientes() pueda contar
+  // intentos acumulados y aplicar MAX_INTENTOS. Antes esta línea también
+  // filtraba erroresPrevios igual que resultadosPrevios: cualquier contrato
+  // que siguiera pendiente perdía TODO su historial de error al arrancar la
+  // siguiente corrida, así que intentosPorContrato nunca pasaba de 1 y un
+  // contrato que fallaba siempre de la misma forma (ver
+  // sin_items_partida_25301_validos) quedaba reintentándose para siempre, sin
+  // llegar nunca a "fallo permanente" -- confirmado en vivo el 2026-08-21
+  // corriendo el scrape completo de 2026. descartarTimeoutSintetico() arriba
+  // ya cubre el único caso real de duplicado que hacía falta evitar (el
+  // marcador sintético de 'grupo_timeout' superado por el resultado real),
+  // así que no hace falta ningún descarte adicional acá.
+  const errores = erroresPrevios;
   const rawItems = rawItemsPrevios.filter(r => !codigosPendientes.has(r.codigo_contrato));
 
   const stats = { preciosCorregidos: [], cantidadesDerivadas: [] };
@@ -1156,16 +1305,26 @@ async function main() {
 
   guardarCheckpoint(args.out, errPath, rawPath, resultados, errores, rawItems);
 
-  const reporte = construirReporteCalidad(resultados, stats);
-  const reportePath = args.out.replace(/\.json$/, '.calidad.json');
+  // calidad.json y data.xlsx cubren el dataset COMPLETO (todos los orígenes),
+  // no solo el de esta corrida -- se recarga todo desde disco (incluye lo que
+  // guardarCheckpoint acaba de escribir arriba) en vez de necesitar cargar
+  // otros orígenes en memoria durante toda la corrida. `stats` (precios
+  // corregidos/cantidades derivadas) sigue siendo solo de esta corrida --
+  // esas cifras son sobre trabajo hecho ahora, no sobre el dataset entero.
+  const datasetCompleto = cargarDatasetCompleto(docsDir);
+  guardarManifest(docsDir);
+
+  const reporte = construirReporteCalidad(datasetCompleto, stats);
+  const reportePath = path.join(docsDir, 'data.calidad.json');
   fs.writeFileSync(reportePath, JSON.stringify(reporte, null, 2), 'utf8');
 
-  const excelPath = args.out.replace(/\.json$/, '.xlsx');
-  await guardarExcel(excelPath, resultados);
+  const excelPath = path.join(docsDir, 'data.xlsx');
+  await guardarExcel(excelPath, datasetCompleto);
 
   console.log('--- Resumen ---');
   console.log(`Expedientes procesados en esta corrida: ${ctx.total}`);
-  console.log(`Registros finales totales: ${resultados.length}`);
+  console.log(`Registros de origen "${args.origen}": ${resultados.length}`);
+  console.log(`Registros totales (todos los orígenes): ${datasetCompleto.length}`);
   console.log(`Errores totales acumulados: ${errores.length}`);
   console.log(`Precios corregidos por inconsistencia esta corrida: ${stats.preciosCorregidos.length}`);
   console.log(`Cantidades derivadas de subtotal/precio_unitario esta corrida: ${stats.cantidadesDerivadas.length}`);
