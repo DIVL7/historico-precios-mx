@@ -39,7 +39,16 @@ done
 ORIGEN=$(basename "$CSV" | grep -oE '[0-9]{4}' | head -1)
 ORIGEN="${ORIGEN:-$(basename "$CSV" .csv)}"
 LOG="data/run_${ORIGEN}.log"
-MAX_INTENTOS=30
+# Antes 30 (~5min de reintentos antes de rendirse): diagnosticado en vivo el
+# 2026-08-30 que el corte real es agotamiento de RAM del sistema (ver
+# comentario en scripts/extract.js junto a chromium.launch()), no un
+# expediente atorado -- cada intento ya es seguro (checkpoint + lock +
+# fallo-permanente por contrato tras 3 tries reales en extract.js), así que
+# rendirse a los 30 solo apagaba una corrida sana que iba a seguir
+# progresando sola. Subido a un número alto en vez de sacar el tope del todo
+# para no perder el aviso de "expediente realmente atorado" si el día que de
+# verdad no avanza nada, alguien tiene que enterarse igual.
+MAX_INTENTOS=1000
 
 { echo ""; echo "=== run-extract.sh $(date -Iseconds): $CSV $* ==="; } >> "$LOG"
 

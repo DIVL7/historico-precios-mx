@@ -28,6 +28,18 @@ const RESPONSE_TIMEOUT = 10000;
 const DELAY_BETWEEN_CONTRATOS_MS = 400;
 const DELAY_BETWEEN_EXPEDIENTES_MS = 800;
 const CONTRATO_HARD_TIMEOUT_MS = 25000; // nunca dejar que un solo contrato cuelgue el pipeline (sube un poco vs. antes: ahora la búsqueda es exhaustiva y puede recorrer más páginas)
+// resolverAmbiguoPorPaginado (más abajo) recorre TODA la tabla de contratos
+// del expediente en el sitio, no solo los `contratos.length` de partida 25301
+// que nos importan -- en una compra consolidada esa tabla trae TODAS las
+// partidas mezcladas (25301, 25401, 25901, 53101, ...) y puede ser un orden
+// de magnitud más grande que nuestro subconjunto. Confirmado en vivo el
+// 2026-08-30: expediente con 90 contratos de partida 25301 en nuestro CSV,
+// pero 2,154 filas reales en la tabla del sitio (~22 páginas de 100) -- con
+// el CONTRATO_HARD_TIMEOUT_MS genérico (pensado para 1 contrato) el bucle no
+// llegaba ni a la página 5 antes de que el timeout externo lo cortara, así
+// que la fila correcta (bien pasada la página 5) nunca se alcanzaba a pesar
+// de existir.
+const AMBIGUO_HARD_TIMEOUT_MS = 90000;
 const MAX_INTENTOS = 3; // tras esto, un expediente con error se marca como fallo permanente y ya no se reintenta solo
 // La tabla de contratos del expediente muestra 100 filas por página (confirmado
 // en vivo el 2026-08-17). Por debajo de este umbral, un expediente cabe
@@ -221,7 +233,23 @@ function localizadoresTablaContratos(page) {
     firstBtn: scope.locator('xpath=following::*[contains(@class,"p-paginator-first")][1]'),
     nextBtn: scope.locator('xpath=following::*[contains(@class,"p-paginator-next")][1]'),
     filas: scope.locator('xpath=following::td[contains(@class,"p-link2")]'),
+    // "Total: N" del paginador -- el PRIMER "Total:" que sigue al encabezado
+    // es el de esta tabla (el de la sección REQUERIMIENTOS ECONÓMICOS, más
+    // abajo en el DOM, queda excluido por `following::` + `[1]`).
+    total: scope.locator('xpath=following::*[contains(text(),"Total:")][1]'),
   };
+}
+
+// Lee el total REAL de filas de la tabla de contratos (todas las partidas
+// mezcladas, no solo las de partida 25301 que filtramos nosotros) -- null si
+// no se pudo leer/parsear, para que el llamador caiga a una estimación en vez
+// de reventar. Confirmado en vivo el 2026-08-30 que este número puede ser un
+// orden de magnitud mayor que `contratos.length`/`totalExpediente` en una
+// compra consolidada (90 contratos nuestros vs. 2,154 filas reales).
+async function leerTotalTablaContratos(totalLoc) {
+  const texto = await totalLoc.innerText().catch(() => '');
+  const m = texto.match(/([\d,]+)\s*$/);
+  return m ? parseInt(m[1].replace(/,/g, ''), 10) : null;
 }
 
 async function irAPrimeraPagina(page, firstBtn) {
@@ -230,6 +258,23 @@ async function irAPrimeraPagina(page, firstBtn) {
     await firstBtn.click({ timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(600);
   }
+}
+
+// Página sin NINGUNA fila todavía (no "no está mi target", la tabla entera
+// sigue en blanco) -- hay que reintentar la MISMA página en vez de asumir que
+// no hay nada y avanzar/rendirse. Confirmado en vivo el 2026-08-30: bajo
+// concurrencia real (4 workers compartiendo CPU en una máquina ajustada de
+// RAM, ver comentario de AMBIGUO_HARD_TIMEOUT_MS), Angular a veces tarda más
+// que el margen fijo de 800ms en pintar la tabla tras la respuesta de red --
+// un contrato real, en la fila 1, se reportaba 'contrato_no_encontrado_en_tabla'
+// porque el chequeo llegó antes de que la tabla terminara de renderizar, y
+// avanzarPagina() con el paginador también sin cargar todavía devolvía false
+// (lo toma como última página). Usado tanto por findAndClickContrato como por
+// resolverAmbiguoPorPaginado -- misma tabla, mismo riesgo de carrera.
+async function esperarSiTablaVacia(filas, page) {
+  if (await filas.count() > 0) return false;
+  await page.waitForTimeout(500);
+  return true;
 }
 
 // Devuelve false si ya estaba en la última página (nada a dónde avanzar).
@@ -261,11 +306,16 @@ async function findAndClickContrato(page, numContrato) {
   // termine solo antes de que el timeout externo lo intente cortar.
   const deadline = Date.now() + CONTRATO_HARD_TIMEOUT_MS - 3000;
   while (Date.now() < deadline) {
-    const link = page.locator('td.p-link2', { hasText: numContrato }).first();
+    const filas = page.locator('td.p-link2');
+    const link = filas.filter({ hasText: numContrato }).first();
     if (await link.count() > 0 && await link.isVisible().catch(() => false)) {
       await link.click();
       return true;
     }
+    // Solo se paga el round-trip extra de esperarSiTablaVacia cuando el match
+    // de arriba falló -- el camino común (fila ya renderizada, primera
+    // página) no lo toca.
+    if (await esperarSiTablaVacia(filas, page)) continue;
     if (!(await avanzarPagina(page, nextBtn))) return false; // se recorrieron todas las páginas, no está en la tabla
   }
   return false; // se agotó el tiempo de búsqueda sin encontrar el contrato
@@ -381,11 +431,14 @@ async function resolverAmbiguoPorPaginado(page, hash, contrato) {
   };
 
   await irAPrimeraPagina(page, firstBtn);
-  // Expedientes ≤ UMBRAL_PASADA_UNICA (100 contratos) caben en 1-2 páginas
-  // (100 filas/página confirmado en vivo) -- este tope es solo una cota de
-  // seguridad contra un paginador atascado, no un límite real esperado.
-  const maxPaginas = 5;
-  for (let paginasVisitadas = 0; paginasVisitadas < maxPaginas; paginasVisitadas++) {
+  // Sin tope fijo de páginas: la tabla real del sitio mezcla TODAS las
+  // partidas del expediente (ver comentario de AMBIGUO_HARD_TIMEOUT_MS), así
+  // que su tamaño no tiene relación con `contratos.length` -- el único corte
+  // válido es agotar la tabla de verdad (avanzarPagina devuelve false) o el
+  // deadline, igual que findAndClickContrato.
+  const deadline = Date.now() + AMBIGUO_HARD_TIMEOUT_MS - 3000;
+  while (Date.now() < deadline) {
+    if (await esperarSiTablaVacia(filas, page)) continue;
     const textos = (await filas.allInnerTexts().catch(() => [])).map(normalizarEspacios);
     for (let i = 0; i < textos.length; i++) {
       if (textos[i] !== numContratoBuscado) continue;
@@ -744,7 +797,16 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
     // el tiempo máximo que ya le tocaría a cada contrato individualmente) --
     // llegar a este punto es señal real de que algo está roto, no solo de
     // que el expediente es grande.
-    const grupoDeadlineMs = Math.max(60000, contratos.length * CONTRATO_HARD_TIMEOUT_MS);
+    // Multiplicador subido de CONTRATO_HARD_TIMEOUT_MS a AMBIGUO_HARD_TIMEOUT_MS:
+    // cualquier contrato del grupo puede terminar necesitando
+    // resolverAmbiguoPorPaginado (hasta AMBIGUO_HARD_TIMEOUT_MS él solo), no
+    // sabemos de antemano cuáles. Con el multiplicador viejo, un grupo chico
+    // con 2+ contratos ambiguos corría el riesgo real de que el segundo se
+    // cortara a mitad de resolución (deadline de grupo agotado por el primero)
+    // aunque estuviera resolviendo bien -- 'grupo_timeout' en vez de dejarlo
+    // completar. El piso (+10000 sobre un solo AMBIGUO_HARD_TIMEOUT_MS) sigue
+    // haciendo falta para el caso de 1 solo contrato pendiente.
+    const grupoDeadlineMs = Math.max(AMBIGUO_HARD_TIMEOUT_MS + 10000, contratos.length * AMBIGUO_HARD_TIMEOUT_MS);
     const grupoStart = Date.now();
 
     // Pasada única por página: solo para expedientes grandes (ver
@@ -782,22 +844,30 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
       // recién se descarta ahí (el costo de un click de más en ese caso raro
       // es preferible a mantener un contador sincronizado a mano).
       const numContratosPendientes = new Set(contratos.map(c => normalizarEspacios(c.numContrato)));
-      const { firstBtn, nextBtn, filas } = localizadoresTablaContratos(page);
+      const { firstBtn, nextBtn, filas, total } = localizadoresTablaContratos(page);
 
       // Cota local a la cantidad de páginas, además del deadline de grupo:
-      // grupoDeadlineMs (contratos.length * CONTRATO_HARD_TIMEOUT_MS) sigue
-      // siendo un techo válido para el trabajo LEGÍTIMO por contrato, pero
-      // es demasiado laxo para detectar el paginador atascado específico
-      // que este bucle puede sufrir (nextBtn que nunca reporta disabled --
-      // el mismo bug histórico documentado en findAndClickContrato, ahora
-      // compartido vía avanzarPagina): para un expediente de 3,221
-      // contratos esa cota son ~22 horas, mucho más que lo que esta
-      // estrategia debería tardar en recorrer sus ~33 páginas reales. Con
-      // ~100 filas/página confirmado en vivo, un margen generoso (2x + 10,
-      // por si la tabla del sitio mezcla contratos ajenos a partida 25301
-      // que no están en `contratos`) alcanza para cortar mucho antes que el
-      // deadline de grupo si el paginador realmente se atoró.
-      const maxPaginas = Math.ceil((totalExpediente || contratos.length) / 100) * 2 + 10;
+      // grupoDeadlineMs sigue siendo un techo válido para el trabajo
+      // LEGÍTIMO por contrato, pero es demasiado laxo para detectar el
+      // paginador atascado específico que este bucle puede sufrir (nextBtn
+      // que nunca reporta disabled -- el mismo bug histórico documentado en
+      // findAndClickContrato, ahora compartido vía avanzarPagina): para un
+      // expediente de 3,221 contratos pendientes esa cota son varios días,
+      // mucho más que lo que esta estrategia debería tardar en recorrer sus
+      // páginas reales.
+      //
+      // El total real de la tabla (leído del propio paginador del sitio) es
+      // la base correcta -- `totalExpediente`/`contratos.length` es SOLO
+      // nuestro subconjunto de partida 25301, que puede ser un orden de
+      // magnitud menor que la tabla real en una compra consolidada
+      // (confirmado en vivo el 2026-08-30: 90 contratos nuestros vs. 2,154
+      // filas reales, ~22 páginas -- con el estimado viejo esto daba
+      // maxPaginas=12 y cortaba antes de llegar a la fila real). Si por lo
+      // que sea no se puede leer el total (cambio de layout, timing), se cae
+      // al estimado viejo -- peor que el total real, pero sigue siendo mejor
+      // que no tener ningún tope.
+      const totalReal = await leerTotalTablaContratos(total);
+      const maxPaginas = Math.ceil((totalReal || totalExpediente || contratos.length) / 100) * 2 + 10;
       let paginasVisitadas = 0;
 
       // Fuera del loop de filas: es la misma función para las ~100 filas de
@@ -831,8 +901,14 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
 
       while (porCodigo.size > 0) {
         if (!page) break;
+        // Antes de contar esta página contra maxPaginas: si la tabla todavía
+        // está en blanco (misma carrera de renderizado que findAndClickContrato/
+        // resolverAmbiguoPorPaginado, ver esperarSiTablaVacia), reintentar sin
+        // gastar presupuesto de páginas -- si no, una racha de reintentos por
+        // carga lenta agotaría maxPaginas antes de leer una sola fila real.
+        if (await esperarSiTablaVacia(filas, page)) continue;
         if (++paginasVisitadas > maxPaginas) {
-          console.error(`[pasada_unica_excedida] Expediente ${hash}: se superaron ${maxPaginas} páginas (esperadas ~${Math.ceil((totalExpediente || contratos.length) / 100)} según el tamaño del expediente) sin resolver los ${porCodigo.size} contrato(s) restantes -- posible paginador atascado, se corta acá en vez de esperar al deadline de grupo.`);
+          console.error(`[pasada_unica_excedida] Expediente ${hash}: se superaron ${maxPaginas} páginas (esperadas ~${Math.ceil((totalReal || totalExpediente || contratos.length) / 100)} según ${totalReal ? 'el total real de la tabla' : 'nuestro subconjunto, sin poder leer el total real'}) sin resolver los ${porCodigo.size} contrato(s) restantes -- posible paginador atascado, se corta acá en vez de esperar al deadline de grupo.`);
           break;
         }
         const textos = (await filas.allInnerTexts().catch(() => [])).map(normalizarEspacios);
@@ -905,7 +981,7 @@ async function processExpedienteGroup(browser, hash, contratos, compendio, cucop
         // pasada dirigida si la page sigue viva (no si el grupo ya se
         // abandonó por deadline, ver `if (!page) break` de más abajo).
         if (res.error === 'numero_contrato_ambiguo' && page) {
-          res = await withTimeout(resolverAmbiguoPorPaginado(page, hash, contrato), CONTRATO_HARD_TIMEOUT_MS, contrato.codigoContrato)
+          res = await withTimeout(resolverAmbiguoPorPaginado(page, hash, contrato), AMBIGUO_HARD_TIMEOUT_MS, contrato.codigoContrato)
             .catch(e => ({ error: 'excepcion', detalle: String(e) }));
         }
         if (res.error) {
@@ -1265,6 +1341,19 @@ async function main() {
   const errores = erroresPrevios;
   const rawItems = rawItemsPrevios.filter(r => !codigosPendientes.has(r.codigo_contrato));
 
+  // "ERROR FATAL: browser.newPage: Target crashed" recurrente (los 4 orígenes,
+  // horas de uptime variable, 0 a 186 min) diagnosticado en vivo el 2026-08-30:
+  // NO es una fuga de Chromium ni un expediente puntual -- medido directo, 4
+  // páginas concurrentes de este mismo sitio ya consumen ~1.5GB de RAM (7
+  // procesos chrome-headless-shell), y esta máquina solo tiene 7.3GB totales
+  // con ~0.9GB libres EN REPOSO (antes de sumar Node cargando el dataset
+  // combinado, ~300MB medidos). El corte es agotamiento real de RAM del
+  // sistema, no un bug de este código -- por eso el tiempo hasta el crash es
+  // tan errático (depende de qué más esté usando memoria en ese momento).
+  // Alternativa evaluada y NO aplicada (a pedido explícito, por ahora se
+  // sigue relanzando a mano vía run-extract.sh cuando se corta): bajar
+  // `concurrency` default de 4 a 2, y/o sumar args de arranque más livianos
+  // (`--disable-gpu`, `--no-sandbox`) a chromium.launch() de abajo.
   const stats = { preciosCorregidos: [], cantidadesDerivadas: [] };
   const browser = await chromium.launch({ headless: true });
 
